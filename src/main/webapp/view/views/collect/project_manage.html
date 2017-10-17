@@ -1,0 +1,240 @@
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">采集</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"> </li>
+</ul>
+<!--<div>{{pageTitle}}</div>-->
+
+
+<div class="row">
+    <div class="col-md-12">
+
+
+        <!-- BEGIN PORTLET-->
+        <div class="portlet light bordered ">
+            <div class="portlet-title">
+                <div class="caption caption-md">
+                    <i class="icon-bar-chart font-red"></i>
+                    <span class="caption-subject font-red bold uppercase">项目管理</span>
+                    <span class="caption-helper hide">weekly stats...</span>
+                </div>
+
+                <div class="inputs">
+                    <div class="portlet-input input-inline input-big ">
+                        <div class="input-icon right">
+                            <i class="icon-magnifier" ng-click="getUserProjects()"></i>
+                            <input type="text"  ng-change="getUserProjects()" ng-model="name"  class="form-control form-control-solid input-circle" placeholder="search..."> </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="portlet-body">
+                <div class="row number-stats margin-bottom-30">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="stat-left">
+
+                            <div class="stat-number">
+
+                                <div class="title"> 项目总数 </div>
+                                <div class="number"> {{pageConfig.bigTotalItems}} </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="stat-right">
+
+                            <div class="stat-number">
+                                <div class="title"> 本月总数 </div>
+                                <div class="number"> {{thisMonthItems}} </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="table-toolbar">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div  class="btn-group">
+                                <button  ng-click="goCreateProject()" id="sample_editable_1_new" class="btn sbold green"> 新建项目
+                                    <i  class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="table-scrollable-borderless">
+                    <table class="table table-hover table-light"   >
+                        <thead  >
+                        <tr class="uppercase">
+                            <th > 序号 </th>
+                            <th > 项目名称 </th>
+                            <th> 分组 </th>
+                            <!--<th> 描述 </th>-->
+                            <th> 使用模板 </th>
+                            <th> 采集状态 </th>
+                            <th> 采集条数 </th>
+                            <th> 创建时间 </th>
+                            <th colspan="1"> 操作 </th>
+                        </thead>
+
+
+
+                        <tr ng-repeat="cp in collectProjects">
+                            <td class="col-md-1">{{$index+1+(pageConfig.bigCurrentPage-1)*pageConfig.itemsPerPage}}</td>
+                            <td class="col-md-1">
+                                <a ng-click="showInfo(cp.id)" class="primary-link">{{cp.name}}</a>
+                            </td>
+                            <td class="col-md-1"> {{cp.group}} </td>
+                            <!--<td class="col-md-2"> {{cp.describle}} </td>-->
+                            <td class="col-md-1"> {{cp.templateName}} </td>
+                            <td class="col-md-1"><span ng-class ="{'label label-sm label-success': cp.status=='完成采集','label label-sm label-info':cp.status=='正在采集','label label-sm label-danger':cp.status=='准备采集'}" >{{cp.status}}</span></td>
+                            <td class="col-md-1"> <span class="bold font-red">{{cp.collectNo}}</span> </td>
+                            <td class="col-md-1"> <span class="bold font-green"  ng-bind="cp.createTime | date:'yyyy-MM-dd HH:mm'"></span> </td>
+                            <!--<td><span class="label label-sm label-success">{{cp.status}}</span></td>-->
+
+
+
+
+
+
+
+                            <td class="col-md-1"><div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle btn-xs"
+                                        data-toggle="dropdown">
+                                    操作 <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a ng-click="alertCollect(cp.id)">开始采集</a></li>
+                                    <li><a ng-click="showInfo(cp.id)">查看数据</a></li>
+                                    <li ng-show="cp.importSearchStatus==0"><a ng-click="importSolr(cp.id)">导入搜索库</a></li>
+                                    <li ng-show="cp.importSearchStatus!=0"><a ng-click="importSolr(cp.id)">重新导入搜索库</a></li>
+
+                                    <li><a ng-click="showDetail(cp.id)">查看详情</a></li>
+                                    <li class="divider"></li>
+                                    <li ng-hide="cp.templateId==0||cp.collectNo==0"><a ng-click="deleteInfo(cp.id)">删除数据</a></li>
+                                    <li><a ng-click="deleteProject(cp.id)">删除项目</a></li>
+                                </ul>
+                            </div>
+                            </td>
+
+<!--
+                            <td class="col-md-1" ng-show="cp.importSearchStatus==0" >
+                                <button  type="button" ng-disabled="cp.collectNo<=0" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" ng-click="importColumn(cp.id)">
+                                    导入
+                                </button>
+                                &lt;!&ndash; 模态框（Modal） &ndash;&gt;
+                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                    &times;
+                                                </button>
+                                                <h4 class="modal-title" id="myModalLabel"  >
+                                                    请勾选要导入哪些信息到搜索库（注意：个数不能大于10！）
+                                                </h4>
+                                            </div>
+                                            <div class="modal-body"  ng-repeat="(key, value) in tableKey">
+
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" id="inlineCheckbox1"  name="tableKey" ng-model="tableKey[key]"   ng-true-value=true ng-false-value=false  > {{key}}
+                                                </label>
+
+
+                                            </div>
+
+
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                                </button>
+                                                <button type="button" data-dismiss="modal" class="btn btn-primary"  ng-click="ImportSearchInfo()">
+                                                    确认并导入
+                                                </button>
+                                            </div>
+                                        </div>&lt;!&ndash; /.modal-content &ndash;&gt;
+                                    </div>&lt;!&ndash; /.modal &ndash;&gt;
+                                </div>
+                            </td>
+
+
+                            <td class="col-md-1" ng-show="cp.importSearchStatus==1">
+                                <label class="label label-info">正在导入</label>
+                            </td>
+                            <td class="col-md-1" ng-show="cp.importSearchStatus==2">
+                                <label class="label label-success">已导</label>
+                            </td>-->
+
+                        </tr>
+
+
+
+
+
+
+
+
+                    </table>
+
+                </div>
+                <pagination ng-click="getUserProjects()" total-items="pageConfig.bigTotalItems" ng-model="pageConfig.bigCurrentPage" max-size="pageConfig.maxSize" class="pagination-sm navbar-right" boundary-links="true"></pagination>
+
+            </div>
+        </div>
+        <!-- END PORTLET-->
+
+
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

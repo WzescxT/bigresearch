@@ -1,0 +1,192 @@
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">采集</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"> </li>
+</ul>
+
+
+<div class="row">
+    <div class="col-md-12">
+
+
+        <!-- BEGIN PORTLET-->
+        <div class="portlet light bordered ">
+            <div class="portlet-title">
+                <div class="caption caption-md">
+                    <i class="icon-bar-chart font-red"></i>
+                    <span class="caption-subject font-red bold uppercase">模板管理</span>
+                    <span class="caption-helper hide">weekly stats...</span>
+                </div>
+
+                <div class="inputs">
+                    <div class="portlet-input input-inline input-big ">
+                        <div class="input-icon right">
+                            <i class="icon-magnifier" ng-click="getUserTemplates()"></i>
+                            <input type="text" ng-change="getUserTemplates()" ng-model="name"  class="form-control form-control-solid input-circle" placeholder="search..."> </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-chart">
+                <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
+                <div id="sparkline_bar"></div>
+            </div>
+            <div class="portlet-body">
+                <div class="row number-stats margin-bottom-30">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="stat-left">
+                            <div class="stat-chart">
+                                <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
+                                <div ></div>
+                            </div>
+                            <div class="stat-number">
+
+                                <div class="title"> 模板总数 </div>
+                                <div class="number"> {{pageConfig.bigTotalItems}} </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="stat-right">
+                            <div class="stat-chart">
+                                <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
+                                <div id="sparkline_bar2"></div>
+                            </div>
+                            <div class="stat-number">
+                                <div class="title"> 本月总数 </div>
+                                <div class="number"> {{thisMonthItems}} </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                <div class="table-toolbar">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div  class="btn-group">
+                                <button  ng-click="goCreateTemplate()" id="sample_editable_1_new" class="btn sbold green"> 新建模板
+                                    <i  class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="table-scrollable-borderless">
+                    <table class="table table-hover table-light"  >
+                        <thead>
+                        <tr class="uppercase">
+                            <th > 序号 </th>
+                            <th > 模板名称 </th>
+                            <th> 描述 </th>
+                            <th> 类型 </th>
+                            <th> 创建时间 </th>
+                            <th colspan="2"> 操纵 </th>
+                        </tr>
+                        </thead>
+
+
+
+                        <tr ng-repeat="ct in collectTemplates">
+                            <td>{{$index+1+(pageConfig.bigCurrentPage-1)*pageConfig.itemsPerPage}}</td>
+                            <td>
+                                <a ng-click="showInfo(cp.id)" class="primary-link">{{ct.name}}</a>
+                            </td>
+                            <td> {{ct.description}} </td>
+                            <!--<td> {{ct.type}} </td>-->
+                            <td> {{ct.type|templateType}} </td>
+                            <td> <span class="bold font-green"  ng-bind="ct.createTime | date:'yyyy-MM-dd HH:mm'"></span> </td>
+                            <!--<td><span class="label label-sm label-success">{{cp.status}}</span></td>-->
+                            <td><div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle btn-xs"
+                                        data-toggle="dropdown">
+                                    操作 <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a ng-click="showDetail(ct.id)">查看详情</a></li>
+                                    <!--<li><a ng-click="updateTemplate(ct.id)">更改模板</a></li>-->
+                                    <li class="divider"></li>
+                                    <li><a ng-click="alertDelete(ct.id)">删除模板</a></li>
+                                </ul>
+                            </div>
+                            </td>
+                        </tr>
+
+
+
+
+
+
+                    </table>
+
+                </div>
+                <pagination ng-click="getUserTemplates()" total-items="pageConfig.bigTotalItems" ng-model="pageConfig.bigCurrentPage" max-size="pageConfig.maxSize" class="pagination-sm navbar-right" boundary-links="true"></pagination>
+
+            </div>
+        </div>
+        <!-- END PORTLET-->
+
+
+
+
+   <!--     <observe totalitems="204" listsizes="5" itemsperpage="10"></observe>-->
+
+
+
+
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,269 @@
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">文本分析</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"> </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+<div class="row" style="margin-bottom: 6%">
+    <div class="col-md-12">
+        <!-- BEGIN PORTLET-->
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption font-green-sharp">
+                    <i class="fa fa-gift "></i>文件导入配置 </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"> </a>
+                    <a href="#" data-toggle="modal" class="config"> </a>
+                    <a href="javascript:;" class="reload"> </a>
+                    <a href="javascript:;" class="remove"> </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form  class="form-horizontal ">
+                    <div class="form-body">
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><strong>上传文件类型：</strong></label>
+                                <div class="col-sm-6">
+                                        excel
+                                       <small>文件首行必须为标题</small>
+
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">选择导入字段(空格隔开)</label>
+                                <div class="col-sm-4">
+                                    <input type="text"  placeholder="{{textlibrary.fields}}" class="form-control"  ng-model="textlibrary.fields"  ng-change="updateUploader()"/>
+                                    <small>例如：title content   (*表示所有字段，默认全部导入)</small>
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+
+                        </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END PORTLET-->
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="row" nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter" >
+    <div class="col-md-4">
+        <!-- BEGIN: ACCORDION DEMO -->
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption font-green-sharp">
+                    <i class="icon-settings font-green-sharp"></i>
+                    <span class="caption-subject bold uppercase">选择文件</span>
+                    <span class="caption-helper hide"></span>
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default" href="#">
+                        <i class="icon-cloud-upload"></i>
+                    </a>
+                    <a class="btn btn-circle btn-icon-only btn-default" href="#">
+                        <i class="icon-wrench"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+
+
+
+
+
+
+
+                <!---->
+
+                <div class="andArea" onclick="document.getElementById('fileupload').click()" >
+                        <div class="filePicker">点击选择文件</div>
+                        <input type="file" id="fileupload" style="display: none;" nv-file-select="" accept=".xls*"   uploader="uploader" multiple />
+                    </div>
+            </div>
+            <div class="portlet-body" style="padding-top: 30px">
+                <small ng-show="textlibrary.type=='.txt'">*上传文本编码必须为utf-8格式<a href="http://www.baidu.com">?如何转换编码</a></small>
+
+
+
+            </div>
+        </div>
+        <!-- END: ACCORDION DEMO -->
+    </div>
+    <div class="col-md-8">
+        <!-- BEGIN: ACCORDION DEMO -->
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption font-green-sharp">
+                    <i class="icon-settings font-green-sharp"></i>
+                    <span class="caption-subject bold uppercase">上传队列</span>
+                    <span class="caption-helper">队列长度: {{ uploader.queue.length }}</span>
+                </div>
+                <div class="actions">
+                    <div class="btn-group">
+                        <a class="btn btn-circle btn-default btn-sm" href="#" data-toggle="dropdown">
+                            <i class="fa fa-cogs"></i> 设置
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-right">
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-pencil"></i> 编辑 </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-trash-o"></i> 删除 </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-ban"></i> 禁用 </a>
+                            </li>
+                            <li class="divider"> </li>
+                            <li>
+                                <a href="#">
+                                    <i class="i"></i> Make admin </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-scrollable table-scrollable-borderless">
+                    <table class="table table-hover table-light">
+                        <thead>
+                        <tr class="uppercase">
+                            <th width="50%">文件名</th>
+                            <th ng-show="uploader.isHTML5">大小</th>
+                            <th ng-show="uploader.isHTML5">进度</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in uploader.queue">
+                            <td>
+                                <strong>{{ item.file.name }}</strong>
+                            </td>
+                            <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                            <td ng-show="uploader.isHTML5">
+                                <div class="progress progress-sm" style="margin-bottom: 0;">
+                                    <div class="progress-bar progress-bar-info" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                    <span ng-show="item.isSuccess" class="text-success">
+                                        <i class="glyphicon glyphicon-ok"></i>
+                                    </span>
+                                    <span ng-show="item.isCancel" class="text-info">
+                                        <i class="glyphicon glyphicon-ban-circle"></i>
+                                    </span>
+                                    <span ng-show="item.isError" class="text-danger">
+                                        <i class="glyphicon glyphicon-remove"></i>
+                                    </span>
+                            </td>
+                            <td nowrap>
+                                <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                    <span class="glyphicon glyphicon-upload"></span> 上传 </button>
+                                <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                                    <span class="glyphicon glyphicon-ban-circle"></span> 取消 </button>
+                                <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                    <span class="glyphicon glyphicon-trash"></span> 移除 </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <p>队列进度:</p>
+                    <div class="progress progress-sm" style="">
+                        <div class="progress-bar progress-bar-info" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+                    <span class="glyphicon glyphicon-upload"></span> 上传全部 </button>
+                <button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
+                    <span class="glyphicon glyphicon-ban-circle"></span> 取消上传 </button>
+                <button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+                    <span class="glyphicon glyphicon-trash"></span> 移除所有 </button>
+            </div>
+            <br/>
+            <li ng-repeat="a in fileStatus">
+                {{a}}
+            </li>
+        </div>
+        <!-- END: ACCORDION DEMO -->
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

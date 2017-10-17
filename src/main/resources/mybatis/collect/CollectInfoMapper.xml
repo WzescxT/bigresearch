@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.monetware.mapper.collect.CollectInfoMapper">
+
+	<!--根据map自动映射列名和参数-->
+	<insert id="insertCollectInfo" parameterType="java.util.Map">
+		insert ignore into collect_info_${projectId}
+		<foreach collection="params.keys" item="key" open="(" close=")" separator="," >
+			`${key}`
+		</foreach>
+		values
+		<foreach collection="params.keys"  item="key" open="(" close=")" separator=",">
+			#{params[${key}]}
+		</foreach>
+	</insert>
+
+
+
+
+	<insert id="createCollectInfo"  parameterType="com.monetware.model.collect.CollectInfo">
+	    INSERT INTO 
+	    collect_info_${projectId}
+	    (`project_id`, `collect_no`,`url`,`abstract`, `title`, `keywords`, `author`, `publish_time`, `source`, `heads`, `content`, `channel`, `province`, `city`, `polarity`, `strength`, `commentnum`, `clicknum`, `likenum`, `dislikenum`, `downloadnum`) 
+	    VALUES		
+  			(#{projectId},#{collectNo},#{url},#{abstract},#{title},#{keywords},#{author},#{publishTime},#{source},#{heads},#{content},#{channel},#{province},#{city},#{polarity},#{strength},#{commentnum},#{clicknum},#{likenum},#{dislikenum},#{downloadnum})
+  	</insert>
+	<select id="getCollectInfos"   parameterType="java.util.Map" resultType="java.util.Map" >
+	    select
+	    	*
+	    from
+	    	collect_info_${projectId}
+	   	where 
+	   		`id` limit  ${pageStart},${pageSize};
+  	</select>
+  	
+  	
+  	<select id="getCollectInfoNo"  parameterType="java.util.Map"  resultType="java.lang.Long" >
+	    select
+	    	count(`id`)
+	    from
+	    	collect_info_${projectId}
+  	</select>
+  	
+  	<select id="getCommonInfo"  parameterType="java.util.Map"  resultType="java.util.Map" >
+	    select
+	    	*
+	    from
+	    	collect_info_${projectId}
+	    	where 
+	   		`id` limit  ${pageStart},${pageSize};
+  	</select>
+  	
+  	<delete id="deleteCollectInfo" parameterType="java.lang.Long">
+  		  TRUNCATE TABLE collect_info_${projectId}
+  	</delete>
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+</mapper>

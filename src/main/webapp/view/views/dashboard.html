@@ -1,0 +1,217 @@
+<!-- BEGIN PAGE BREADCRUMB -->
+<ul class="page-breadcrumb breadcrumb hide">
+    <li>
+        <a href="#">Home</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active"> Dashboard </li>
+</ul>
+<!-- END PAGE BREADCRUMB -->
+<!-- BEGIN MAIN CONTENT -->
+<div id="shortInfo" ng-controller="DashboardController">
+    <div  class="note note-info">
+        <h3>锐研 数据服务平台
+            <span class="close" data-close="note">
+                </span>
+        </h3>
+        <p>锐研是萌泰数据旗下的大数据服务产品，集采集、分析、检索于一体的数据服务平台，
+            锐研竭力为您提供优质的数据服务，满足用户对于数据处理的所有需求！  </p>
+        <span class="label label-danger">NOTE:</span> 欢迎使用锐研数据平台.</span>
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <div class="portlet">
+
+                                <div style="height: 500px">
+                                    <carousel interval="myInterval">
+                                        <slide ng-repeat="slide in slides" active="slide.active">
+                                            <img ng-src="{{slide.image}}" style="width: 100%;height: 500px">
+                                            <div class="carousel-caption">
+                                                <h4> {{slide.label}}</h4>
+                                                <p>{{slide.text}}</p>
+                                            </div>
+                                        </slide>
+                                    </carousel>
+                                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <!-- BEGIN DASHBOARD STATS -->
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="dashboard-stat blue">
+                <div class="visual">
+                    <i class="fa fa-comments"></i>
+                </div>
+                <div class="details">
+                    <div class="number"> 580 </div>
+                    <div class="desc"> 企业高校 </div>
+                </div>
+                <a class="more" href="#">
+                    <i class="m-icon-swapup m-icon-white"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="dashboard-stat red">
+                <div class="visual">
+                    <i class="fa fa-bar-chart-o"></i>
+                </div>
+                <div class="details">
+                    <div class="number"> 67000 </div>
+                    <div class="desc"> 用户 </div>
+                </div>
+                <a class="more" href="#">
+                    <i class="m-icon-swapup m-icon-white"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="dashboard-stat green">
+                <div class="visual">
+                    <i class="fa fa-shopping-cart"></i>
+                </div>
+                <div class="details">
+                    <div class="number"> 9000000 </div>
+                    <div class="desc"> 条数据/天 </div>
+                </div>
+                <a class="more" href="#">
+                    <i class="m-icon-swapup m-icon-white"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="dashboard-stat purple">
+                <div class="visual">
+                    <i class="fa fa-globe"></i>
+                </div>
+                <div class="details">
+                    <div class="number"> +89% </div>
+                    <div class="desc"> 订单增长/天 </div>
+                </div>
+                <a class="more" href="#">
+                    <i class="m-icon-swapup m-icon-white"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- END DASHBOARD STATS -->
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <!-- BEGIN PORTLET-->
+            <div class="portlet light bordered ">
+                <div class="portlet-title">
+                    <div class="caption caption-md">
+                        <i class="icon-settings font-green"></i>
+                        <span class="caption-subject font-green bold uppercase">我们提供的服务：</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row list-separated">
+                        <div class="col-md-3 col-sm-3 col-xs-6">
+                            <div class="uppercase font-hg font-red-flamingo"> 采集
+                            </div>
+                            <div>
+                                我们提供了一系类简单的爬虫配置方法，只需要您两分钟时间配置采集规则，您的数据采集工作就可以在云主机中进行，同时提供监控管理采集数据的功能，让更多用户能够获取想要的数据，为您的研究提供有效的数据！
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-6">
+                            <div class="uppercase font-hg font-green"> 搜索
+                            </div>
+                            <div>
+                                在采集到的海量数据中如何根据关键词搜索到有效数据？我们使用专业的搜索引擎为您提供快速精确的搜索服务，让您随时随地对您的数据了如指掌！
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-6">
+                            <div class="uppercase font-hg font-purple"> 分析
+                            </div>
+                            <div>
+                                由于用户采集数据的种类繁多，我们提供了可视化分析方案，您可以使用我们的分析工具进行可视化数据分析，按照自己的想法剔除脏数据、使用多样化的文本分析途径、展示数据汇总分析结果！
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-6">
+                            <div class="uppercase font-hg font-blue"> 订制化服务
+                            </div>
+                            <div>
+                                想要获取更加全面的网络数据？想要获取更加全面有效的分析结果和炫酷的分析结果展示？那么欢迎您致电上海萌泰，我们将为您提供更加优质高效的服务！
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END PORTLET-->
+        </div>
+
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <!-- BEGIN PORTLET-->
+            <div class="portlet light bordered ">
+                <div class="portlet-title">
+                    <div class="caption caption-md">
+                        <i class="icon-settings font-green"></i>
+                        <span class="caption-subject font-green bold uppercase">锐研平台的优势：</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row list-separated"  >
+                        <div class="col-md-6 col-sm-6 col-xs-6" >
+                            <div style="padding-left: 10%">
+                                <li>
+                                    优秀而有灵活的数据采集技术
+                                </li>
+                                <li>
+                                    巨大的云存储空间和稳定的存储平台
+                                </li>
+                                <li>
+                                   强大的数据搜索和维护功能
+                                </li>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <div style="padding-left: 10%">
+                                <li>
+                                    强大的数据分析功能
+                                </li>
+                                <li>
+                                    数据的安全性保障
+                                </li>
+                                <li>
+                                    提供订制化服务
+                                </li>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- END PORTLET-->
+        </div>
+
+    </div>
+
+
+
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <!-- BEGIN PORTLET-->
+            <div style="text-align: center">
+                        <button ng-click="toTop()"  class="button btn-circle btn-lg btn-theme-panel btn-primary">开始使用锐研数据</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- END MAIN CONTENT -->
+<!-- BEGIN MAIN JS & CSS -->
+<script>
+    Dashboard.init();
+</script>
+<!-- BEGIN MAIN JS & CSS -->

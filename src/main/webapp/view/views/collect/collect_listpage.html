@@ -1,0 +1,188 @@
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">采集</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"> </li>
+</ul>
+
+
+<!--tab-->
+<div class="col-md-12">
+    <div>
+        <tabset justified="true">
+            <tab  ng-click="changeTemplate(1)" active=active.tab1 >
+            <!--<tab  ng-click="changeTemplate(1)" active=(tabId==1?true:false)>-->
+                <tab-heading>
+                    单页采集
+                    <i class="glyphicon glyphicon-file"></i>  </tab-heading>
+            </tab>
+            <tab ng-click="changeTemplate(2)" active=active.tab2>
+                <tab-heading>
+                分页采集
+                <i class="glyphicon glyphicon-duplicate"></i>  </tab-heading>
+            </tab>
+            <tab ng-click="changeTemplate(3)" active=active.tab3>
+                <tab-heading>
+                分层采集
+                <i class="icon-link"></i>  </tab-heading>
+            </tab>
+        </tabset>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN PORTLET-->
+        <div class="portlet box green-meadow">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>创建模板 </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"> </a>
+                    <a href="#" data-toggle="modal" class="config"> </a>
+                    <a href="javascript:;" class="reload"> </a>
+                    <a href="javascript:;" class="remove"> </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form  class="form-horizontal form-bordered">
+
+
+
+                    <main class="row-fluid">
+                        <div class="col-md-6" style="padding:0;">
+                            <div class="numberedtextarea-wrapper "><textarea id="json-src" ng-model="usertemplateStr" placeholder="在此输入json字符串..." class="form-control" style="height:553px;padding:0 10px 10px 20px;border:0;border-right:solid 1px #ddd;border-bottom:solid 1px #ddd;border-radius:0;resize: none; outline:none;">
+                                {{usertemplateStr}}
+
+
+
+                            </textarea></div>
+                        </div>
+                        <div class="col-md-6" style="padding:0;">
+
+                            <div id="right-box" style="height:553px;border-right:solid 1px #ddd;border-bottom:solid 1px #ddd;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;">
+                                <div id="line-num" style="background-color:#fafafa;padding:0px 8px;float:left;border-right:dashed 1px #eee;display:none;z-index:-1;color:#999;position:absolute;text-align:center;over-flow:hidden;"><div>1<div><div>2<div><div>3<div></div></div></div></div></div></div></div>
+                                <div class="ro" id="json-target" style="padding:0px 25px;"><span data-type="object" data-inner="&lt;i style=&quot;cursor:pointer;&quot; class=&quot;fa fa-minus-square-o&quot; onclick=&quot;hide(this)&quot;&gt;&lt;/i&gt;{&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;span class=&quot;json_key&quot;&gt;&quot;json&quot;&lt;/span&gt;:&lt;span class=&quot;json_string&quot;&gt;&quot;yes&quot;&lt;/span&gt;&lt;br&gt;}"><i style="cursor:pointer;" class="fa fa-minus-square-o" onclick="hide(this)"></i>{<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="json_key">"json"</span>:<span class="json_string">"yes"</span><br>}</span></div>
+                            </div>
+                            <form id="form-save" method="POST"><input type="hidden" value="" id="txt-content" name="content"></form>
+                        </div>
+                        <br style="clear:both;">
+                    </main>
+
+
+
+
+
+
+
+                    <div class="form-actions" ng-disabled="currentProject.id>0">
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-6" >
+                                <button ng-disabled="currentProject.id>0" class="btn green" ng-click="createTemplate()">
+                                    <i class="fa fa-check" ></i>创建</button>
+                                <button type="button" ng-click="reset()" class="btn default">重置</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END PORTLET-->
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

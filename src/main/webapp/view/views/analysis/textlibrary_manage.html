@@ -1,0 +1,134 @@
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">分析</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"> </li>
+</ul>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN PORTLET-->
+        <div class="portlet light bordered ">
+            <div class="portlet-title">
+                <div class="caption caption-md">
+                    <i class="icon-bar-chart font-red"></i>
+                    <span class="caption-subject font-red bold uppercase">文本库管理</span>
+                    <span class="caption-helper hide">weekly stats...</span>
+                </div>
+
+                <div class="inputs">
+                    <div class="portlet-input input-inline input-big ">
+                        <div class="input-icon right">
+                            <i class="icon-magnifier" ng-click="getTextLibraries()"></i>
+                            <input type="text"  ng-model="name" ng-change="getTextLibraries()" class="form-control form-control-solid input-circle" placeholder="search..."> </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-chart">
+                <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
+                <div></div>
+            </div>
+            <div class="portlet-body">
+                <div class="row number-stats margin-bottom-30">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="stat-left">
+                            <div class="stat-chart">
+                                <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
+                                <div id="sparkline_bar"></div>
+                            </div>
+                            <div class="stat-number">
+
+                                <div class="title"> 文本库总数 </div>
+                                <div class="number"> {{pageConfig.bigTotalItems}} </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="stat-right">
+                            <div class="stat-chart">
+                                <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
+                                <div id="sparkline_bar2"></div>
+                            </div>
+                            <div class="stat-number">
+                                <div class="title"> 本月总数 </div>
+                                <div class="number"> {{thisMonthItems}} </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="table-toolbar">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div  class="btn-group">
+                                <button  ng-click="goCreateTextLibrary()" id="sample_editable_1_new" class="btn sbold green"> 新建文本库
+                                    <i  class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="table-scrollable-borderless">
+                    <table class="table table-hover table-light"  >
+                        <thead>
+                        <tr class="uppercase">
+                            <th > 序号 </th>
+                            <th > 文本库名称 </th>
+                            <th> 描述 </th>
+                            <th> 文本行数 </th>
+                            <th> 导入状态 </th>
+                            <th> 创建时间 </th>
+                            <th colspan="2"> 操纵 </th>
+                        </tr>
+                        </thead>
+                                                <tr ng-repeat="tl in textLibraries">
+                                                    <td>{{$index+1+(pageConfig.bigCurrentPage-1)*pageConfig.itemsPerPage}}</td>
+                                                    <td>
+                                                        <a ng-click="showInfo(tl.id)" class="primary-link">{{tl.name}}</a>
+                                                    </td>
+                                                    <td> {{tl.describle}} </td>
+                                                    <td> <span class="bold font-red">{{tl.lineNo}}</span> </td>
+                                                    <td ><span  ng-if=' tl.importStatus==2' class ="label label-sm label-success" >导入完成</span>
+                                                    <span ng-if=' tl.importStatus==1' class ="label label-sm label-info" >正在导入</span>
+                                                    <span ng-if=' tl.importStatus==0' class ="label label-sm label-danger" >尚未导入</span></td>
+
+
+                                                    <td> <span class="bold font-green"  ng-bind="tl.createTime | date:'yyyy-MM-dd HH:mm'"></span> </td>
+                                                    <!--<td><span class="label label-sm label-success">{{cp.status}}</span></td>-->
+                                                    <td><div class="btn-group">
+                                                        <button type="button" class="btn btn-primary dropdown-toggle btn-xs"
+                                                                data-toggle="dropdown">
+                                                            操作 <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu" role="menu">
+                                                            <li><a ng-click="importTextLibrary(tl.id)">导入文本</a></li>
+                                                            <li><a ng-click="goDBView()">查看详情</a></li>
+                                                            <li class="divider"></li>
+                                                            <!--<li ng-show="tl.lineNo>0"><a ng-click="deleteText(tl.id)">删除文本</a></li>-->
+                                                            <li><a ng-click="deleteTextLibrary(tl.id)">删除文本库</a></li>
+                                                        </ul>
+                                                    </div>
+                                                    </td>
+                                                </tr>
+
+                    </table>
+
+                </div>
+                <pagination ng-click="getUserProjects()" total-items="pageConfig.bigTotalItems" ng-model="pageConfig.bigCurrentPage" max-size="pageConfig.maxSize" class="pagination-sm navbar-right" boundary-links="true"></pagination>
+
+            </div>
+        </div>
+        <!-- END PORTLET-->
+    </div>
+</div>
+
+
+<!--选择模板-->

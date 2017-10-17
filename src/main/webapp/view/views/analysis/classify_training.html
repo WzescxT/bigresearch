@@ -1,0 +1,180 @@
+
+
+
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">分析</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"> </li>
+</ul>
+
+
+<div class="row">
+    <div class="col-md-12">
+
+
+        <!-- BEGIN PORTLET-->
+        <div class="portlet light bordered ">
+            <div class="portlet-title">
+                <div class="caption caption-md">
+                    <i class="icon-bar-chart font-red"></i>
+                    <span class="caption-subject font-red bold uppercase">训练集管理</span>
+                    <span class="caption-helper hide">weekly stats...</span>
+                </div>
+
+                <div class="inputs">
+                    <div class="portlet-input input-inline input-big ">
+                        <div class="input-icon right">
+                            <i class="icon-magnifier" ng-click="getClassifyTraining()"></i>
+                            <input type="text" ng-change="getClassifyTraining()" ng-model="name"  class="form-control form-control-solid input-circle" placeholder="search..."> </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-chart">
+                <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
+                <div id="sparkline_bar"></div>
+            </div>
+            <div class="portlet-body">
+                <div class="row number-stats margin-bottom-30">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="stat-left">
+                            <div class="stat-chart">
+                                <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
+                                <div></div>
+                            </div>
+                            <div class="stat-number">
+                                <div class="title"> 项目总数 </div>
+                                <div class="number"> {{pageConfig.bigTotalItems}} </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="stat-right">
+                            <div class="stat-chart">
+                                <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
+                                <div id="sparkline_bar2"></div>
+                            </div>
+                            <div class="stat-number">
+                                <div class="title"> 本月总数 </div>
+                                <div class="number"> {{thisMonthItems}} </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="table-toolbar">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div  class="btn-group">
+                                <button  style="margin-left: 20%" ng-click="addTrainingCategory()" id="sample_editable_1_new" class="btn sbold green "> 新建分类
+                                    <i  class="fa fa-plus"></i>
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="table-scrollable-borderless">
+                    <table class="table table-hover table-light table-striped"  >
+                        <thead>
+                        <tr class="uppercase">
+                            <th  class="text-center"> 序号 </th>
+                            <th  class="text-center"> 分类名称 </th>
+                            <th class="text-center"> 文本数量 </th>
+                            <th class="text-center"> 创建时间 </th>
+                            <th  class="text-center" colspan="2"> 操作 </th>
+                        </tr>
+                        </thead>
+
+                        <tr ng-repeat="ct in classifyTrainings" class="text-center">
+                            <td class="col-md-2">{{$index+1+(pageConfig.bigCurrentPage-1)*pageConfig.itemsPerPage}}</td>
+                            <td class="col-md-3">
+                                <a class="primary-link">{{ct.categoryName}}</a>
+                            </td>
+                            <td class="col-md-2"><span class="bold font-red">{{ct.textNo}}</span>   </td>
+                            <td class="col-md-3"> <span class="bold font-green"  ng-bind="ct.createTime | date:'yyyy-MM-dd HH:mm'"></span> </td>
+                            <!--<td><span class="label label-sm label-success">{{cp.status}}</span></td>-->
+                            <td class="col-md-2"><div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle btn-xs"
+                                        data-toggle="dropdown">
+                                    操作 <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a ng-click="showText(ct.categoryName)">查看详情</a></li>
+                                    <li><a ng-click="addTrainingText(ct.categoryName)">添加文本</a></li>
+                                    <li><a ng-click="updateCategoryName(ct.categoryName)">修改分类</a></li>
+                                    <li class="divider"></li>
+                                    <li><a ng-click="delTrainingCategory(ct.categoryName)">删除分类</a></li>
+                                </ul>
+                            </div>
+                            <!--<td class="col-md-2"><a class="btn btn-sm btn-primary" ng-click="showClusteInfo(cluste.id)"> 查看详情 </a>-->
+                            </td>
+                        </tr>
+
+
+
+
+
+
+                    </table>
+
+                </div>
+                <pagination ng-click="getClassifyTraining()" total-items="pageConfig.bigTotalItems" ng-model="pageConfig.bigCurrentPage" max-size="pageConfig.maxSize" class="pagination-sm navbar-right" boundary-links="true"></pagination>
+
+            </div>
+        </div>
+        <!-- END PORTLET-->
+
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,303 @@
+
+<!-- BEGIN HEADER TOP -->
+<div class="page-header-top" id="top">
+    <div class="container">
+        <!-- 页面顶部logo -->
+        <div class="page-logo">
+            <a href="#/dashboard.html">
+                <img src="{{settings.layoutPath}}/img/logo-default.jpg" alt="logo" class="logo-default"> </a>
+        </div>
+        <!-- END LOGO -->
+        <!--顶部右上角个人信息-->
+        <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+        <a href="javascript:;" class="menu-toggler"></a>
+        <!-- END RESPONSIVE MENU TOGGLER -->
+        <!-- BEGIN TOP NAVIGATION MENU -->
+        <div class="top-menu" ng-show="loginStatus==0">
+            <ul class="nav navbar-nav pull-right">
+                <li class="dropdown dropdown-extended dropdown-dark dropdown-notification" >
+                    <a class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown" data-close-others="true">
+                        <button class="btn btn-transparent grey-salsa btn-circle btn-sm active" ng-click="toLogin()">登录</button>
+                        </a>
+                </li>
+            </ul>
+            </div>
+        <div class="top-menu"  ng-show="loginStatus==1">
+            <ul class="nav navbar-nav pull-right">
+
+                <!-- BEGIN INBOX DROPDOWN -->
+                <li class="dropdown dropdown-extended dropdown-dark dropdown-inbox" id="header_inbox_bar">
+
+                    <ul class="dropdown-menu">
+
+                        <li>
+                            <ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
+                                <li>
+                                    <a href="inbox.html?a=view">
+                                        <span class="photo">
+                                            <img src="{{settings.layoutPath}}/img/avatar2.jpg" class="img-circle" alt=""> </span>
+                                        <span class="subject">
+                                            <span class="from"> Lisa Wong </span>
+                                            <span class="time">Just Now </span>
+                                        </span>
+                                        <span class="message"> Vivamus sed auctor nibh congue nibh. auctor nibh auctor nibh... </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="inbox.html?a=view">
+                                        <span class="photo">
+                                            <img src="{{settings.layoutPath}}/img/avatar3.jpg" class="img-circle" alt=""> </span>
+                                        <span class="subject">
+                                            <span class="from"> Richard Doe </span>
+                                            <span class="time">16 mins </span>
+                                        </span>
+                                        <span class="message"> Vivamus sed congue nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="inbox.html?a=view">
+                                        <span class="photo">
+                                            <img src="{{settings.layoutPath}}/img/avatar1.jpg" class="img-circle" alt=""> </span>
+                                        <span class="subject">
+                                            <span class="from"> Bob Nilson </span>
+                                            <span class="time">2 hrs </span>
+                                        </span>
+                                        <span class="message"> Vivamus sed nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="inbox.html?a=view">
+                                        <span class="photo">
+                                            <img src="{{settings.layoutPath}}/img/avatar2.jpg" class="img-circle" alt=""> </span>
+                                        <span class="subject">
+                                            <span class="from"> Lisa Wong </span>
+                                            <span class="time">40 mins </span>
+                                        </span>
+                                        <span class="message"> Vivamus sed auctor 40% nibh congue nibh... </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="inbox.html?a=view">
+                                        <span class="photo">
+                                            <img src="{{settings.layoutPath}}/img/avatar3.jpg" class="img-circle" alt=""> </span>
+                                        <span class="subject">
+                                            <span class="from"> Richard Doe </span>
+                                            <span class="time">46 mins </span>
+                                        </span>
+                                        <span class="message"> Vivamus sed congue nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <!-- END INBOX DROPDOWN -->
+                <!-- BEGIN USER LOGIN DROPDOWN -->
+                <li class="dropdown dropdown-user dropdown-dark">
+                    <a href="javascript:;" class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown" data-close-others="true">
+                        <img alt="" class="img-circle" src="../avatr/{{AuthSetting.LoginUser.id}}">
+                        <span class="username username-hide-mobile">{{AuthSetting.LoginUser.username}}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-default">
+                        <li>
+                            <a href="#/profile/account">
+                                <i class="icon-user"></i> 个人信息 </a>
+                        </li>
+                        <li>
+                            <a href="#/profile/dashboard" ng-show="AuthSetting.LoginUser.roleLevel>0">
+                            <i class="glyphicon glyphicon-th"></i> 系统管理 </a>
+                        </li>
+
+
+                        <li class="divider"> </li>
+
+                        <li>
+                            <a ng-click="loginOut()">
+                                <i class="icon-key" ></i> 退出账户 </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- END USER LOGIN DROPDOWN -->
+                <!-- BEGIN QUICK SIDEBAR TOGGLER -->
+                <!-- END QUICK SIDEBAR TOGGLER -->
+            </ul>
+        </div>
+        <!-- END TOP NAVIGATION MENU -->
+    </div>
+</div>
+<!-- END HEADER TOP -->
+<!-- BEGIN HEADER MENU -->
+<div class="page-header-menu">
+    <div class="container">
+        <!-- BEGIN HEADER SEARCH BOX -->
+        <form class="search-form" action="extra_search.html" method="GET">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" name="query">
+                <span class="input-group-btn">
+                    <a href="javascript:;" class="btn submit">
+                        <i class="icon-magnifier"></i>
+                    </a>
+                </span>
+            </div>
+        </form>
+        <!-- END HEADER SEARCH BOX -->
+        <!-- BEGIN MEGA MENU -->
+        <!--导航栏-->
+        <!-- DOC: Apply "hor-menu-light" class after the "hor-menu" class below to have a horizontal menu with white background -->
+        <!-- DOC: Remove dropdown-menu-hover and data-close-others="true" attributes below to disable the dropdown opening on mouse hover -->
+        <div class="hor-menu">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="#/dashboard.html">首页</a>
+                </li>
+                <li class="menu-dropdown mega-menu-dropdown ">
+                    <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="#" class="dropdown-toggle"> 采集
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu" style="min-width: 600px">
+                        <li>
+                            <div class="mega-menu-content">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <ul class="mega-menu-submenu">
+                                            <li>
+                                                <h3>系统模板</h3>
+                                            </li>
+                                            <li>
+                                                <a ng-href="index.html#/collect_news.html" class="iconify">
+                                                    <i class="glyphicon glyphicon-phone"></i> 新闻媒体 </a>
+                                            </li>
+                                            <li>
+                                                <a ui-sref="collect_forum"  ui-sref-opts="{reload:true}" class="iconify">
+                                                    <i class="glyphicon glyphicon-bullhorn"></i> 博客论坛 </a>
+                                            </li>
+
+                                            <li>
+                                                <a ui-sref="collect_business"  ui-sref-opts="{reload:true}"  class="iconify">
+                                                    <i class="glyphicon glyphicon-search"></i> 商业数据 </a>
+                                            </li>
+
+                                            <!--<li>
+                                                <a ng-href="index.html#/collect_personal.html" class="iconify">
+                                                    <i class="glyphicon glyphicon-leaf"></i> 私人定制 </a>
+                                            </li>-->
+
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <ul class="mega-menu-submenu">
+                                            <li>
+                                                <h3>自定义模板</h3>
+                                            </li>
+                                            <li>
+                                                <a ng-click="designCollectTemplate(1)" class="iconify">
+                                                    <i class="glyphicon glyphicon-file"></i> 单页采集 </a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="designCollectTemplate(2)" class="iconify">
+                                                    <i class="glyphicon glyphicon-duplicate"></i> 分页采集 </a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="designCollectTemplate(3)" class="iconify">
+                                                    <i class="icon-link"></i> 分层链接采集 </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <ul class="mega-menu-submenu">
+                                            <li>
+                                                <h3>采集管理</h3>
+                                            </li>
+                                            <li>
+                                                <a ng-href="index.html#/template_manage.html" class="iconify">
+                                                    <i class="fa fa-angle-right"></i> 模板管理 </a>
+                                            </li>
+                                            <li>
+                                                <a ng-href="index.html#/collectproject_manage.html" class="iconify">
+                                                    <i class="fa fa-angle-right"></i> 项目管理 </a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-dropdown mega-menu-dropdown mega-menu-full ">
+                    <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" ng-href="index.html#/search.html" class="dropdown-toggle"> 搜索
+                    </a>
+                </li>
+                <li class="menu-dropdown mega-menu-dropdown ">
+                    <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="#" class="dropdown-toggle">分析
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu" style="min-width: 600px">
+                        <li>
+                            <div class="mega-menu-content">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <ul class="mega-menu-submenu">
+                                            <li>
+                                                <h3>分析</h3>
+                                            </li>
+                                            <li>
+                                                <a ng-href="index.html#/textlibrary_manage.html" class="iconify">
+                                                    <i class="fa fa-angle-right"></i> 数据管理 </a>
+                                            </li>
+                                            <li>
+                                                <a ng-href="index.html#/analysisproject_manage.html" class="iconify">
+                                                    <i class="fa fa-angle-right"></i> 项目管理 </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <ul class="mega-menu-submenu">
+                                            <li>
+                                                <h3>在线工具</h3>
+                                            </li>
+                                            <li>
+                                                <a ng-href="index.html#/analysis_online.html" class="iconify">
+                                                    <i class="fa fa-angle-right"></i> 在线分析 </a>
+                                            </li>
+                                            <li>
+                                                <a ng-href="index.html#/analysis_db.html" class="iconify">
+                                                    <i class="fa fa-angle-right"></i> 数据库可视化工具 </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <ul class="mega-menu-submenu">
+                                            <li>
+                                                <h3>配置管理</h3>
+                                            </li>
+                                            <li>
+                                                <a ng-href="index.html#/analysisproject_training.html" class="iconify">
+                                                    <i class="fa fa-angle-right"></i> 分类训练 </a>
+                                            </li>
+                                            <li>
+                                                <a ng-href="index.html#/analysis_sentime_dictionary.html" class="iconify">
+                                                    <i class="fa fa-angle-right"></i> 情感词典 </a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+            </li>
+
+
+
+
+
+
+
+
+            </ul>
+        </div>
+        <!-- END MEGA MENU -->
+    </div>
+</div>
+<!-- END HEADER MENU -->

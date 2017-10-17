@@ -1,0 +1,194 @@
+
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">分析</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"> </li>
+</ul>
+
+<div class="portlet light bordered ">
+    <div class="portlet-title">
+        <div class="caption caption-md">
+            <i class="icon-bar-chart font-red"></i>
+            <span class="caption-subject font-red bold uppercase">情感分析</span>
+        </div>
+
+    </div>
+
+    <h3 class="text-center title"><strong>{{analysisProject.name}}</strong></h3>
+    <div>
+        <div class="form-group">
+            <div >
+                <label  >分析状态：</label>
+                <span ng-class ="{'label  label-success': analysisProject.sentimeStatus=='分析结束','label label-sm label-info':analysisProject.sentimeStatus=='正在分析','label label-sm label-danger':analysisProject.sentimeStatus=='尚未分析'}" >{{analysisProject.sentimeStatus}}</span>
+            <div class="padding-tb-10">
+                <label >有效文本字段：</label>
+                <!--<span class="label label-default">所有字段</span>-->
+                    <label class="checkbox-inline" ng-repeat="(key, value) in sentimeFields">
+                        <input type="checkbox" name="sentimeFields" ng-model="sentimeFields[key]"   ng-true-value="true" ng-false-value="false"  > {{key}}
+                    </label>
+            </div>
+                <div>
+                    <label>选择情感分析库：</label>
+                    <label class="checkbox-inline" ng-repeat="dic in dictionaries">
+
+                        <input type="radio" name="dictionaryId" value={{dic.id}} ng-model="$parent.dictionaryId"  />{{dic.name}}
+
+                    </label>
+
+            </div>
+
+
+
+                <div>
+                    <button  ng-disabled="analysisProject.sentimeStatus=='正在分析'"   class="btn sm blue" style="margin-left: 100px" ng-click="startSentime()">
+                        <i class="fa fa-check" ></i>开始分析</button>
+                </div>
+
+
+
+
+
+                </div>
+    </div>
+
+
+
+
+
+
+    </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="row" style="margin-top: 30px" ng-show="analysisProject.sentimeStatus=='分析结束'">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption font-dark">
+                    <i class="icon-settings font-green"></i>
+                    <span class="caption-subject font-green bold  uppercase"> 分析结果展示</span>
+                </div>
+
+
+
+
+              <!--  <div class="row" >
+                    <div class="col-md-2">
+                        <div class="btn-group pull-right">
+                            <button class="btn green  btn-outline dropdown-toggle" data-toggle="dropdown">工具
+                                <i class="fa fa-angle-down"></i>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+
+                                <li>
+                                    <a href="javascript:;">
+                                        <i class="fa fa-file-excel-o"></i> 导出Excel </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+-->
+
+
+
+
+            </div>
+            <div class="portlet-body">
+
+
+
+
+
+                <div class="table-scrollable-borderless" style="width: 90%;margin-left: 5%" >
+                    <table class="table table-hover table-light table-striped" style="text-align: center" >
+                        <thead>
+                        <tr class="uppercase" >
+                            <th class="text-center"> 序号 </th>
+                            <th class="text-center" > 文本内容 </th>
+                            <th class="text-center"> 正向得分 </th>
+                            <th class="text-center"> 负向得分 </th>
+                            <th class="text-center"> 总分 </th>
+                        </tr>
+                        </thead>
+
+
+
+                        <tr ng-repeat="s in sentimeResult">
+                            <td class="col-md-1">{{$index+1+(pageConfig.bigCurrentPage-1)*pageConfig.itemsPerPage}}</td>
+                            <td>
+                            <div ng-show = "s.text.length<=100 "> {{s.text}} </div>
+                            <span ng-hide="true">{{value=s.text}}</span>
+                            <span ng-show = "value.length>100 " tooltips tooltip-side="center" tooltip-template='{{value}}' >   {{s.text | characters:100:true }}</span></td>
+                            <!--<td class="col-md-8" style="text-align: left"> <span>{{s.text| textLengthSet:true:100:'' }}</span>   <span ng-show="s.id==id" >{{leaveText}}</span> <span ng-click="showAll(s.id,s.text)"> <span ng-show="s.id==id"> < < </span>  <span ng-show="s.id!=id"> > > </span>   </span></td>-->
+                            <td class="col-md-1"> <span class="bold font-green">{{s.positiveScore}}</span> </td>
+                            <td class="col-md-1"> <span class="bold font-red">{{s.negativeScore}}</span> </td>
+                            <td class="col-md-1"> <span class="bold bg-font-grey">{{s.positiveScore+s.negativeScore}}</span> </td>
+
+                            <!--<td class="col-md-2"> <a class="btn btn-sm btn-primary" ng-click="showClassifyInfo(classify.categoryName)"> 查看详情 </a> </td>-->
+
+                        </tr>
+
+
+
+
+
+
+                    </table>
+
+                </div>
+                <pagination ng-click="getSentimeResult()" total-items="pageConfig.bigTotalItems" ng-model="pageConfig.bigCurrentPage" max-size="pageConfig.maxSize" class="pagination-sm navbar-right" boundary-links="true"></pagination>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

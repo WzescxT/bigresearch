@@ -1,0 +1,56 @@
+<!--用户管理界面-->
+<!-- BEGIN PAGE BREADCRUMB -->
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">个人</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active"> 用户信息 </li>
+</ul>
+<!-- END PAGE BREADCRUMB -->
+<!-- BEGIN PAGE CONTENT-->
+<div class="row" ng-controller="UserProfileController">
+    <div class="col-md-12">
+        <!-- BEGIN PROFILE SIDEBAR -->
+        <div class="profile-sidebar">
+            <!-- PORTLET MAIN -->
+            <div class="portlet light profile-sidebar-portlet">
+                <!-- SIDEBAR USERPIC -->
+                <div class="profile-userpic">
+                    <img src="../avatr/{{AuthSetting.LoginUser.id}}" class="img-responsive" alt=""> </div>
+                <!-- END SIDEBAR USERPIC -->
+                <!-- SIDEBAR USER TITLE -->
+                <div class="profile-usertitle">
+                    <div class="profile-usertitle-name"> {{AuthSetting.LoginUser.username}} </div>
+                    <div class="profile-usertitle-job"> {{AuthSetting.LoginUser.roleName}} </div>
+                </div>
+                <div class="profile-usermenu">
+                    <ul class="nav">
+
+                        <li ng-class="{active: $state.includes('profile.account')}">
+                            <a ui-sref="profile.account">
+                                <i class="icon-settings"></i> 个人账户 </a>
+                        </li>
+
+                        <li ng-show="AuthSetting.LoginUser.roleLevel>2" ng-class="{active: $state.includes('profile.dashboard')}">
+                            <a ui-sref="profile.dashboard">
+                                <i class="icon-home"></i> 用户管理 </a>
+                        </li>
+
+                        <li ng-class="{active: $state.includes('profile.help')}">
+                            <a ui-sref="profile.help">
+                                <i class="icon-info"></i> 帮助 </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- END MENU -->
+            </div>
+        </div>
+        <!-- END BEGIN PROFILE SIDEBAR -->
+        <!-- BEGIN PROFILE CONTENT -->
+        <div ui-view class="profile-content fade-in-up"> </div>
+        <!-- END PROFILE CONTENT -->
+    </div>
+</div>
+<!-- END PAGE CONTENT-->
+

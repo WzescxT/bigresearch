@@ -1,0 +1,98 @@
+
+<!--select-->
+<script src="../assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+<script src="../assets/pages/scripts/components-bootstrap-select.min.js" type="text/javascript"></script>
+<script src="../assets/pages/scripts/components-select2.min.js" type="text/javascript"></script>
+
+<link href="../assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
+<link href="../assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+<link href="../assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+<div class="modal-body"   style="text-align: center;padding: 30px 60px 50px 60px;">
+
+    <div class="row" >
+        <div  class="col-md-12">
+            <!-- BEGIN PORTLET-->
+                <div class="portlet-title" style="padding-bottom: 20px">
+                    <h4 class="caption primary-link">新建文本分析项目 </h4>
+                </div>
+                <div class="portlet-body form">
+                    <!-- BEGIN FORM-->
+                    <form  class="form-horizontal ">
+
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">项目名称:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="cname" required="required" placeholder="{{analysisProject.name}}" class="form-control" ng-model="analysisProject.name"/>
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+
+
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">选择文本库</label>
+                                <div class="col-sm-9">
+                                    <select  class="form-control select2me" ng-model="analysisProject.textlibraryId"  >
+                                        <option  value=0 selected="selected">请选择文本库</option>
+                                        <option ng-repeat="tl in textLibraries" value={{tl.id}}>{{tl.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+
+
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">项目描述:</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control" name="mainInfo" rows="10" placeholder="{{analysisProject.describle}}" ng-model="analysisProject.describle"></textarea>
+                                </div>
+
+                            </div>
+                        </fieldset>
+
+
+
+
+
+
+
+
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-6" >
+                                    <button  class="btn green" ng-click="createAnalysisProject()">
+                                        <i class="fa fa-check" ></i>创建</button>
+                                    <button type="button" class="btn default" ng-click="cancel()">取消</button>
+                                </div>
+                            </div>
+                    </form>
+                    <!-- END FORM-->
+                </div>
+            </div>
+            <!-- END PORTLET-->
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+</div>

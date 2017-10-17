@@ -1,0 +1,103 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light">
+            <div class="portlet-title tabbable-line">
+                <div class="caption caption-md">
+                    <i class="icon-globe theme-font hide"></i>
+                    <span class="caption-subject font-blue-madison bold uppercase">账户简况</span>
+                </div>
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#" data-target="#tab_1_1" data-toggle="tab">个人信息</a>
+                    </li>
+                    <li>
+                        <a href="#" data-target="#tab_1_2" data-toggle="tab">更换头像</a>
+                    </li>
+                    <li>
+                        <a href="#" data-target="#tab_1_3" data-toggle="tab">更改密码</a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="portlet-body">
+                <div class="tab-content">
+                    <!-- PERSONAL INFO TAB -->
+                    <div class="tab-pane active" id="tab_1_1">
+                        <form role="form" action="#">
+                            <div class="form-group">
+                                <label class="control-label">用户名</label>
+                                <input type="text" placeholder="John" ng-model="user.username" class="form-control" /> </div>
+                            <div class="form-group">
+                                <label class="control-label">性别</label>
+                                <select class="form-control" ng-model="user.gender">
+                                    <option value ="male">男</option>
+                                    <option value="female">女</option>
+                                </select></div>
+                                <!--<input type="text" placeholder="Web Developer" ng-model="user.gender" class="form-control" /> </div>-->
+                            <div class="form-group">
+                                <label class="control-label">电话号码</label>
+                                <input type="text" placeholder="+1 646 580 DEMO (6284)" ng-tel ng-model="user.tel" class="form-control" /> </div>
+                            <div class="form-group">
+                                <label class="control-label">邮箱地址</label>
+                                <input type="text" placeholder="Design, Web etc." ng-model="user.email" class="form-control" /> </div>
+
+                            <div class="margiv-top-10">
+                                <a href="#" ng-click="updateBasic()" class="btn green-haze"> 保存修改 </a>
+                                <a href="#" class="btn default" ng-click="resetBasic()"> 取消 </a>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- END PERSONAL INFO TAB -->
+                    <!-- CHANGE AVATAR TAB -->
+                    <div class="tab-pane" id="tab_1_2">
+                        <p> 上传一个图片作为您的头像 </p>
+                        <div uploader="uploader" filters="queueLimit, customFilter">
+                            <div class="form-group">
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                                        <img src="../avatr/{{AuthSetting.LoginUser.id}}" alt="" /> </div>
+                                    <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
+                                    <div>
+                                        <span class="btn default btn-file">
+                                            <span class="fileinput-new"> 选择图片 </span>
+                                            <span class="fileinput-exists"> 更改 </span>
+                                            <input  type="file" id="fileupload" nv-file-select=""   uploader="uploader"> </span>
+                                        <button class="btn default fileinput-exists" ng-click="uploader.clearQueue()" data-dismiss="fileinput"> 移除 </button>
+                                    </div>
+                                </div>
+                                <div class="clearfix margin-top-10">
+                                    <span class="label label-danger">注意! </span>
+                                    <span>如果不能上传请切换浏览器或者更新浏览器版本，如： Firefox, Chrome, Opera, Safari and Internet Explorer   </span>
+                                </div>
+                            </div>
+                            <div class="margin-top-10">
+
+                                <button type="button" ng-click="uploader.uploadAll()"  ng-disabled="!uploader.getNotUploadedItems().length" class="btn green-haze"> 提交 </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END CHANGE AVATAR TAB -->
+                    <!-- CHANGE PASSWORD TAB -->
+                    <div class="tab-pane" id="tab_1_3">
+                        <form action="#">
+                            <div class="form-group">
+                                <label class="control-label">当前密码</label>
+                                <input type="password" ng-model="password.oldPassword" class="form-control" /> </div>
+                            <div class="form-group">
+                                <label class="control-label">新密码</label>
+                                <input type="password" ng-model="password.newPassword" class="form-control" /> </div>
+                            <div class="form-group">
+                                <label class="control-label">重新输入新密码</label>
+                                <input type="password" ng-model="password.rePassword" class="form-control" /> </div>
+                            <div class="margin-top-10">
+                                <a href="#" class="btn green-haze" ng-click="updatePassword()"> 更改密码 </a>
+                                <a href="#" class="btn default" ng-click="resetPassword()"> 取消 </a>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

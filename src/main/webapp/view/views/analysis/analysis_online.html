@@ -1,0 +1,176 @@
+<!--导航栏样式-->
+<!--<style>
+    /* Custom Styles */
+    ul.header-tabs{
+        width: 140px;
+        margin-top: 20px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+    }
+    ul.header-tabs li{
+        margin: 0;
+        border-top: 1px solid #ddd;
+    }
+    ul.header-tabs li:first-child{
+        border-top: none;
+    }
+    ul.header-tabs li a{
+        margin: 0;
+        padding: 8px 16px;
+        border-radius: 0;
+    }
+    ul.header-tabs li.active a, ul.header-tabs li.active a:hover{
+        color: #fff;
+        background: #0088cc;
+        border: 1px solid #0088cc;
+    }
+    ul.header-tabs li:first-child a{
+        border-radius: 4px 4px 0 0;
+    }
+    ul.header-tabs li:last-child a{
+        border-radius: 0 0 4px 4px;
+    }
+    ul.header-tabs.affix{
+        top: 30px; /* Set the top position of pinned element */
+    }
+</style>-->
+
+
+<body  data-spy="scroll" data-target="#myScrollspy">
+    <div style=" width: 100%">
+        <div class="col-md-2"  id="myScrollspy">
+            <div id="myNav" class="nav header-tabs"  data-offset-top="230" data-spy="affix" style="width: 166px;">
+                <a ng-click="toTab(0)"  class="list-group-item">导航条</a>
+                <a ng-click="toTab(1)" class="list-group-item">关键词提取</a>
+                <a ng-click="toTab(2)" class="list-group-item">中文分词</a>
+                <a ng-click="toTab(3)" class="list-group-item">摘要&amp;高亮</a>
+                <a ng-click="toTab(4)" class="list-group-item">简繁体&amp;拼音</a>
+
+            </div>
+        </div>
+
+
+
+        <div class="col-md-10" role="main" id="main">
+
+
+
+
+            <div class="panel panel-default" id="tab0">
+                <div class="panel-heading"><span class="panel-title text-primary" style=" font-size: 15px">单文本分析</span></div>
+                <!--<input  ng-model="content" />-->
+                <textarea my-textarea={{content}} style="width: 100%;height: 300px;background-color: white; font-size:13px;padding-left: 3%;padding-right: 3% "  contenteditable="true" ng-model="content" ng-change="refresh()"></textarea>
+
+                <!--<div  id="content" class="textarea" ng-model="content"  style="background-color: white; font-size:18px;padding-left: 3%;padding-right: 3% "  contenteditable="true">{{content}}<br /></div>-->
+                <!--<textarea id="content" ng-model="content" name="content" class="input">{{content}}</textarea>-->
+                <div class="panel-footer" style="font-size: 14px;text-align:right;padding: 6px;">
+                    <button type="button" class="btn btn-primary btn-md" ng-click="refresh()">提交文本</button>
+                </div>
+            </div>
+
+
+            <div class="panel panel-default" id="tab1">
+
+                <div class="panel-heading "><span class="panel-title text-primary" style=" font-size: 15px">关键词提取</span></div>
+                <div style="text-align: center" >
+
+                <ng-tag-cloud  class="custom-1" cloud-width="800" cloud-height="500" cloud-data="keyWords"></ng-tag-cloud>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- Nav tabs -->
+            <div class="panel panel-default" id="tab2">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a ng-click="getSegmentContent(3)" data-toggle="tab">NLP分词</a></li>
+                    <li><a ng-click="getSegmentContent(4)" data-toggle="tab">精准分词</a></li>
+                    <li><a ng-click="getSegmentContent(2)" data-toggle="tab">索引分词</a></li>
+                    <li><a ng-click="getSegmentContent(1)" data-toggle="tab">基本分词</a></li>
+
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="nlp_seg">
+                        <div class="panel-body">
+                            <span style="line-height: 32px;" ng-repeat="term in terms">
+
+                                <dd  class="word_{{term.natureStr}} word_width">{{term.name}}</dd>
+                            </span>
+
+
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+                <div class="panel-heading text-right">
+
+                </div>
+
+
+
+
+
+
+            <div class="panel panel-default" id="tab3">
+                <div class="panel-heading"><span class="panel-title text-primary" style=" font-size: 15px">摘要&amp;高亮</span></div>
+                <div class="panel-body">
+                    <span style="font-size: 20px;" id="summaryStr_result">
+
+                            <font  style="{{word.isKeyWord ? 'color:#F00' : 'color : blank'}}"  ng-repeat="word in words">{{word.name}}</font>
+
+                        <!--<font color="red">语言</font>是<font color="red">人类</font>区别其他动物的本质特性。在所有生物中，只有<font color="red">人类</font>才具有<font color="red">语言</font><font color="red">能力</font>。<font color="red">人类</font>的多种<font color="red">智能</font>都与<font color="red">语言</font>有着密切的关系。<font color="red">人类</font>的逻辑思维以<font color="red">语言</font>为<font color="red">形式</font>，<font color="red">人类</font>的绝大部分知识也是以<font color="red">语言文字</font>的<font color="red">形式</font>记载和流传下来的。因而，它也是人工<font color="red">智能</font>的一个重要，甚至核心部分。用自然<font color="red">语言</font>与<font color="red">计算机</font>进行通信，这是<font color="red">人们</font>长期以来所追求的。因为它既有明显的<font color="red">实际意义</font>，同时也有重要的理论意义：<font color="red">人们</font>可以用自己最<font color="red">习惯</font>的<font color="red">语言</font>来使用<font color="red">计算机</font>，而无需再花大量的时间和精力去学习不很自然和<font color="red">习惯</font>的各种<font color="red">计算机</font><font color="red">语言</font>；<font color="red">人们</font>也可通过它进一步了解<font color="red">人类</font>的<font color="red">语言</font><font color="red">能力</font>和<font color="red">智能</font>的机制。....-->
+                    </span>
+                </div>
+                <div class="panel-heading text-right">
+
+                </div>
+            </div>
+
+            <div class="panel panel-default" id="tab4">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a ng-click="ZHConvert(true)" data-toggle="tab">繁体中文</a></li>
+                    <li><a ng-click="ZHConvert(false)" data-toggle="tab">简体中文</a></li>
+                    <li><a ng-click="getPinyin()" data-toggle="tab">汉语拼音</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="jian">
+                        <div class="panel-body">
+                            <span  style="font-size: 20px;" >
+                                <font>{{exchangeContent}}</font>
+                            </span>
+			 		<!--<pre style="font-size: 20px;" id="j2f_result">{{exchangeContent}}</pre>-->
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="fan">
+                        <div class="panel-body">
+			 		<pre style="font-size: 20px;"  id="f2j_result">语言是人类区别其他动物的本质特性。在所有生物中，只有人类才具有语言能力。人类的多种智能都与语言有着密切的关系。人类的逻辑思维以语言为形式，人类的绝大部分知识也是以语言文字的形式记载和流传下来的。因而，它也是人工智能的一个重要，甚至核心部分。
+用自然语言与计算机进行通信，这是人们长期以来所追求的。因为它既有明显的实际意义，同时也有重要的理论意义：人们可以用自己最习惯的语言来使用计算机，而无需再花大量的时间和精力去学习不很自然和习惯的各种计算机语言；人们也可通过它进一步了解人类的语言能力和智能的机制。</pre>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="pin">
+                        <div class="panel-body">
+                            <pre style="font-size: 20px;" id="pinyin_result">{{pinyin}}</pre>     </div>
+                    </div>
+                </div>
+                <div class="panel-heading text-right">
+
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+
+
+</body>

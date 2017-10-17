@@ -1,0 +1,171 @@
+
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">分析</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"> </li>
+</ul>
+
+<div class="portlet light bordered ">
+    <div class="portlet-title">
+        <div class="caption caption-md">
+            <i class="icon-bar-chart font-red"></i>
+            <span class="caption-subject font-red bold uppercase">分类分析</span>
+        </div>
+
+    </div>
+
+    <h3 class="text-center title"><strong>{{analysisProject.name}}</strong></h3>
+    <div>
+        <div class="form-group">
+            <div >
+                <label  >分类状态：</label>
+                <span ng-class ="{'label  label-success': analysisProject.classifyStatus=='分类结束','label label-sm label-info':analysisProject.classifyStatus=='正在分类','label label-sm label-danger':analysisProject.classifyStatus=='尚未分类'}" >{{analysisProject.classifyStatus}}</span>
+            <div class="padding-tb-10">
+                <label >有效文本字段：</label>
+                <!--<span class="label label-default">所有字段</span>-->
+                    <label class="checkbox-inline" ng-repeat="(key, value) in classifyFields">
+                        <input type="checkbox" name="classifyFields" ng-model="classifyFields[key]"   ng-true-value="true" ng-false-value="false"  > {{key}}
+                    </label>
+            </div>
+                <div>
+                    <label>选择分类：</label>
+                    <label class="checkbox-inline" ng-repeat="(key, value) in classifyCategories">
+                        <input type="checkbox" name="classifyCategories" ng-model="classifyCategories[key]"   ng-true-value="true" ng-false-value="false"  > {{key}}
+                    </label>
+
+
+
+            </div>
+
+
+
+                <div>
+                    <button  ng-disabled="analysisProject.classifyStatus=='正在分类'"   class="btn sm blue" style="margin-left: 100px" ng-click="startClassify()">
+                        <i class="fa fa-check" ></i>开始分类分析</button>
+                </div>
+
+
+
+
+
+                </div>
+    </div>
+
+
+
+
+
+
+    </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="row" style="margin-top: 30px" ng-show="analysisProject.classifyStatus=='分类结束'">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption font-dark">
+                    <i class="icon-settings font-green"></i>
+                    <span class="caption-subject font-green bold  uppercase"> 分类结果展示</span>
+                </div>
+
+
+
+
+
+
+
+
+            </div>
+            <div class="portlet-body">
+
+
+
+
+
+                <div class="table-scrollable-borderless" style="width: 90%;margin-left: 5%" >
+                    <table class="table table-hover table-light table-striped" style="text-align: center" >
+                        <thead>
+                        <tr class="uppercase" >
+                            <th class="text-center"> 序号 </th>
+                            <th class="text-center" > 分类名称 </th>
+                            <th class="text-center"> 分类数量 </th>
+                            <th class="text-center"> 分类时间 </th>
+                            <th class="text-center"> 查看详情 </th>
+                        </tr>
+                        </thead>
+
+
+
+                        <tr ng-repeat="classify in classifyResult">
+                            <td class="col-md-1">{{$index+1+(pageConfig.bigCurrentPage-1)*pageConfig.itemsPerPage}}</td>
+                            <td class="col-md-4"> {{classify.categoryName}} </td>
+                            <td class="col-md-2"> <span class="bold font-red">{{classify.textNo}}</span> </td>
+                            <td class="col-md-3"><span class="bold font-green"  ng-bind="classify.createTime | date:'yyyy-MM-dd hh:mm'"></span>  </td>
+                            <td class="col-md-2"> <a class="btn btn-sm btn-primary" ng-click="showClassifyInfo(classify.categoryName)"> 查看详情 </a> </td>
+
+                        </tr>
+
+
+
+
+
+
+                    </table>
+
+                </div>
+                <pagination ng-click="getClusteResult()" total-items="pageConfig.bigTotalItems" ng-model="pageConfig.bigCurrentPage" max-size="pageConfig.maxSize" class="pagination-sm navbar-right" boundary-links="true"></pagination>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

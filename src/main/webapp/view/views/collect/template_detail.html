@@ -1,0 +1,26 @@
+<!--模板信息弹框展示-->
+<div class="col-md-12">
+    <!-- BEGIN PORTLET-->
+    <div class="portlet box green-meadow">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-gift"></i>模板详情 </div>
+            <div class="tools">
+                <a href="javascript:;" class="remove" ng-click="closeModal()"> </a>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form  class="form-horizontal form-bordered">
+                <div class="col-md-12" style="padding:0;">
+                    <div jxb-bind-compiled-html=jsonResult style="padding-left: 20px;padding-right: 20px" >
+                    </div>
+                </div>
+                <br style="clear:both;">
+
+            </form>
+            <!-- END FORM-->
+        </div>
+    </div>
+    <!-- END PORTLET-->
+</div>

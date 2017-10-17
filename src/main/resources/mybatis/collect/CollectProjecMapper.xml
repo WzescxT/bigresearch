@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.monetware.mapper.collect.CollectProjectMapper">
+
+	<insert id="createCollectProject"    parameterType="com.monetware.model.collect.CollectProject">
+	    INSERT INTO 
+	    `collect_project` 
+	    (`name`, `import_search_status`, `create_user`,`group`, `describle`, `status`, `template_id`, `collect_no`) 
+	    VALUES
+  			(#{name},#{importSearchStatus},#{createUser},#{group},#{describle},#{status},#{templateId},#{collectNo})
+  	</insert>
+	<select id="getCollectProject"  resultType="com.monetware.model.collect.CollectProject" parameterType="java.lang.Long">
+	    select
+	    	`id` as id, 
+	    	`name` as name, 
+	    	`import_search_status` as 'importSearchStatus',
+	    	`create_user` as createUser,
+	    	`group` as 'group', 
+	    	`describle` as describle, 
+	    	`search_url` as searchUrl, 
+	    	`create_time` as createTime, 
+	    	`collect_time` as collectTime, 
+	    	`status` as status, 
+	    	`template_id` as templateId, 
+	    	`collect_no` as collectNo, 
+	    	`data_source` as dataSource
+	    from
+	    	`collect_project`
+	   	where `id` = #{id}
+  	</select>
+	<select id="getCollectProjects"  resultType="com.monetware.model.collect.CollectProject" parameterType="java.lang.Integer">
+	    select
+	    	`id` as id, 
+	    	`name` as name, 
+	    	`import_search_status` as 'importSearchStatus',
+	    	`create_user` as createUser,
+	    	`group` as 'group', 
+	    	`describle` as describle, 
+	    	`search_url` as searchUrl, 
+	    	`create_time` as createTime, 
+	    	`collect_time` as collectTime, 
+	    	`status` as status, 
+	    	`template_id` as templateId, 
+	    	`collect_no` as collectNo, 
+	    	`data_source` as dataSource
+	    from
+	    	`collect_project`
+	   	where `create_user` = #{createUser}
+  	</select>
+  	
+  	
+  	<select id="getCollectProjects1"  resultType="com.monetware.model.search.ProjectNameModel" parameterType="java.lang.Integer">
+	    select
+	    	`id` as id, 
+	    	`name` as name, 
+	    	`create_user` as createUser
+	    from
+	    	`collect_project`
+	   	where `create_user` = #{createUser} AND `import_search_status`= 2
+  	</select>
+  	
+  	
+  	<select id="getCollectProjectsNo"  resultType="java.lang.Long" parameterType="java.util.Map">
+	    select
+	    	count(id)
+	    from
+	    	`collect_project`
+	   	where `create_user` = #{userId}
+	   		and 
+	   		`name` like "%"#{name}"%"
+  	</select>
+  	
+  	
+  	<select id="getMonthProjectsNo"  resultType="java.lang.Long" parameterType="java.util.Map">
+	     select
+	    	count(id)
+	    from
+	    	`collect_project`
+	   	where 
+	   		`create_user` = #{userId}
+	   		and 
+	   		`name` like "%"#{name}"%"
+			and 
+			`create_time` >= #{firstDay}
+			
+  	</select>
+  	
+  	
+  	
+	<select id="getPartCollectProjects"  resultType="com.monetware.model.collect.CollectProject">
+	    select
+	    	`id` as id, 
+	    	`name` as name, 
+	    	`import_search_status` as 'importSearchStatus',
+	    	`create_user` as createUser,
+	    	`group` as 'group', 
+	    	`describle` as describle, 
+	    	`search_url` as searchUrl, 
+	    	`create_time` as createTime, 
+	    	`collect_time` as collectTime, 
+	    	`status` as status, 
+	    	`template_id` as templateId, 
+	    	`collect_no` as collectNo, 
+	    	`data_source` as dataSource
+	    from
+	    	`collect_project`
+	   	where `create_user` = #{userId}
+	   	and 
+	   		`name` like "%"#{name}"%"
+	   		ORDER BY create_time desc
+	   	limit  ${pageStart},${pageSize};
+  	</select>
+
+
+
+	<select id="getSearchProjects"  resultType="com.monetware.model.collect.CollectProject">
+	    select
+	    	`id` as id,
+	    	`name` as name,
+	    	`import_search_status` as 'importSearchStatus',
+	    	`create_user` as createUser,
+	    	`group` as 'group',
+	    	`describle` as describle,
+	    	`search_url` as searchUrl,
+	    	`create_time` as createTime,
+	    	`collect_time` as collectTime,
+	    	`status` as status,
+	    	`template_id` as templateId,
+	    	`collect_no` as collectNo,
+	    	`data_source` as dataSource
+	    from
+	    	`collect_project`
+	   	where `create_user` = #{userId}
+	   	and
+	   		`import_search_status` = 2
+	   		ORDER BY create_time desc
+
+  	</select>
+
+	<select id="getCollectProjectByName"  resultType="com.monetware.model.collect.CollectProject" parameterType="com.monetware.model.collect.CollectProject">
+	    select
+	    	`id` as id, 
+	    	`name` as name, 
+	    	`import_search_status` as 'importSearchStatus',
+	    	`create_user` as createUser,
+	    	`group` as 'group', 
+	    	`describle` as describle, 
+	    	`search_url` as searchUrl, 
+	    	`create_time` as createTime, 
+	    	`collect_time` as collectTime, 
+	    	`status` as status, 
+	    	`template_id` as templateId, 
+	    	`collect_no` as collectNo, 
+	    	`data_source` as dataSource
+	    from
+	    	`collect_project`
+	   	where `name` = #{name}
+	   		and
+	   		`create_user` = #{createUser}
+  	</select>
+  	
+  	<delete id="deleteCollectProject" parameterType="java.lang.Long">
+		DELETE FROM collect_project  where id = ${id};
+		DROP TABLE IF EXISTS collect_info_${id};
+	</delete>
+  	
+  	
+  	<update id="updateCollectProject" parameterType="com.monetware.model.collect.CollectProject">
+		UPDATE `collect_project`
+		<trim prefix="set" suffixOverrides=",">
+			<if test="searchUrl != null and searchUrl != ''">
+				`search_url` = #{searchUrl}  ,
+            </if>
+			<if test="importSearchStatus != null and importSearchStatus != ''">
+				`import_search_status` = #{importSearchStatus}  ,
+            </if>
+			<if test="status != null and status != ''">
+            	`status` = #{status}   ,
+            </if>
+			<if test="collectNo != null">
+            	`collect_no` = #{collectNo}   ,
+            </if>
+			<if test="collectTime != null and collectTime != ''">
+            	`collect_time` = #{collectTime}   ,
+            </if>
+			<if test="dataSource != null and dataSource != ''">
+	    		`data_source` = #{dataSource}   
+            </if>
+ 		</trim>
+   			where
+    		`id`= #{id}
+		
+</update>
+  	
+	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 
+</mapper>

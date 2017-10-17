@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.monetware.mapper.analysis.TextLibraryInfoMapper">
+	
+  	<select id="getInfoByPage"  parameterType="java.util.Map"  resultType="java.util.Map" >
+	    select
+	    	*
+	    from
+	    	analysis_textlibrary_info_${textLibraryId}
+	    	where 
+	   		`id` limit  ${pageStart},${pageSize};
+  	</select>
+  	
+  	
+  	<update id="createTextLibraryInfoTable" parameterType="map"> 
+  		CREATE TABLE if not EXISTS analysis_textlibrary_info_${textLibraryId} (
+  		`id` bigint(20) NOT NULL AUTO_INCREMENT,
+  		${sql}
+  		PRIMARY KEY (`id`)
+	) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+	
+	</update>
+	
+  <update id="dropTextLibraryInfoTable" parameterType="map"> 
+  		DROP TABLE IF EXISTS analysis_textlibrary_info_${textLibraryId};
+	
+	</update>
+  
+  
+  
+  <select id="getTextLibraryInfoNo" resultType="java.lang.Long">
+    select 
+    count(id)
+    from analysis_textlibrary_info_${textLibraryId}
+   
+  </select>
+  	
+  	<select id="getOneInfo" parameterType="java.util.Map"  resultType="java.util.Map">
+  	
+  	select
+	    	${columns}
+	    from
+	    	analysis_textlibrary_info_${textLibraryId}
+	    	where 
+	   		`id` = ${id};
+  	
+  	</select>
+  	
+  	
+  	<select id="getAllInfoByColumns" parameterType="java.util.Map"  resultType="java.util.Map">
+  	
+  		select
+	    	${columns}
+	    from
+	    	analysis_textlibrary_info_${textLibraryId}
+	    	
+  	
+  	</select>
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+</mapper>

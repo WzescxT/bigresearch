@@ -1,0 +1,376 @@
+
+<body>
+
+
+
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">数据分析</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"> </li>
+</ul>
+
+
+
+
+<style>
+    #main{width:100%;height:auto;}
+    #left{width:20%;height:auto;}
+    #right{width:75%;height:auto;margin-left:5%;}
+    #left,#right{float:left;}
+    pre {
+        white-space: pre-wrap; /* css-3 */
+        white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        word-wrap: break-word; /* Internet Explorer 5.5+ */
+    }
+
+
+</style>
+
+
+
+
+
+
+
+<div id="main">
+    <div id="left">
+
+
+        <div style="	height: 800px;background-color: #555;">
+            <treecontrol class="tree-dark" tree-model="treedata"  expanded-nodes="expandedNodes" selected-node="selectedNode"  on-selection="showSelected(node)">
+
+                 {{node.label}}
+            </treecontrol>
+        </div>
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+    <div id="right">
+
+
+
+
+
+
+        <!--sql条件-->
+        <div class="portlet light bordered " ng-show="selectedNode.id>0">
+            <div class="portlet-title">
+                <div class="caption caption-md">
+                    <i class="icon-bar-chart font-red"></i>
+                    <span class="caption-subject font-red bold uppercase">SQL分析</span>
+                </div>
+
+            </div>
+
+            <h3 class="text-center title"><strong>{{selectedNode.label}}</strong></h3>
+            <div>
+                <div class="form-group">
+                    <div >
+
+                        <label>选择类型：</label>
+                        <!--<label class="label  label-success" >{{analysisProject.clusteAlgorithm}}</label>-->
+                        <label class="checkbox-inline">
+                            <input type="radio" name="type" ng-model="SQL.type"    value='1'  >  查询
+                        </label>
+                        <!--<label class="checkbox-inline">
+                            <input type="radio" name="type" ng-model="SQL.type"     value='2'  >  统计
+                        </label>-->
+                        <label class="checkbox-inline">
+                            <input type="radio" name="type" ng-model="SQL.type"     value='3'  >  修改
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="radio" name="type" ng-model="SQL.type"     value='4'  >  删除
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="radio" name="type" ng-model="SQL.type"     value='5'  >  添加
+                        </label>
+
+
+
+
+
+                        <div class="padding-tb-10" ng-show="SQL.type==1">
+                            <label >选择字段：</label>
+                            <!--<span class="label label-default">所有字段</span>-->
+                            <label class="checkbox-inline" ng-repeat="(key, value) in SQL.columns">
+                                <input type="checkbox" name="column" ng-model="SQL.columns[key]"   ng-true-value="true" ng-false-value="false"  > {{key}}
+                            </label>
+                        </div>
+
+
+
+
+
+
+                        <div ng-show="SQL.type==3||SQL.type==5">
+                            <label>字段赋值：</label>
+                            <div class="form-group" style="width: 80%;padding-left: 10%">
+
+
+                                <div   ng-repeat="item in SQL.value">
+                                    <div style="padding-top: 20px">
+                                        <span class="fa fa-minus" style="display:inline-block;width: 10%;margin-left:5px" ng-click="delValueItem($index)" aria-hidden="true"></span>
+                                    <span style="display:inline-block;width: 15%">
+                                        <select style="height: 25px" ng-model="item.name">
+                                            <option ng-repeat="(key, value) in condition.columns" value="{{key}}">{{key}}</option>
+                                        </select>
+
+                                    </span>
+
+
+                                    <span style="display:inline-block;width: 15%;padding-left: 30px">
+                                        =
+
+
+                                    </span>
+
+                                    <span style="display:inline-block;width: 30%;padding-left: 30px">
+                                        <input ng-model="item.value" style="height: 25px" placeholder="输入参数">
+
+                                    </span>
+
+
+
+                                    </div>
+
+
+
+                                </div>
+
+                                <div style="padding-top: 20px">
+
+                                    <i class="fa fa-plus" style="display:inline-block;width: 10%;margin-left:5px" ng-click="addValueItem()" aria-hidden="true"></i>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+                        <div ng-hide="SQL.type==5">
+                            <label>键入条件：</label>
+                            <div class="form-group" style="width: 80%;padding-left: 10%">
+
+
+                                <div   ng-repeat="item in SQL.conditions">
+                                    <div style="padding-top: 20px">
+                                    <span class="fa fa-minus" style="display:inline-block;width: 10%;margin-left:5px" ng-click="delItem($index)" aria-hidden="true"></span>
+                                    <span style="display:inline-block;width: 15%">
+                                        <select style="height: 25px" ng-model="item.column">
+                                            <option ng-repeat="(key, value) in condition.columns" value="{{key}}">{{key}}</option>
+                                        </select>
+
+                                    </span>
+
+
+                                    <span style="display:inline-block;width: 15%;padding-left: 30px">
+                                        <select style="height: 25px" ng-model="item.compare">
+                                            <option ng-repeat="c in condition.compare" value={{c.value}} >{{c.name}}</option>
+                                        </select>
+
+
+
+                                    </span>
+
+                                    <span style="display:inline-block;width: 20%;padding-left: 30px">
+                                        <input ng-model="item.value" style="height: 25px" placeholder="输入参数">
+
+                                    </span>
+
+
+                                    <span style="display:inline-block;width: 15%;padding-left: 30px">
+                                        <select style="height: 25px" ng-model="item.relation">
+                                            <option ng-repeat="r in condition.relation" value={{r.value}}>{{r.name}}</option>
+                                        </select>
+
+
+
+                                    </span>
+
+                                    </div>
+
+
+
+                                </div>
+
+                                <div style="padding-top: 20px">
+
+                                    <i class="fa fa-plus" style="display:inline-block;width: 10%;margin-left:5px" ng-click="addItem()" aria-hidden="true"></i>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <div>
+
+                            <label>SQL生成：</label>
+                            <pre style="margin-left: 5px;text-align: left;width:100%">
+                                <!--<textarea  style="width: 100%;height: 100%;text-align: left" ng-model="sqlStr">
+                                    </textarea>-->
+     {{sqlStr}}
+
+
+                            </pre>
+
+                        </div>
+
+
+
+                        <div>
+                            <label   class="label  label-primary" style="margin-left: 100px" ng-click="excuteSql()">
+                                <i class="fa fa-check" ></i>执行SQL</label>
+                            <label class="label  label-success" style="margin-left: 80px">处理数量：{{pageConfig.bigTotalItems}}</label>
+
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--结果集展示-->
+
+        <div class="row" >
+            <div class="col-md-12">
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption font-dark">
+                            <i class="icon-settings font-green"></i>
+                            <span class="caption-subject font-green bold  uppercase"> 查询结果</span>
+                        </div>
+
+
+
+
+
+                    </div>
+                    <div class="portlet-body">
+
+
+
+
+
+                        <div class="table-scrollable-borderless" style="width: 90%;margin-left: 5%" >
+
+
+                            <table ng-show="results.length > 0" class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1">
+
+                                <thead>
+                                <tr>
+                                   <!-- <th style="text-align: center">
+                                        <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /> </th>-->
+                                    <th > id</th>
+                                    <th style="text-align: center" ng-repeat="c in columns" ng-show="c!='id'"> {{c}} </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="odd gradeX" ng-repeat="ci in results">
+
+                                    <td><span class="bold font-green">{{ci.id}}</span></td>
+                                    <td ng-repeat="c in columns" ng-show="c!='id'" >
+                                        <div ng-show = "ci[c].length<=50 "> {{ci[c]}} </div>
+                                        <span ng-hide="true">{{value=ci[c]}}</span>
+                                        <span ng-show = "ci[c].length>50 " tooltips tooltip-side="center" tooltip-template='{{value}}' >   {{ci[c] | characters:50:true }}</span></td>
+
+                                </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div ng-show="results.length > 0">
+
+
+
+                        <pagination ng-click="excuteSql()" total-items="pageConfig.bigTotalItems" ng-model="pageConfig.bigCurrentPage" max-size="pageConfig.maxSize" class="pagination-sm navbar-right" boundary-links="true"></pagination>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- END EXAMPLE TABLE PORTLET-->
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>

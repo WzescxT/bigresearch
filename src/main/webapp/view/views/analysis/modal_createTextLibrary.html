@@ -1,0 +1,61 @@
+
+<div class="modal-body"   style="text-align: center;padding: 30px 60px 50px 60px;">
+
+
+
+
+
+    <div class="row" >
+        <div  class="col-md-12">
+            <!-- BEGIN PORTLET-->
+                <div class="portlet-title" style="padding-bottom: 20px">
+                    <h4 class="caption primary-link">新建文本库 </h4>
+                </div>
+                <div class="portlet-body form">
+                    <!-- BEGIN FORM-->
+                    <form  class="form-horizontal ">
+
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">文本库名称:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="cname" required="required" placeholder="{{textLibrary.name}}" class="form-control" ng-model="textLibrary.name"/>
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">项目描述:</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control" name="mainInfo" rows="10" placeholder="{{textLibrary.describle}}" ng-model="textLibrary.describle"></textarea>
+                                </div>
+
+                            </div>
+                        </fieldset>
+
+
+
+
+
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-6" >
+                                    <button  class="btn green" ng-click="createTextLibrary()">
+                                        <i class="fa fa-check" ></i>创建</button>
+                                    <button type="button" ng-click="cancel()" class="btn default">取消</button>
+                                </div>
+                            </div>
+                    </form>
+                    <!-- END FORM-->
+                </div>
+            </div>
+            <!-- END PORTLET-->
+    </div>
+
+
+
+
+</div>

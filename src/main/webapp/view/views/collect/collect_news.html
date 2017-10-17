@@ -1,0 +1,382 @@
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">采集</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"> </li>
+</ul>
+
+
+<div class="row" style="padding-bottom: 22px;">
+        <div class="form-group">
+            <div class="col-sm-3">
+                <select class="form-control select2me" ng-model="collectProject.templateId" data-placeholder="{{collectProject.templateId}}">
+                    <option value="1">新浪新闻</option>
+                    <option value="2">百度新闻</option>
+                </select>
+            </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="row" ng-show="collectProject.templateId==1">
+    <div class="col-md-12">
+        <!-- BEGIN PORTLET-->
+        <div class="portlet box green-meadow">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>新浪新闻 </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"> </a>
+                    <a href="#" data-toggle="modal" class="config"> </a>
+                    <a href="javascript:;" class="reload"> </a>
+                    <a href="javascript:;" class="remove"> </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form  class="form-horizontal form-bordered">
+                    <div class="form-body">
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">模板名称</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="developer" placeholder="{{sinaNewsConfig.name}}" class="form-control" ng-model="sinaNewsConfig.name"/>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">模板描述</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="developer" placeholder="{{sinaNewsConfig.describle}}" class="form-control" ng-model="sinaNewsConfig.describle"/>
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+
+
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">搜索内容</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="developer" placeholder="{{sinaNewsConfig.keyword}}" class="form-control" ng-model="sinaNewsConfig.keyword"/>
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">频道选择</label>
+                                <div class="col-sm-6">
+                                <select class="form-control select2me" ng-model="sinaNewsConfig.channel" data-placeholder="{{sinaNewsConfig.channel}}">
+                                    <option >所有频道</option>
+                                    <option value="1_7">财经</option>
+                                    <option value="1_10">体育</option>
+                                    <option value="1_8">娱乐</option>
+                                    <option value="1_6">科技</option>
+                                    <option value="1_9">军事</option>
+                                    <option value="1_15">读书</option>
+                                    <option value="1_29">历史</option>
+                                    <option value="1_27">传媒</option>
+                                    <option value="1_24">健康</option>
+                                    <option value="1_18">教育</option>
+                                    <option value="1_11">女性</option>
+                                    <option value="1_16">育儿</option>
+                                    <option value="1_22">时尚</option>
+                                    <option value="1_28">收藏</option>
+                                    <option value="1_13">汽车</option>
+                                    <option value="1_12">房产</option>
+                                    <option value="1_14">游戏</option>
+                                    <option value="1_20">星座</option>
+                                    <option value="1_21">旅游</option>
+                                    <option value="1_30">航空</option>
+                                </select>
+                                    </div>
+                            </div>
+                        </fieldset>
+
+
+
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">选择时间</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control select2me" ng-model="sinaNewsConfig.time" data-placeholder="{{sinaNewsConfig.time}}">
+                                        <option >不限</option>
+                                        <option value="custom">指定日期范围</option>
+                                        <option value="h" stime="2016-11-28 14:00:33" etime="2016-11-28 15:00:33">1小时内</option>
+                                        <option value="d" stime="2016-11-27 15:00:33" etime="2016-11-28 15:00:33">1天内</option>
+                                        <option value="w" stime="2016-11-21 15:00:33" etime="2016-11-28 15:00:33">1周内</option>
+                                        <option value="m" stime="2016-10-28 15:00:33" etime="2016-11-28 15:00:33">1个月内</option>
+                                        <option value="2016" stime="2016-01-01 00:00:00" etime="2016-12-31 23:59:59">2016</option>
+                                        <option value="2015" stime="2015-01-01 00:00:00" etime="2015-12-31 23:59:59">2015</option>
+                                        <option value="2014" stime="2014-01-01 00:00:00" etime="2014-12-31 23:59:59">2014</option>
+                                        <option value="2013" stime="2013-01-01 00:00:00" etime="2013-12-31 23:59:59">2013</option>
+                                        <option value="2012" stime="2012-01-01 00:00:00" etime="2012-12-31 23:59:59">2012</option>
+                                        <option value="2011" stime="2011-01-01 00:00:00" etime="2011-12-31 23:59:59">2011</option>
+                                        <option value="2010" stime="2010-01-01 00:00:00" etime="2010-12-31 23:59:59">2010</option>
+                                    </select>
+                            </div>
+                                </div>
+                        </fieldset>
+
+
+                        <fieldset ng-show="sinaNewsConfig.time=='custom'">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">时间范围</label>
+                                <div class="col-sm-9">
+                                    <!--<input type="text" name="compatibility" placeholder="2016-01-01" class="form-control"  ng-model="sinaNewsConfig.stime" />-->
+                                    <div  ng-model='timepickerTest'  ng-time class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                        <input ng-model='sinaNewsConfig.stime' class="form-control" size="16" type="text" value="" readonly>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                    </div>
+                                    <input type="hidden" value="" /><br/>
+
+
+                                    <div  ng-model='timepickerTest'  ng-time class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                        <input ng-model='sinaNewsConfig.etime' class="form-control" size="16" type="text" value="" readonly>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+
+<!--
+                        <div class="form-group">
+                            <label for="dtp_input2" class="col-md-2 control-label">Date Picking</label>
+                            <div  ng-model='timepickerTest'  ng-time class="input-group date form_date col-md-5" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                <input class="form-control" size="16" type="text" value="" readonly>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                            <input type="hidden" id="dtp_input2" value="" /><br/>
+                        </div>-->
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">关键字范围</label>
+                                <div class="col-sm-6">
+                                    <select  ng-model="sinaNewsConfig.range" data-placeholder="{{sinaNewsConfig.range}}">
+                                        <option value="all">全文</option>
+                                        <option value="title">标题</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <!--<fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">新闻源</label>
+                                <div class="col-sm-6">
+                                    <input type="text"  placeholder="{{sinaNewsConfig.source}}" class="form-control"  ng-model="sinaNewsConfig.source" />
+                                    例如：新华社
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">含有媒体类型</label>
+                                <div class="col-sm-6">
+                                    <select  ng-model="sinaNewsConfig.mediatype" data-placeholder="{{sinaNewsConfig.mediatype}}">
+                                        <option value="">不限</option>
+                                        <option value="3_5_6">含有图片</option>
+                                        <option value="2">含有视频</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>-->
+
+                    </div>
+
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+                                <button  class="btn green" ng-click="createSinaNewsConfig()">
+                                    <i class="fa fa-check" ></i> 创建</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END PORTLET-->
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="row" ng-show="collectProject.templateId==2">
+    <div class="col-md-12">
+        <!-- BEGIN PORTLET-->
+        <div class="portlet box green-meadow">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>百度新闻 </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"> </a>
+                    <a href="#" data-toggle="modal" class="config"> </a>
+                    <a href="javascript:;" class="reload"> </a>
+                    <a href="javascript:;" class="remove"> </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form  class="form-horizontal form-bordered">
+                    <div class="form-body">
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">模板名称</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="developer" placeholder="{{baiduNewsConfig.name}}" class="form-control" ng-model="baiduNewsConfig.name"/>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">模板描述</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="developer" placeholder="{{baiduNewsConfig.describle}}" class="form-control" ng-model="baiduNewsConfig.describle"/>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">搜索内容(全部包含)</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="developer" placeholder="{{baiduNewsConfig.mustKeyword}}" class="form-control" ng-model="baiduNewsConfig.mustKeyword"/>
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">搜索内容(包含一个)</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="developer" placeholder="{{baiduNewsConfig.anyoneWord}}" class="form-control" ng-model="baiduNewsConfig.anyoneWord"/>
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">时间范围-开始时间</label>
+                                <div class="col-sm-9">
+                                    <div  ng-model='timepickerTest'  ng-time class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                        <input ng-model='baiduNewsConfig.bt' class="form-control" size="16" type="text" value="" readonly>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+
+
+                        <fieldset >
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">时间范围-结束时间</label>
+                                <div class="col-sm-9">
+
+
+
+                                    <div  ng-model='timepickerTest'  ng-time class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                        <input ng-model='baiduNewsConfig.et' class="form-control" size="16" type="text" value="" readonly>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">关键字范围</label>
+                                <div class="col-sm-6">
+                                    <select  ng-model="baiduNewsConfig.tn" data-placeholder="{{baiduNewsConfig.tn}}">
+                                        <option value="newsdy">全文</option>
+                                        <option value="newstitledy">标题</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+
+                    </div>
+
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+                                <button  class="btn green" ng-click="createBaiduNewsConfig()">
+                                    <i class="fa fa-check" ></i> 生成</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END PORTLET-->
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

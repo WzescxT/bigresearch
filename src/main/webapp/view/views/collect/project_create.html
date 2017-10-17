@@ -1,0 +1,105 @@
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">采集</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"> </li>
+</ul>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN PORTLET-->
+        <div class="portlet box green-meadow">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>新建项目 </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"> </a>
+                    <a href="#" data-toggle="modal" class="config"> </a>
+                    <a href="javascript:;" class="reload"> </a>
+                    <a href="javascript:;" class="remove"> </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form  class="form-horizontal form-bordered">
+
+
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">项目名称</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="cname" placeholder="{{collectProject.name}}" class="form-control" ng-model="collectProject.name"/>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">选择分组</label>
+                            <div class="col-sm-6">
+                                <select class="form-control select2me" ng-model="collectProject.group" data-placeholder="{{collectProject.group}}">
+                                    <option value="新闻资讯">新闻资讯</option>
+                                    <option value="历史研究">历史研究</option>
+                                    <option value="民意调查">民意调查</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </fieldset>
+
+
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">模板选择</label>
+                            <div class="col-sm-6">
+                                <select class="form-control select2me"  ng-model="collectProject.templateId"  >
+                                    <option  value=0>请选择模板</option>
+
+                                    <option ng-repeat="tp in templates" value={{tp.id}}>{{tp.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <!--<fieldset ng-hide="true">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">采集数量</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="category" placeholder="{{collectProject.collectNo}}" class="form-control" ng-model="collectProject.collectNo" />
+                            </div>
+                        </div>
+                    </fieldset>-->
+
+
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">项目描述</label>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" name="mainInfo" rows="10" placeholder="{{collectProject.describle}}" ng-model="collectProject.describle"></textarea>
+                            </div>
+
+                        </div>
+                    </fieldset>
+
+
+
+                    <div class="form-actions" ng-disabled="currentProject.id>0">
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-6" >
+                                <button ng-disabled="currentProject.id>0" class="btn green" ng-click="createProject()">
+                                    <i class="fa fa-check" ></i>创建</button>
+                                <button type="button" ng-click="reset()" class="btn default">重置</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END PORTLET-->
+    </div>
+</div>
+
+
+
+<!--选择模板-->

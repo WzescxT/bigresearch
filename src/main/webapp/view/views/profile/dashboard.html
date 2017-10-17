@@ -1,0 +1,212 @@
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered ">
+            <div class="portlet-title">
+                <div class="caption caption-md">
+                    <i class="icon-bar-chart font-red"></i>
+                    <span class="caption-subject font-red bold uppercase">用户管理</span>
+                    <span class="caption-helper hide">weekly stats...</span>
+                </div>
+
+                <div class="inputs">
+                    <div class="portlet-input input-inline input-big ">
+                        <div class="input-icon right">
+                            <i class="icon-magnifier" ng-click="getUserList()"></i>
+                            <input type="text"  ng-change="getUserList()" ng-model="condition.name"  class="form-control form-control-solid input-circle" placeholder="search..."> </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="portlet-body">
+                <div class="row number-stats margin-bottom-30">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="stat-left">
+
+                            <div class="stat-number">
+
+                                <div class="title"> 用户总数 </div>
+                                <div class="number"> {{pageConfig.bigTotalItems}} </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="stat-right">
+
+                            <div class="stat-number">
+                                <div class="title"> 本月总数 </div>
+                                <div class="number"> {{thisMonthItems}} </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="table-toolbar">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div  class="btn-group">
+                                <button  ng-click="goCreateUser()" id="sample_editable_1_new" class="btn sbold green"> 添加用户
+                                    <i  class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="table-scrollable-borderless">
+                    <table class="table table-hover table-light"   >
+                        <thead  >
+                        <tr class="uppercase">
+                            <th > 序号 </th>
+                            <th > 用户名 </th>
+                            <th>  电话 </th>
+                            <th>  邮件 </th>
+                            <th> 创建时间 </th>
+                            <th> 账户有效时间 </th>
+                            <th> 备注 </th>
+                            <th> 删除用户 </th>
+
+                        </tr>
+                        </thead>
+
+
+
+                        <tr ng-repeat="u in users">
+                            <td class="col-md-1">{{$index+1+(pageConfig.bigCurrentPage-1)*pageConfig.itemsPerPage}}</td>
+                            <td class="col-md-1">
+                                <a ng-click="showInfo(cp.id)" class="primary-link">{{u.username}}</a>
+                            </td>
+                            <td class="col-md-1"> {{u.tel}} </td>
+                            <td class="col-md-1"> {{u.email}} </td>
+                            <td class="col-md-1"> <span class="bold font-green"  ng-bind="u.createTime | date:'yyyy-MM-dd HH:mm'"></span> </td>
+                            <td class="col-md-1"> <span class="bold font-red"  ng-bind="u.endTime | date:'yyyy-MM-dd HH:mm'"></span> </td>
+                            <td class="col-md-1">{{u.comments}}</span> </td>
+                            <td class="col-md-1"><label class="btn label-sm label-default" ng-click="delete(u.id)">删除用户</label></td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+                <pagination ng-click="getUserList()" total-items="pageConfig.bigTotalItems" ng-model="pageConfig.bigCurrentPage" max-size="pageConfig.maxSize" class="pagination-sm navbar-right" boundary-links="false"></pagination>
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="portlet light bordered " id="user_create" ng-show="user_create">
+            <form role="form" action="#">
+                <div class="form-group">
+                    <label class="control-label">用户名</label>
+                    <input type="text" ng-model="tempUser.username" class="form-control" /> </div>
+                <div class="form-group">
+                    <label class="control-label">密码</label>
+                    <input type="password" ng-model="tempUser.password" class="form-control" /> </div>
+
+
+                <div class="form-group">
+                    <label class="control-label">截止日期</label>
+                    <div  ng-model='timepickerTest'  ng-time class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                        <input ng-model='tempUser.endTime' class="form-control" size="16" type="text" value="" readonly>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">性别</label>
+                    <select class="form-control" ng-model="tempUser.gender">
+                        <option value ="male">男</option>
+                        <option value="female">女</option>
+                    </select></div>
+
+
+
+                <div class="form-group">
+                    <label class="control-label">电话号码</label>
+                    <input type="text" ng-tel ng-model="tempUser.tel" class="form-control" /> </div>
+                <div class="form-group">
+                    <label class="control-label">邮箱地址</label>
+                    <input type="text"  ng-model="tempUser.email" class="form-control" /> </div>
+                <div class="form-group">
+                    <label class="control-label">备注</label>
+                    <input type="text"  ng-model="tempUser.comments" class="form-control" /> </div>
+
+
+
+
+                <div class="margiv-top-10">
+                    <a href="#" ng-click="createUser()" class="btn green-haze"> 创建用户 </a>
+                    <a href="#" class="btn default" ng-click="cancelCreateUser()"> 取消 </a>
+                </div>
+            </form>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

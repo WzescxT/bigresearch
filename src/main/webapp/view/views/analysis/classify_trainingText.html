@@ -1,0 +1,123 @@
+
+
+
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">分析</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"> </li>
+</ul>
+
+
+<div class="row">
+    <div class="col-md-12">
+
+
+        <!-- BEGIN PORTLET-->
+        <div class="portlet light bordered ">
+            <div class="portlet-title">
+                <div class="caption caption-md">
+                    <i class="icon-bar-chart font-red"></i>
+                    <span class="caption-subject font-red bold uppercase">训练文本展示</span>
+                    <span class="caption-helper hide">weekly stats...</span>
+                </div>
+
+
+            </div>
+
+            <div class="stat-chart">
+                <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
+                <div id="sparkline_bar"></div>
+            </div>
+            <div class="portlet-body">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="table-scrollable-borderless">
+                    <table class="table table-hover table-light table-striped"  >
+                        <thead>
+                        <tr class="uppercase">
+                            <th  class="text-center"> 序号 </th>
+                            <th  class="text-center"> 文本内容 </th>
+                            <th class="text-center"> 创建时间 </th>
+                            <th  class="text-center" colspan="2"> 删除 </th>
+                        </tr>
+                        </thead>
+
+
+
+                        <tr ng-repeat="ct in classifyTrainings" >
+                            <td class="col-md-1 text-left"><strong>{{$index+1+(pageConfig.bigCurrentPage-1)*pageConfig.itemsPerPage}}</strong></td>
+                            <td class="col-md-8">
+                                <p ng-show = "ct.text.length<=100 " class="text-left">{{ct.text}}</p>
+                                <div ng-hide="true" >{{value=ct.text}}</div>
+                                <p ng-show = "ct.text.length>100 "class="text-left"  tooltips tooltip-side="center" tooltip-template='{{value}}' >{{ct.text | characters:100:true }}</p>
+
+
+                            <!--<a class="primary-link">{{ct.text}}</a>-->
+                            </td>
+                            <td class="col-md-2 text-center"> <span class="bold font-green"  ng-bind="ct.createTime | date:'yyyy-MM-dd HH:mm'"></span> </td>
+                            <!--<td><span class="label label-sm label-success">{{cp.status}}</span></td>-->
+                            <td class="col-md-1 text-left"><a class="btn btn-sm btn-primary" ng-click="delTraining(ct.id)"> 删除 </a>
+                            </td>
+                        </tr>
+
+
+
+
+
+
+                    </table>
+
+                </div>
+                <pagination ng-click="getClassifyTraining()" total-items="pageConfig.bigTotalItems" ng-model="pageConfig.bigCurrentPage" max-size="pageConfig.maxSize" class="pagination-sm navbar-right" boundary-links="true"></pagination>
+
+            </div>
+        </div>
+        <!-- END PORTLET-->
+
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

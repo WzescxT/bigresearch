@@ -1,0 +1,185 @@
+
+
+
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">分析</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"> </li>
+</ul>
+
+
+<div class="row">
+    <div class="col-md-12">
+
+
+        <!-- BEGIN PORTLET-->
+        <div class="portlet light bordered ">
+            <div class="portlet-title">
+                <div class="caption caption-md">
+                    <i class="icon-bar-chart font-red"></i>
+                    <span class="caption-subject font-red bold uppercase">项目管理</span>
+                    <span class="caption-helper hide">weekly stats...</span>
+                </div>
+
+                <div class="inputs">
+                    <div class="portlet-input input-inline input-big ">
+                        <div class="input-icon right">
+                            <i class="icon-magnifier" ng-click="getAnalysisProjects()"></i>
+                            <input type="text" ng-model="name" ng-change="getAnalysisProjects()"  class="form-control form-control-solid input-circle" placeholder="search..."> </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-chart">
+                <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
+                <div id="sparkline_bar"></div>
+            </div>
+            <div class="portlet-body">
+                <div class="row number-stats margin-bottom-30">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="stat-left">
+                            <div class="stat-chart">
+                                <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
+                                <div></div>
+                            </div>
+                            <div class="stat-number">
+
+                                <div class="title"> 项目总数 </div>
+                                <div class="number"> {{pageConfig.bigTotalItems}} </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="stat-right">
+                            <div class="stat-chart">
+                                <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
+                                <div id="sparkline_bar2"></div>
+                            </div>
+                            <div class="stat-number">
+                                <div class="title"> 本月总数 </div>
+                                <div class="number"> {{thisMonthItems}} </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="table-toolbar">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div  class="btn-group">
+                                <button  ng-click="goCreateProject()" id="sample_editable_1_new" class="btn sbold green"> 新建项目
+                                    <i  class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="table-scrollable-borderless">
+                    <table class="table table-hover table-light"  >
+                        <thead>
+                        <tr class="uppercase">
+                            <th > 序号 </th>
+                            <th > 项目名称 </th>
+                            <th> 描述 </th>
+                            <th> 文本库 </th>
+                            <th> 创建时间 </th>
+                            <th colspan="2"> 操作 </th>
+                        </tr>
+                        </thead>
+
+
+
+                        <tr ng-repeat="ap in analysisProjects">
+                            <td>{{$index+1+(pageConfig.bigCurrentPage-1)*pageConfig.itemsPerPage}}</td>
+                            <td>
+                                <a ng-click="showInfo(ap.id)" class="primary-link">{{ap.name}}</a>
+                            </td>
+                            <td> {{ap.describle}} </td>
+                            <td> {{ap.textlibraryName}} </td>
+                            <td> <span class="bold font-green"  ng-bind="ap.createTime | date:'yyyy-MM-dd HH:mm'"></span> </td>
+                            <!--<td><span class="label label-sm label-success">{{cp.status}}</span></td>-->
+                            <td><div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle btn-xs"
+                                        data-toggle="dropdown">
+                                    操作 <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a ng-click="goWordFrequence(ap.id)">词频统计</a></li>
+                                    <li><a ng-click="goCluste(ap.id)">文本聚类</a></li>
+                                    <li><a ng-click="goClassify(ap.id)">文本分类</a></li>
+                                    <li><a ng-click="goSentime(ap.id)">情感分析</a></li>
+                                    <li class="divider"></li>
+                                    <li><a ng-click="deleteProject(ap.id)">删除项目</a></li>
+                                </ul>
+                            </div>
+                            </td>
+                        </tr>
+
+
+
+
+
+
+                    </table>
+
+                </div>
+                <pagination ng-click="getUserProjects()" total-items="pageConfig.bigTotalItems" ng-model="pageConfig.bigCurrentPage" max-size="pageConfig.maxSize" class="pagination-sm navbar-right" boundary-links="true"></pagination>
+
+            </div>
+        </div>
+        <!-- END PORTLET-->
+
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

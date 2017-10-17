@@ -1,0 +1,131 @@
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">搜索</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <!--<li class="active" data-ng-bind="$state.current.data.pageTitle"> </li>-->
+</ul>
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid" >
+        <a class="navbar-brand" href="#">选择项目：</a>
+        <br>
+        <div class="navbar-header" >
+
+            <div class="navbar-brand"  ng-repeat="project in projects">
+            <label> <input type="radio" name="act" value="{{project.id}}" checked="checked" ng-model="searchNews.act"/>{{project.name}}</label>
+            </div>
+        </div>
+        <div>
+            <form class="navbar-form navbar-left" role="search" style=" padding: 0;">
+                <div class="form-group" >
+                    <input type="text" class="form-control" placeholder="关键字" ng-model="searchNews.searchStr" size="87"/>
+                </div>
+                <button type="submit" class="btn btn-default" ng-click="Search()">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+
+
+
+
+
+
+<div class="row" ng-show="results.length>0">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet light bordered" >
+            <div class="portlet-title">
+                <div class="caption font-dark">
+                    <i class="icon-settings font-dark"></i>
+                    <span class="caption-subject bold uppercase"> {{searchProject.name}} </span>
+                </div>
+
+            </div>
+            <div class="portlet-body" >
+                <div class="table-toolbar">
+                    <div class="row">
+                        <div class="col-md-6">
+
+
+
+                            <label>选择显示列：</label>
+
+
+                            <div class="padding-tb-10">
+
+                                <label class="checkbox-inline" ng-repeat="col in columns">
+                                    <input type="checkbox"  ng-model="col.value"   ng-true-value="true" ng-false-value="false"  > {{col.name}}
+                                </label>
+                            </div>
+
+
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="btn-group pull-right">
+                                <button class="btn green  btn-outline dropdown-toggle" data-toggle="dropdown">导出
+                                    <i class="fa fa-angle-down"></i>
+                                </button>
+                                <ul class="dropdown-menu pull-right">
+
+                                    <li>
+                                        <a href="../collect/exportExcel/{{AuthSetting.LoginUser.id}}/{{searchProject.id}}">
+                                            <i class="fa fa-file-excel-o"></i> 导出excel文件 </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1">
+                    <thead>
+                    <tr>
+
+                        <!--<th><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /> </th>-->
+                        <th > id</th>
+                        <th ng-repeat="c in columns" ng-show="c!='id'&&c.value"> {{c.name}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="odd gradeX" ng-repeat="ci in results">
+
+                        <!--<td><input type="checkbox" class="checkboxes" value="1" /> </td>-->
+                        <td>{{$index+1+(pageConfig.bigCurrentPage-1)*pageConfig.itemsPerPage}}</td>
+                        <!--<div ng-repeat="c in columns" ng-show="c!='id'">
+                            <td ng-show=c.value>{{ci[c.name]}}</td>
+
+                        </div>-->
+                        <!--<td ng-repeat="c in columns" ng-show="c!='id'&&c.value" >{{ci[c.name]}}  </td>-->
+                        <td ng-repeat="c in columns" ng-show="c!='id'&&c.value" >
+                            <div ng-hide = "ci[c.name].length>100 "> {{ci[c.name]}} </div>
+
+                            <!--<span ng-show = "ci[c.name].length>100 " tooltips tooltip-side="center" tooltip-template='<div> {{ci[c.name]}} </div>' >   {{ci[c.name] | characters:100:true }}</span></td>-->
+                            <div ng-hide="true">{{value =ci[c.name]  }} </div>
+                            <span ng-show = "ci[c.name].length>100 " tooltip-append-to-body="true"  tooltips tooltip-side="center"   tooltip-template={{value}}   >   {{ci[c.name] | characters:100:true }}</span></td>
+
+                        <!--{{ci[c.name] | characters:100:true }} <span ng-show="ci[c.name].length>=100" ng-click="showAll(ci[c.name])">open</span> </td>-->
+                    </tr>
+                    <!--"<div ng-show="ci[c.name].length>=100 ">{{ci[c.name]}}</div>"-->
+
+                    </tbody>
+                </table>
+            </div>
+            <pagination ng-click="getNewPage()" total-items="pageConfig.bigTotalItems" ng-model="pageConfig.bigCurrentPage" max-size="pageConfig.maxSize" class="pagination-sm navbar-right" boundary-links="true"></pagination>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+

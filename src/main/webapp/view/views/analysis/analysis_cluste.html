@@ -1,0 +1,186 @@
+
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">分析</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"> </li>
+</ul>
+
+<div class="portlet light bordered ">
+    <div class="portlet-title">
+        <div class="caption caption-md">
+            <i class="icon-bar-chart font-red"></i>
+            <span class="caption-subject font-red bold uppercase">聚类分析</span>
+        </div>
+
+    </div>
+
+    <h3 class="text-center title"><strong>{{analysisProject.name}}</strong></h3>
+    <div>
+        <div class="form-group">
+            <div >
+                <label  >聚类状态：</label>
+                <span ng-class ="{'label  label-success': analysisProject.clusteStatus=='聚类结束','label label-sm label-info':analysisProject.clusteStatus=='正在聚类','label label-sm label-danger':analysisProject.clusteStatus=='尚未聚类'}" >{{analysisProject.clusteStatus}}</span>
+            <div class="padding-tb-10">
+                <label >有效文本字段：</label>
+                <!--<span class="label label-default">所有字段</span>-->
+                    <label class="checkbox-inline" ng-repeat="(key, value) in clusteFields">
+                        <input type="checkbox" name="segmentType" ng-model="clusteFields[key]"   ng-true-value="true" ng-false-value="false"  > {{key}}
+                    </label>
+            </div>
+    <div>
+        <label>选择聚类算法：</label>
+        <!--<label class="label  label-success" >{{analysisProject.clusteAlgorithm}}</label>-->
+        <label class="checkbox-inline">
+            <input type="radio" name="segmentType" ng-model="analysisProject.clusteAlgorithm"     value='1'  >  k-means
+        </label>
+        <label class="checkbox-inline">
+            <input type="radio" name="segmentType" ng-model="analysisProject.clusteAlgorithm" value="2" > Lingo
+        </label>
+        <label class="checkbox-inline">
+            <input type="radio" name="segmentType" ng-model="analysisProject.clusteAlgorithm" value="3" > STC
+        </label>
+
+
+    </div>
+
+
+
+                <div>
+                    <label>输入聚类数量：</label>
+                    <!--<label class="label  label-success" >{{analysisProject.clusteAlgorithm}}</label>-->
+                    <label class="checkbox-inline">
+                        <input type="radio" name="clusteCount" ng-model="analysisProject.clusteCount"     value=0   >  智能托管
+                    </label>
+                    <label class="checkbox-inline">
+                        <input type="radio" name="clusteCount" ng-model="analysisProject.clusteCount"      ng-checked="analysisProject.clusteCount>0"    > 手动输入
+
+                    </label>
+
+                    <input ng-hide="analysisProject.clusteCount==0" ng-model="analysisProject.clusteCount" placeholder="输入聚类数量">
+                    <button  ng-disabled="analysisProject.clusteStatus=='正在聚类'"   class="btn sm blue" style="margin-left: 100px" ng-click="startCluste()">
+                        <i class="fa fa-check" ></i>开始聚类分析</button>
+                </div>
+
+
+
+
+
+                </div>
+    </div>
+
+
+
+
+
+
+    </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="row" style="margin-top: 30px" ng-show="analysisProject.clusteStatus=='聚类结束'">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption font-dark">
+                    <i class="icon-settings font-green"></i>
+                    <span class="caption-subject font-green bold  uppercase"> 聚类结果展示</span>
+                </div>
+
+
+
+
+
+
+            </div>
+            <div class="portlet-body">
+
+
+
+
+
+                <div class="table-scrollable-borderless" style="width: 90%;margin-left: 5%" >
+                    <table class="table table-hover table-light table-striped" style="text-align: center" >
+                        <thead>
+                        <tr class="uppercase" >
+                            <th class="text-center"> 序号 </th>
+                            <th class="text-center" > 聚类关键信息 </th>
+                            <th class="text-center"> 聚类数量 </th>
+                            <th class="text-center"> 聚类时间 </th>
+                            <th class="text-center"> 查看详情 </th>
+                        </tr>
+                        </thead>
+
+
+
+                        <tr ng-repeat="cluste in projectClustes">
+                            <td class="col-md-1">{{$index+1+(pageConfig.bigCurrentPage-1)*pageConfig.itemsPerPage}}</td>
+                            <td class="col-md-6"> {{cluste.clusterName}} </td>
+                            <td class="col-md-1"> <span class="bold font-red">{{cluste.textNo}}</span> </td>
+                            <td class="col-md-2"><span class="bold font-green"  ng-bind="cluste.createTime | date:'yyyy-MM-dd hh:mm'"></span>  </td>
+                            <td class="col-md-2"> <a class="btn btn-sm btn-primary" ng-click="showClusteInfo(cluste.id)"> 查看详情 </a> </td>
+
+                        </tr>
+
+
+
+
+
+
+                    </table>
+
+                </div>
+                <pagination ng-click="getClusteResult()" total-items="pageConfig.bigTotalItems" ng-model="pageConfig.bigCurrentPage" max-size="pageConfig.maxSize" class="pagination-sm navbar-right" boundary-links="true"></pagination>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
