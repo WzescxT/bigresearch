@@ -27,6 +27,13 @@
                 分层采集
                 <i class="icon-link"></i>  </tab-heading>
             </tab>
+
+            <tab ng-click="changeTemplate(4)" active=active.tab3>
+                <tab-heading>
+                    高级采集
+                    <i class="icon-link"></i>  </tab-heading>
+            </tab>
+
         </tabset>
     </div>
 </div>
@@ -45,7 +52,7 @@
 
 
 
-<div class="row">
+<div class="row" ng-model="isadvanced" ng-init="isadvanced=false" ng-show="isadvanced==false">
     <div class="col-md-12">
         <!-- BEGIN PORTLET-->
         <div class="portlet box green-meadow">
@@ -86,11 +93,6 @@
                     </main>
 
 
-
-
-
-
-
                     <div class="form-actions" ng-disabled="currentProject.id>0">
                         <div class="row">
                             <div class="col-md-offset-3 col-md-6" >
@@ -109,11 +111,338 @@
 </div>
 
 
+<div class="col-lg-12" ng-show="isadvanced==true">
+
+    <!--管理菜单-->
+    <div class="col-lg-1">
+        <br/><br/><br/><br/>
+        <ul class="nav nav-pills nav-stacked">
+            <li class="active"><a href="#">新建</a></li>
+            <li><a href="#">导入</a></li>
+            <li><a href="#">导出</a></li>
+            <li><a href="#">监控</a></li>
+        </ul>
+    </div>
+    
+    <!--采集区域-->
+    <div class="col-lg-7">
+        <!--标签-->
+        <ul id="myTab" class="nav nav-tabs">
+
+            <li class="active">
+                <a href="/#basic" data-toggle="tab">
+                    基本信息
+                </a>
+            </li>
+
+            <li><a href="/#assist" data-toggle="tab">
+                辅助规则
+            </a></li>
+
+
+            <li><a href="/#urlrule" data-toggle="tab">
+                URL规则
+            </a></li>
+
+            <li><a href="/#miningrule" data-toggle="tab">
+                采集规则
+            </a></li>
+
+            <li><a href="/#storerule" data-toggle="tab">
+                持久化规则
+            </a></li>
+
+            <li><a href="/#planrule" data-toggle="tab">
+                执行计划
+            </a></li>
+
+        </ul>
+
+        <!--标签内容-->
+        <div id="myTabContent" class="tab-content">
+
+            <!--基本信息-->
+            <div class="tab-pane fade in active" id="basic">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <br/>
+                        <label for="projectname" class="col-sm-2 control-label">项目名称</label>
+                        <div class="col-xs-4">
+                            <input type="text" class="form-control" id="projectname"
+                                   placeholder="请输入项目名称">
+                        </div>
+                        <div class="col-xs-4">
+                            <button class="btn btn-default">新建项目</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskname" class="col-sm-2 control-label">任务名称</label>
+                        <div class="col-xs-4">
+                            <input type="text" class="form-control" id="taskname"
+                                   placeholder="请输入任务名称">
+                        </div>
+                        <div class="col-xs-4">
+                            <button class="btn btn-default">新建任务</button>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="manager" class="col-sm-2 control-label">负责人</label>
+                        <div class="col-xs-4">
+                            <input type="text" class="form-control" id="manager"
+                                   placeholder="请输入负责人">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskdescription" class="col-sm-2 control-label">任务描述</label>
+                        <div class="col-xs-4">
+                            <textarea class="form-control" rows="3" id="taskdescription"></textarea>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <!--辅助信息-->
+            <div class="tab-pane fade" id="assist">
+                <form class="form-horizontal" role="form">
+                    <!--登录页配置-->
+                    <div class="form-group">
+                        <br/>
+                        <label for="signup" class="col-sm-2 control-label">登陆配置</label>
+                        <div class="col-xs-3">
+                            <input type="checkbox"  class="form-control" id="signup" ng-model="issign" ng-init="issign=false">
+                        </div>
+
+                    </div>
+
+                    <!--根据是否选择登陆配置来决定是否显示-->
+                    <div ng-show="issign">
+
+                        <div class="form-group">
+                            <label for="signurl" class="col-sm-2 control-label">登录页路径</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="signurl">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label">用户名</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="username">
+                            </div>
+                            <div class="col-xs-4">
+                                <button class="btn btn-default" data-toggle="modal" data-target="#myModal">选择</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password" class="col-sm-2 control-label">用户名</label>
+                            <div class="col-xs-4">
+                                <input type="password" class="form-control" id="password">
+                            </div>
+                            <div class="col-xs-4">
+                                <button class="btn btn-default" data-toggle="modal" data-target="#myModal">选择</button>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="code" class="col-sm-2 control-label">验证码</label>
+                            <div class="col-xs-4">
+                                <input type="password" class="form-control" id="code">
+                            </div>
+                            <div class="col-xs-4">
+                                <button class="btn btn-default" data-toggle="modal" data-target="#myModal">选择</button>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="cookie" class="col-sm-2 control-label">cookie</label>
+                            <div class="col-xs-4">
+                                <textarea class="form-control" rows="3" id="cookie"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+
+            <!--url 规则-->
+            <div class="tab-pane fade" id="urlrule">
+                <form class="form-horizontal" role="form">
+                    <br/>
+                    <div class="form-group">
+                        <label for="pattern" class="col-sm-2 control-label">读取模式</label>
+                        <div class="col-xs-4">
+                            <select class="form-control" id="pattern" ng-model="selectedvalue" ng-init="selectedvalue=0">
+                                <option value="0" ng-selected="true">单页</option>
+                                <option value="1">列表</option>
+                                <option value="2">翻页</option>
+                                <option value="3">导入</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div ng-if="selectedvalue==0">
+                        <div class="form-group">
+                            <label for="urlpath" class="col-sm-2 control-label">URL路径</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="urlpath">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="selectedvalue==1">
+                        <div class="form-group">
+                            <label for="urlpattern" class="col-sm-2 control-label">URL模式</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="urlpattern">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="initvalue" class="col-sm-2 control-label">初始值</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="initvalue">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="interval" class="col-sm-2 control-label">间隔</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="interval">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pagecount" class="col-sm-2 control-label">页数</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="pagecount">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <!--采集规则-->
+            <div class="tab-pane fade" id="miningrule">
+                <form class="form-horizontal" role="form">
+                    <br/><br/><br/>
+                    <textarea class="form-control" rows="3" placeholder="采集规则设定""></textarea>
+                </form>
+            </div>
+
+            <!--持久化规则-->
+            <div class="tab-pane fade" id="storerule">
+                <form class="form-horizontal" role="form">
+                    <br/>
+                    <div class="form-group">
+                        <label for="pattern" class="col-sm-2 control-label">读取模式</label>
+                        <div class="col-xs-4">
+                            <select class="form-control" id="store" ng-model="selectedvalue" ng-init="selectedvalue=0">
+                                <option value="0" ng-selected="true">数据库</option>
+                                <option value="1">文件</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!--执行计划-->
+            <div class="tab-pane fade" id="planrule">
+                <form class="form-horizontal" role="form">
+                    <br/>
+
+                    <div class="form-group">
+                        <label for="proxy" class="col-sm-2 control-label">代理ip</label>
+                        <div class="col-xs-4">
+                            <textarea class="form-control" rows="3" id="proxy"></textarea>
+                            <input type="file" id="proxyfile">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="intervaltime1" class="col-sm-2 control-label">间隔时间</label>
+                        <div class="col-xs-2">
+                            <input type="text" class="form-control" id="intervaltime1" placeholder="起始时间">
+                        </div>
+                        <div class="col-xs-2">
+                            <input type="text" class="form-control" id="intervaltime2" placeholder="终止时间">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="header" class="col-sm-2 control-label">浏览器头配置</label>
+                        <div class="col-xs-4">
+                            <textarea class="form-control" rows="3" id="header" placeholder="可不填"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userdefinition" class="col-sm-2 control-label">自定义配置</label>
+                        <div class="col-xs-4">
+                            <textarea class="form-control" rows="3" id="userdefinition" placeholder="可不填"></textarea>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!--测试模块-->
+    <div class="col-lg-4">
+        <br/> <br/> <br/>
+        <textarea class="form-control" rows="3" placeholder="测试模块占位" style="height: 400px"></textarea>
+    </div>
+
+
+</div>
 
 
 
 
-
+<!-- 按钮触发模态框 -->
+<!--<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">-->
+    <!--模拟浏览器-->
+<!--</button>-->
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    选取路径
+                </h4>
+            </div>
+            <div class="modal-body">
+                <iframe src="http://www.baidu.com" id="my-iframe" style="height: 500px;width: 100%"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="button" class="btn btn-primary">
+                    提交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 
 
 

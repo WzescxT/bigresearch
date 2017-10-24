@@ -8,7 +8,8 @@ var MetronicApp = angular.module("MetronicApp", [
     "ui.router",
     "ui.bootstrap",
     "oc.lazyLoad",
-    "ngSanitize"
+    "ngSanitize",
+    "ui.bootstrap",
 ]);
 
 
@@ -476,6 +477,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
                             'js/controllers/collect/CollectListPageController.js',
                             'js/services/collect/CollectCusTempService.js',
                             'js/services/collect/CollectNewsService.js',
+                            'js/scripts/angular.min.js',
                             //josn解析使用E:\project\bigresearch\前台页面优化\webapp\view\css\collect_listpage.css
                             'css/collect_listpage.css',
                             '../assets/global/plugins/font-awesome/css/font-awesome.min.css',

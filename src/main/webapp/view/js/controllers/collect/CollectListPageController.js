@@ -5,24 +5,24 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
 
 
 
-
     $scope.changeTemplate=function(tableId){
 
         //console.log("1点击事件，切换tab....");
         $scope.tabId=tableId;
         //console.log("2点击事件，切换tab....");
         if(tableId==1){
+            $scope.isadvanced = false;
             $scope.usertemplateStr=angular.toJson($scope.temp1);
-
         }else if(tableId==2){
+            $scope.isadvanced = false;
             $scope.usertemplateStr=angular.toJson($scope.temp2);
 
         }else if(tableId==3){
+            $scope.isadvanced = false;
             $scope.usertemplateStr=angular.toJson($scope.temp3);
-
-
+        }else if(tableId==4){
+            $scope.isadvanced = true;
         }
-
 
         initTemplate();
 
@@ -308,7 +308,8 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
         $scope.active={
             "tab1":$scope.tabId==1?true:false,
             "tab2":$scope.tabId==2?true:false,
-            "tab3":$scope.tabId==3?true:false
+            "tab3":$scope.tabId==3?true:false,
+            "tab3":$scope.tabId==4?true:false,
 
 
         }
@@ -318,12 +319,36 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
 
     });
 
-
-
-
-
-
-
 });
 
+
+var ModalDemoCtrl = function ($scope, $modal) {
+    $scope.open = function (size) {
+        var modalInstance = $modal.open({
+            templateUrl: 'myModalContent.html',
+            controller: ModalInstanceCtrl,
+            size: size
+        });
+
+        modalInstance.result.then(function (take_me_outside) {
+            $scope.message = take_me_outside;
+        });
+    };
+};
+
+// Please note that $modalInstance represents a modal window (instance) dependency.
+// It is not the same as the $modal service used above.
+
+var ModalInstanceCtrl = function ($scope, $modalInstance) {
+    $scope.take_me_outside = "asdfasdf";
+
+    $scope.ok = function (take_me_outside) {
+        console.log($modalInstance);
+        $modalInstance.close(take_me_outside);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+};
 
