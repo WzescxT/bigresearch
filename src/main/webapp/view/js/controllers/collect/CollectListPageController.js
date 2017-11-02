@@ -41,7 +41,54 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
 
     }
 
+    $scope.ajaxType=false;
+    $scope.ajaxXpath=false;
+    $scope.changeifHide=function (x) {
+      if(x==0)
+      {
+          $scope.ajaxType=false;
+          $scope.ajaxXpath=false;
+      }
+      else if(x==1)
+      {
+          $scope.ajaxType=true;
+          $scope.ajaxXpath=true;
+      }
 
+    }
+    $scope.changeXpath=function (x) {
+        if(x==0)
+        {
+            $scope.ajaxXpath=false;
+        }
+        else if(x==1)
+        {
+            $scope.ajaxXpath=true;
+        }
+
+    }
+    $scope.testCrawler=function () {
+       /* var x = $('#crawlrule').serializeArray();
+        var m = [], idata;
+        $.each(x, function(i, field){
+            // 由于会出现"双引号字符会导致接下来的数据打包失败，故此对元素内容进行encodeURI编码
+            // 后台PHP采用urldecode()函数还原数据
+            m.push('"' + field.name + '":"' + field.value) + '"';
+        });
+        idata ='{' +  m.join(',') + '}';
+        idata = eval('(' +idata+ ')');*/
+        var params = $("#crawlrule").serializeArray();
+        var values = {};
+        for( x in params ){
+            values[params[x].name] = params[x].value;
+        }
+        var idata = JSON.stringify(values)
+        alert(idata.toString());
+        alert("if excute");
+        console.log(idata.toString());
+        CollectCusTempService.crawltest(idata);
+
+    }
 
 
 
