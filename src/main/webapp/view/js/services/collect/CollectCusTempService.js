@@ -32,7 +32,6 @@ MetronicApp.factory('CollectCusTempService', function ($http, $q, $rootScope) {
                     deferred.reject(resp);
                 }
             });
-
             promise.success = function (fn) {
                 promise.then(fn);
                 return promise;
@@ -42,6 +41,20 @@ MetronicApp.factory('CollectCusTempService', function ($http, $q, $rootScope) {
                 return promise;
             }
             return promise;
+        },
+        crawltest: function (data) {
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+            $http.post($rootScope.ServerUrl + "collect/CrawledData", data).success(function (resp) {
+                if (resp) {
+                    var testresult=resp["testResult"];
+                    var text=$('#testarea').val(testresult);
+
+
+                } else {
+
+                }
+            });
         },
         getTemplateById: function (data) {
             var deferred = $q.defer();
