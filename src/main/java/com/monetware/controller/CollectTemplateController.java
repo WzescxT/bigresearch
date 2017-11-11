@@ -12,10 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,9 +36,12 @@ public class CollectTemplateController {
 
 	@Autowired
 	private BaiduNewsUrlService baiduNewsUrlService;
-	
 
-    //创建模板
+
+
+
+
+	//创建模板
 	@RequestMapping("/createCustom")
     @ResponseBody
     public RtInfo createTemplate(@RequestBody CollectTemplate collectTemplate, @RequestHeader HttpHeaders headers) {

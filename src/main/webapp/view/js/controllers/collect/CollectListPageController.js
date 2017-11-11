@@ -1,9 +1,366 @@
-angular.module('MetronicApp').controller('CollectListPageController', function($rootScope, $scope, $http, $state,$timeout,CollectNewsService,anchorScroll,CollectCusTempService,$stateParams,$cookieStore) {
+angular.module('MetronicApp').controller('CollectListPageController', function($rootScope, $scope, $http, $state,$timeout,CollectNewsService,anchorScroll,CollectCusTempService,$stateParams,$cookieStore, $http) {
+
+
+    var jsonData = {
+
+        "basic_rule": {
+            "project_id": 123,
+            "task_id": 123,
+            "task_leader": "abc",
+            "task_description": "abc"
+        },
+
+        "assistant_rule": {
+            "open": true,
+            "login_page_path": "abc",
+            "login_username": "abc",
+            "login_username_xpath": "abc",
+            "login_password": "abc",
+            "login_password_xpath": "abc",
+            "login_verifycode": "abc",
+            "login_verifycode_xpath": "abc",
+            "cookie": "abc"
+        },
+
+        "url_pattern": {
+
+            "current_selected": "single",
+
+            "single": {
+
+                // "single_url_pattern_name": "abc",
+                "url_path": "abc"
+
+            },
+
+            "list": {
+                // "list_url_pattern_name": "abc",
+                "url_wildcard": "abc",
+                "init_value": 123,
+                "gap": 123,
+                "pages_num": 123,
+                "list_url_file_path": "abc"
+            },
+
+
+            "click": {
+                // "click_url_pattern_name": "abc",
+                "url_index_path": "abc",
+                "next_page_xpath": "abc",
+                "click_url_file_path": "abc"
+            },
+
+            "import": {
+                // "import_url_pattern_name": "abc",
+                "file_upload_path": "abc",
+                "click_url_file_path": "abc"
+            }
+
+        },
+
+        "creep_rule":
+            [
+                {
+                    "creep_pattern_name": "abc",
+                    "ajax": {
+                        "open": true,
+                        "ajax_pattern": "abc",
+                        "button_xpath": "abc"
+                    },
+
+                    "attribute_xpath": "abc",
+                    "attribute_name": "abc"
+                },
+                {
+                    "creep_pattern_name": "abc",
+                    "ajax": {
+                        "open": true,
+                        "ajax_pattern": "abc",
+                        "button_xpath": "abc"
+                    },
+
+                    "attribute_xpath": "abc",
+                    "attribute_name": "abc"
+                }
+            ],
+
+        "store_rule": {
+            "store_pattern": "abc"
+        },
+
+        "run_rule": {
+            "proxy_id": "abc",
+            "time": {
+                "start_time": "abc",
+                "end_time": "abc"
+            },
+            "headers": "abc",
+            "custom_config": "abc"
+        }
+
+    };
+
+    // direction == 0 上一步
+    // direction == 1 下一步
+    $scope.changeTabs=function(id, flag) {
+
+        if(flag){
+
+            // 基本规则
+            jsonData.basic_rule.project_id = $scope.selected_project.advanceProjectEntity.project_id;
+            jsonData.basic_rule.task_id =  $scope.selected_task.task_id;
+            jsonData.basic_rule.task_leader = $scope.task_leader;
+            jsonData.basic_rule.task_description =  $scope.task_description;
+
+            // 辅助规则
+            jsonData.assistant_rule.open = $scope.open;
+            jsonData.assistant_rule.login_page_path = $scope.login_page_path;
+            jsonData.assistant_rule.login_username = $scope.login_username;
+            jsonData.assistant_rule.login_username_xpath = $scope.login_username_xpath;
+            jsonData.assistant_rule.login_password =  $scope.login_password;
+            jsonData.assistant_rule.login_password_xpath = $scope.login_password_xpath;
+            jsonData.assistant_rule.login_verifycode = $scope.login_verifycode;
+            jsonData.assistant_rule.login_verifycode_xpath = $scope.login_verifycode_xpath;
+            jsonData.assistant_rule.cookie = $scope.cookie;
+
+            // URL规则
+            var arr = ["single","list","click","import"];
+            jsonData.url_pattern.current_selected = arr[$scope.crawl_pattern];
+
+            jsonData.url_pattern.single.url_path = $scope.url_path;
+
+            // 文件怎么上传？？url_file_path 是什么
+            jsonData.url_pattern.list.url_wildcard = $scope.url_wildcard;
+            jsonData.url_pattern.list.init_value =  $scope.init_value;
+            jsonData.url_pattern.list.gap = $scope.gap;
+            jsonData.url_pattern.list.pages_num =  $scope.pages_num;
+            jsonData.url_pattern.list.list_url_file_path = "";
+
+            jsonData.url_pattern.click.url_index_path =  $scope.url_index_path;
+            jsonData.url_pattern.click.next_page_xpath = $scope.next_page_xpath;
+            jsonData.url_pattern.click.click_url_file_path = "";
+
+            jsonData.url_pattern.import.file_upload_path = "";
+            jsonData.url_pattern.import.import_url_file_path="";
+
+
+            // 持久化规则
+            var storeArr = ['file','database'];
+            jsonData.store_rule.store_pattern = storeArr[$scope.store_pattern];
+
+
+            // 采集规则
+            jsonData.creep_rule = $scope.creep_rule;
+
+            // 执行计划
+            jsonData.run_rule.proxy_id = $scope.proxy_id
+            jsonData.run_rule.time.start_time=$scope.start_time;
+            jsonData.run_rule.time.end_time=$scope.end_time;
+            jsonData.run_rule.headers=$scope.headers;
+            jsonData.run_rule.custom_config=$scope.custom_config;
+
+
+            $http({
+                method: 'POST',
+                url: '/advance/test',
+                data: jsonData
+                // data: $.param(jsonData),
+                // headers: {'Content-Type':'application/x-www-form-urlencoded'},
+                // transformRequest: angular.identity
+            }).then(function successCallback(response) {
+                console.log(response.data);
+            }, function errorCallback(response) {
+                // 请求失败执行代码
+                console.log("create project bad");
+            });
+        }
+
+        $("#myTab a[href='/#" + id +"']").tab('show')
+
+    };
 
     $scope.pageTitle = "自定义采集模块";
 
 
+    $scope.creep_rule = [];
+    
+    $scope.del = function ($index) {
+        if($index>=0){
+            $scope.creep_rule.splice($index,1);
+        }
+    };
 
+    $scope.add = function () {
+        $scope.creep_name = "";
+        $scope.creep_pattern = "单体";
+        $scope.x = false;
+        $scope.ajax_pattern = "点击";
+        $scope.button_xpath = "";
+        $scope.attribute_xpath = "";
+        $scope.attribute_name = "";
+        $('#modal-add').modal('show');
+    };
+    
+    $scope.save = function () {
+
+        var newEle = {
+            "creep_name": $scope.creep_name,
+            "creep_pattern": $scope.creep_pattern,
+            "ajax": {
+                "open": $scope.x,
+                "ajax_pattern": $scope.ajax_pattern,
+                "button_xpath": $scope.button_xpath
+            },
+            "attribute_xpath": $scope.attribute_xpath,
+            "attribute_name":  $scope.attribute_name
+        };
+        $scope.creep_rule.push(newEle);
+
+        $('#modal-add').modal('hide');
+    };
+
+    $scope.update = function($index){
+        $scope.t_index = $index;
+        $scope.creep_name = $scope.creep_rule[$index].creep_name;
+        $scope.creep_pattern = $scope.creep_rule[$index].creep_pattern;
+        $scope.x = $scope.creep_rule[$index].ajax.open;
+        $scope.ajax_pattern = $scope.creep_rule[$index].ajax.ajax_pattern;
+        $scope.button_xpath = $scope.creep_rule[$index].ajax.button_xpath;
+        $scope.attribute_xpath = $scope.creep_rule[$index].attribute_xpath;
+        $scope.attribute_name = $scope.creep_rule[$index].attribute_name;
+        $('#modal-update').modal('show');
+    };
+
+    $scope.modify = function ($index) {
+
+        $scope.creep_rule[$index].creep_name = $scope.creep_name;
+        $scope.creep_rule[$index].creep_pattern =$scope.creep_pattern;
+
+        var ajaxTypes = ["点击","滚动"];
+        $scope.creep_rule[$index].ajax.open = $scope.x;
+        $scope.creep_rule[$index].ajax.ajax_pattern = types[$scope.y];
+        $scope.creep_rule[$index].ajax.button_xpath = $scope.button_xpath;
+        $scope.creep_rule[$index].attribute_xpath = $scope.attribute_xpath;
+        $scope.creep_rule[$index].attribute_name = $scope.attribute_name;
+
+        $('#modal-update').modal('hide');
+
+    }
+
+
+    // 渲染项目和任务选择框
+    $http({
+        method: 'GET',
+        url: '/advance/getProjectsDetailInfo'
+    }).then(function successCallback(response) {
+        $scope.projects = response.data;
+        $scope.selected_project = $scope.projects[$scope.projects.length-1];
+        tasks = $scope.selected_project.advanceTaskEntities;
+        $scope.selected_task = tasks[tasks.length-1];
+
+
+    }, function errorCallback(response) {
+        // 请求失败执行代码
+        console.log("get projects bad")
+    });
+
+
+    // 创建项目
+    $scope.createAdvanceProject = function () {
+
+        if($scope.new_project_name!=""){
+
+            for(var i = 0; i < $scope.projects.length; i++){
+                if($scope.projects[i].advanceProjectEntity.project_name == $scope.new_project_name){
+                    alert("项目已经存在");
+                    return;
+                }
+
+            }
+
+            $http({
+                method: 'POST',
+                url: '/advance/createProject',
+                data:{
+                    project_name:$scope.new_project_name
+                }
+            }).then(function successCallback(response) {
+                console.log(response.data.newProject);
+                $scope.projects.push(response.data.newProject);
+                $scope.selected_project = $scope.projects[$scope.projects.length-1];
+                // tasks = $scope.selected_project.advanceTaskEntities;
+                // $scope.selected_task = tasks[tasks.length-1];
+            }, function errorCallback(response) {
+                // 请求失败执行代码
+                console.log("create project bad");
+            });
+        }
+
+    };
+
+
+    // 创建任务
+    $scope.createAdvanceTask = function () {
+        if($scope.new_task_name!=""){
+            $http({
+                method: 'POST',
+                url: '/advance/createTask',
+                data:{
+                    project_id: $scope.selected_project.advanceProjectEntity.project_id,
+                    task_name: $scope.new_task_name
+                }
+            }).then(function successCallback(response) {
+
+                for(var i = 0; i < $scope.projects.length; i++){
+                    if($scope.projects[i].advanceProjectEntity.project_id == response.data.project_id){
+                        $scope.projects[i].advanceTaskEntities.push(response.data.newTask);
+                        $scope.selected_project = $scope.projects[i];
+                        tasks = $scope.selected_project.advanceTaskEntities;
+                        $scope.selected_task = tasks[tasks.length-1];
+                        return;
+                    }
+                    $('#modal_create_task').modal('hide');
+                }
+
+            }, function errorCallback(response) {
+                // 请求失败执行代码
+                console.log("create task bad");
+            });
+        }
+    };
+
+
+    $scope.uploadtest = function () {
+
+        $("#myTab a[href='/#assist']").tab('show');
+
+        // console.log("yes");
+        // console.log($scope.file_upload_path);
+        // var fd = new FormData();
+        // var file = document.querySelector('input[id=file_upload_path]').files[0];
+        // console.log(file);
+        // fd.append('file_upload_path', file);
+        // fd.append('code',"some");
+        // $http({
+        //     method: 'POST',
+        //     url: '/advance/uploadFile',
+        //     data: fd,
+        //     headers: {'Content-Type':undefined},
+        //     transformRequest: angular.identity
+        // }).then(function successCallback(response) {
+        //     // console.log(response.data)
+        //     console.log("yes");
+        //
+        // }, function errorCallback(response) {
+        //     // 请求失败执行代码
+        //     console.log("bad");
+        //
+        // });
+    };
+
+
+
+    /************************************************新旧分隔线**************************************************/
 
     $scope.changeTemplate=function(tableId){
 
@@ -357,8 +714,6 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
             "tab2":$scope.tabId==2?true:false,
             "tab3":$scope.tabId==3?true:false,
             "tab3":$scope.tabId==4?true:false,
-
-
         }
 
 

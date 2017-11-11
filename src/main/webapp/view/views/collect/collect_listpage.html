@@ -117,7 +117,7 @@
     <div class="col-lg-1">
         <br/><br/><br/><br/>
         <ul class="nav nav-pills nav-stacked">
-            <li class="active"><a href="#">新建</a></li>
+            <li class="active"><a href="#">编辑</a></li>
             <li><a href="#">导入</a></li>
             <li><a href="#">导出</a></li>
             <li><a href="#">监控</a></li>
@@ -168,22 +168,28 @@
                         <br/>
                         <label for="projectname" class="col-sm-2 control-label">项目名称</label>
                         <div class="col-xs-4">
-                            <input type="text" class="form-control" id="projectname"
-                                   placeholder="请输入项目名称">
+                            <select  class="form-control" id = "projectname"
+                                     ng-init="selected_project = projects[0]"
+                                     ng-model="selected_project"
+                                     ng-options="x.advanceProjectEntity.project_name for x in projects"
+                                     ng-change="selected_task=selected_project.advanceTaskEntities[selected_project.advanceTaskEntities.length-1]">
+                            </select>
                         </div>
                         <div class="col-xs-4">
-                            <button class="btn btn-default">新建项目</button>
+                            <button class="btn btn-default" data-toggle="modal" data-target="#modal_create_project">新建项目</button>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="taskname" class="col-sm-2 control-label">任务名称</label>
                         <div class="col-xs-4">
-                            <input type="text" class="form-control" id="taskname"
-                                   placeholder="请输入任务名称">
+                            <!--<input type="text" class="form-control" id="taskname"-->
+                                   <!--placeholder="请输入任务名称">-->
+                            <select  class="form-control" id = "taskname" ng-init="selected_task = selected_project.advanceTaskEntities[0]" ng-model="selected_task" ng-options="x.task_name for x in selected_project.advanceTaskEntities">
+                            </select>
                         </div>
                         <div class="col-xs-4">
-                            <button class="btn btn-default">新建任务</button>
+                            <button class="btn btn-default" data-toggle="modal" data-target="#modal_create_task">新建任务</button>
                         </div>
                     </div>
 
@@ -191,7 +197,7 @@
                     <div class="form-group">
                         <label for="manager" class="col-sm-2 control-label">负责人</label>
                         <div class="col-xs-4">
-                            <input type="text" class="form-control" id="manager"
+                            <input type="text" ng-model="task_leader" ng-init="task_leader=''" class="form-control" id="manager"
                                    placeholder="请输入负责人">
                         </div>
                     </div>
@@ -199,7 +205,17 @@
                     <div class="form-group">
                         <label for="taskdescription" class="col-sm-2 control-label">任务描述</label>
                         <div class="col-xs-4">
-                            <textarea class="form-control" rows="3" id="taskdescription"></textarea>
+                            <textarea class="form-control" rows="3" id="taskdescription" ng-model="task_description" ng-init="task_description=''"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <span class="col-xs-2"></span>
+                        <div class="col-xs-2">
+                            <button type="button" class="btn btn-primary">上一步</button>
+                        </div>
+                        <div class="col-xs-2">
+                            <button type="button" class="btn btn-primary" ng-click="changeTabs('assist',true)">下一步</button>
                         </div>
                     </div>
 
@@ -214,25 +230,34 @@
                         <br/>
                         <label for="signup" class="col-sm-2 control-label">登陆配置</label>
                         <div class="col-xs-3">
-                            <input type="checkbox"  class="form-control" id="signup" ng-model="issign" ng-init="issign=false">
+                            <input type="checkbox"  class="form-control" id="signup" ng-model="open" ng-init="open=false">
                         </div>
-
                     </div>
 
                     <!--根据是否选择登陆配置来决定是否显示-->
-                    <div ng-show="issign">
+                    <div ng-show="open">
 
                         <div class="form-group">
                             <label for="signurl" class="col-sm-2 control-label">登录页路径</label>
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" id="signurl">
+                                <input type="text" class="form-control" id="signurl"
+                                       ng-model="login_page_path" ng-init="login_page_path=''">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="username" class="col-sm-2 control-label">用户名</label>
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" id="username">
+                                <input type="text" class="form-control" id="username"
+                                       ng-model="login_username" ng-init="login_username=''">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username_xpath" class="col-sm-2 control-label">xpath</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="username_xpath"
+                                       ng-model="login_username_xpath" ng-init="login_username_xpath=''">
                             </div>
                             <div class="col-xs-4">
                                 <button class="btn btn-default" data-toggle="modal" data-target="#myModal">选择</button>
@@ -240,9 +265,18 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="password" class="col-sm-2 control-label">用户名</label>
+                            <label for="password" class="col-sm-2 control-label">密码</label>
                             <div class="col-xs-4">
-                                <input type="password" class="form-control" id="password">
+                                <input type="text" class="form-control" id="password"
+                                       ng-model="login_password" ng-init="login_password=''">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password_xpath" class="col-sm-2 control-label">xpath</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="password_xpath"
+                                       ng-model="login_password_xpath" ng-init="login_password_xpath=''">
                             </div>
                             <div class="col-xs-4">
                                 <button class="btn btn-default" data-toggle="modal" data-target="#myModal">选择</button>
@@ -251,9 +285,18 @@
 
 
                         <div class="form-group">
-                            <label for="code" class="col-sm-2 control-label">验证码</label>
+                            <label for="login_verifycode" class="col-sm-2 control-label">验证码</label>
                             <div class="col-xs-4">
-                                <input type="password" class="form-control" id="code">
+                                <input type="text" class="form-control" id="login_verifycode"
+                                       ng-model="login_verifycode" ng-init="login_verifycode=''">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="login_verifycode_xpath" class="col-sm-2 control-label">xpath</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="login_verifycode_xpath"
+                                       ng-model="login_verifycode_xpath" ng-init="login_verifycode_xpath=''">
                             </div>
                             <div class="col-xs-4">
                                 <button class="btn btn-default" data-toggle="modal" data-target="#myModal">选择</button>
@@ -264,10 +307,20 @@
                         <div class="form-group">
                             <label for="cookie" class="col-sm-2 control-label">cookie</label>
                             <div class="col-xs-4">
-                                <textarea class="form-control" rows="3" id="cookie"></textarea>
+                                <textarea class="form-control" rows="3" id="cookie"
+                                          ng-model="cookie" ng-init="cookie=''"></textarea>
                             </div>
                         </div>
+                    </div>
 
+                    <div class="form-group">
+                        <span class="col-xs-2"></span>
+                        <div class="col-xs-2">
+                            <button type="button" class="btn btn-primary" ng-click="changeTabs('basic',false)">上一步</button>
+                        </div>
+                        <div class="col-xs-2">
+                            <button type="button" class="btn btn-primary" ng-click="changeTabs('urlrule',true)">下一步</button>
+                        </div>
                     </div>
 
                 </form>
@@ -281,7 +334,7 @@
                     <div class="form-group">
                         <label for="pattern" class="col-sm-2 control-label">读取模式</label>
                         <div class="col-xs-4">
-                            <select class="form-control" id="pattern" ng-model="selectedvalue" ng-init="selectedvalue=0">
+                            <select class="form-control" id="pattern" ng-model="crawl_pattern" ng-init="crawl_pattern=0">
                                 <option value="0" ng-selected="true">单页</option>
                                 <option value="1">列表</option>
                                 <option value="2">翻页</option>
@@ -290,44 +343,89 @@
                         </div>
                     </div>
 
-                    <div ng-if="selectedvalue==0">
+                    <div ng-show="crawl_pattern==0">
                         <div class="form-group">
-                            <label for="urlpath" class="col-sm-2 control-label">URL路径</label>
+                            <label for="url_path" class="col-sm-2 control-label">URL路径</label>
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" id="urlpath">
+                                <input type="text" class="form-control" id="url_path"
+                                       ng-model="url_path" ng-init="url_path=''">
                             </div>
                         </div>
                     </div>
 
-                    <div ng-if="selectedvalue==1">
+                    <div ng-show="crawl_pattern==1">
                         <div class="form-group">
-                            <label for="urlpattern" class="col-sm-2 control-label">URL模式</label>
+                            <label for="url_wildcard" class="col-sm-2 control-label">URL模式</label>
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" id="urlpattern">
+                                <input type="text" class="form-control" id="url_wildcard"
+                                       ng-model="url_wildcard" ng-init="url_wildcard=''">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="initvalue" class="col-sm-2 control-label">初始值</label>
+                            <label for="init_value" class="col-sm-2 control-label">初始值</label>
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" id="initvalue">
+                                <input type="text" class="form-control" id="init_value"
+                                       ng-model="init_value" ng-init="init_value=''">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="interval" class="col-sm-2 control-label">间隔</label>
+                            <label for="gap" class="col-sm-2 control-label">间隔</label>
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" id="interval">
+                                <input type="text" class="form-control" id="gap"
+                                       ng-model="gap" ng-init="gap=''">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="pagecount" class="col-sm-2 control-label">页数</label>
+                            <label for="pages_num" class="col-sm-2 control-label">页数</label>
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" id="pagecount">
+                                <input type="text" class="form-control" id="pages_num"
+                                       ng-model="pages_num" ng-init="pages_num=''">
                             </div>
                         </div>
 
+                    </div>
+
+                    <div ng-show="crawl_pattern==2">
+                        <div class="form-group">
+                            <label for="url_index_path" class="col-sm-2 control-label">翻页路径</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="url_index_path"
+                                       ng-model="url_index_path" ng-init="url_index_path=''">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="next_page_xpath" class="col-sm-2 control-label">翻页xpath</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="next_page_xpath"
+                                       ng-model="next_page_xpath" ng-init="next_page_xpath=''">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div ng-show="crawl_pattern==3">
+                        <div class="form-group">
+                            <label for="file_upload_path" class="col-sm-2 control-label">文件路径</label>
+                            <div class="col-xs-4">
+                                <input type="file"  id="file_upload_path"
+                                       ng-model="file_upload_path" ng-init="file_upload_path=''">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <span class="col-xs-2"></span>
+                        <div class="col-xs-2">
+                            <button type="button" class="btn btn-primary" ng-click="changeTabs('assist',false)">上一步</button>
+                        </div>
+                        <div class="col-xs-2">
+                            <button type="button" class="btn btn-primary" ng-click="changeTabs('miningrule',true)">下一步</button>
+                        </div>
                     </div>
 
                 </form>
@@ -337,69 +435,46 @@
             <div class="tab-pane fade" id="miningrule">
                 <form class="form-horizontal" role="form" action="/collect/CrawledData" method="post" id="crawlrule">
                     <div class="form-group">
-                        <br/>
-                        <label for="projectname" class="col-sm-2 control-label">模式名称</label>
-                        <div class="col-xs-4">
-                            <input type="text" class="form-control" name="patternName"
-                                   placeholder="请输入模式名称">
+                        <div class="col-xs-11">
+                            <button type="button" class="btn btn-primary" ng-click="add()">添加</button>
+                            <table class="table table-bordered" style="text-align: center">
+                                <thead>
+                                <tr>
+                                    <td>序号</td>
+                                    <td>模式名称</td>
+                                    <td>类型</td>
+                                    <td>Ajax</td>
+                                    <td>操作</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="x in creep_rule">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{x.creep_name}}</td>
+                                    <td>{{x.creep_pattern}}</td>
+                                    <td>{{x.ajax.open}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-warning" ng-click="update($index)">修改</button>
+                                        <button type="button" class="btn btn-danger" ng-click="del($index)">删除</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="taskname" class="col-sm-2 control-label">读取模式</label>
-                        <div class="col-xs-4">
-                            <select class="form-control" name="crawltype">
-                                <option value="0" ng-selected="true">单体</option>
-                                <option value="1">列表</option>
-                            </select>
+                        <span class="col-xs-2"></span>
+                        <div class="col-xs-2">
+                            <button type="button" class="btn btn-primary" ng-click="changeTabs('urlrule',false)">上一步</button>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="taskname" class="col-sm-2 control-label">是否使用Ajax</label>
-                        <div class="col-xs-4">
-                            <select class="form-control" name="ifajax" ng-click="changeifHide(x)" ng-model="x">
-                                <option value="0" ng-selected="true" >是</option>
-                                <option value="1" >否</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group" ng-hide="ajaxType" >
-                        <label for="taskname" class="col-sm-2 control-label">Ajax类型</label>
-                        <div class="col-xs-4">
-                            <select class="form-control" name="ajaxtype"ng-click="changeXpath(y)" ng-model="y">
-                                <option value="0" ng-selected="true">点击</option>
-                                <option value="1" >滚动</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group" ng-hide="ajaxXpath" >
-                        <label for="manager" class="col-sm-2 control-label">点击元素的Xpath</label>
-                        <div class="col-xs-4">
-                            <input type="text" class="form-control" name="ajaxxpath"
-                                   placeholder="请输入要点击的对象的xpath">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="manager" class="col-sm-2 control-label">Xpath</label>
-                        <div class="col-xs-4">
-                            <input type="text" class="form-control" name="xpath"
-                                   placeholder="请输入xpath">
+                        <div class="col-xs-2">
+                            <button type="button" class="btn btn-primary" ng-click="changeTabs('storerule',true)">下一步</button>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="taskdescription" class="col-sm-2 control-label">属性名称</label>
-                        <div class="col-xs-4">
-                            <input type="text" class="form-control" name="nameindb"
-                                   placeholder="请输入属性名称">
-                        </div>
-                    </div>
                 </form>
-                <div style="text-align:center">
-                    <div class="col-xs-6">
-                        <button  ng-click="testCrawler()">测试</button>
-                    </div>
-                </div>
+
 
             </div>
 
@@ -408,12 +483,21 @@
                 <form class="form-horizontal" role="form">
                     <br/>
                     <div class="form-group">
-                        <label for="pattern" class="col-sm-2 control-label">读取模式</label>
+                        <label for="persistence_pattern" class="col-sm-2 control-label">读取模式</label>
                         <div class="col-xs-4">
-                            <select class="form-control" id="store" ng-model="selectedvalue" ng-init="selectedvalue=0">
-                                <option value="0" ng-selected="true">数据库</option>
-                                <option value="1">文件</option>
+                            <select class="form-control" id="persistence_pattern" ng-model="store_pattern" ng-init="store_pattern=0">
+                                <option value="0" ng-selected="true">文件</option>
+                                <option value="1">数据库</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span class="col-xs-2"></span>
+                        <div class="col-xs-2">
+                            <button type="button" class="btn btn-primary" ng-click="changeTabs('miningrule',false)">上一步</button>
+                        </div>
+                        <div class="col-xs-2">
+                            <button type="button" class="btn btn-primary"  ng-click="changeTabs('planrule',true)">下一步</button>
                         </div>
                     </div>
                 </form>
@@ -427,7 +511,8 @@
                     <div class="form-group">
                         <label for="proxy" class="col-sm-2 control-label">代理ip</label>
                         <div class="col-xs-4">
-                            <textarea class="form-control" rows="3" id="proxy"></textarea>
+                            <textarea class="form-control" rows="3" id="proxy"
+                                      ng-model="proxy_id" ng-init="proxy_id=''"></textarea>
                             <input type="file" id="proxyfile">
                         </div>
                     </div>
@@ -435,10 +520,12 @@
                     <div class="form-group">
                         <label for="intervaltime1" class="col-sm-2 control-label">间隔时间</label>
                         <div class="col-xs-2">
-                            <input type="text" class="form-control" id="intervaltime1" placeholder="起始时间">
+                            <input type="text" class="form-control" id="intervaltime1" placeholder="起始时间"
+                                   ng-model="start_time" ng-init="start_time=''">
                         </div>
                         <div class="col-xs-2">
-                            <input type="text" class="form-control" id="intervaltime2" placeholder="终止时间">
+                            <input type="text" class="form-control" id="intervaltime2" placeholder="终止时间"
+                                   ng-model="end_time" ng-init="end_time=''">
                         </div>
                     </div>
 
@@ -446,14 +533,26 @@
                     <div class="form-group">
                         <label for="header" class="col-sm-2 control-label">浏览器头配置</label>
                         <div class="col-xs-4">
-                            <textarea class="form-control" rows="3" id="header" placeholder="可不填"></textarea>
+                            <textarea class="form-control" rows="3" id="header" placeholder="可不填"
+                                      ng-model="headers" ng-init="headers=''"></textarea>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="userdefinition" class="col-sm-2 control-label">自定义配置</label>
                         <div class="col-xs-4">
-                            <textarea class="form-control" rows="3" id="userdefinition" placeholder="可不填"></textarea>
+                            <textarea class="form-control" rows="3" id="userdefinition" placeholder="可不填"
+                                      ng-model="custom_config" ng-init="custom_config=''"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <span class="col-xs-2"></span>
+                        <div class="col-xs-2">
+                            <button type="button" class="btn btn-primary" ng-click="changeTabs('storerule',false)">上一步</button>
+                        </div>
+                        <div class="col-xs-2">
+                            <button type="button" class="btn btn-primary" ng-click="changeTabs('planrule',true)">完    成</button>
                         </div>
                     </div>
 
@@ -506,13 +605,276 @@
 </div>
 
 
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="modal_create_project" tabindex="-1" role="dialog" aria-labelledby="modal_create_project_title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="modal_create_project_title">
+                    创建项目
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="new_project_name" class="col-sm-2 control-label">项目名称</label>
+                        <div class="col-xs-4">
+                            <input type="text" class="form-control" id="new_project_name" ng-model="new_project_name">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="createAdvanceProject()">
+                    创建
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="modal_create_task" tabindex="-1" role="dialog" aria-labelledby="modal_create_task_title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="modal_create_task_title">
+                    创建任务
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="new_project_name" class="col-sm-2 control-label">任务名称</label>
+                        <div class="col-xs-4">
+                            <input type="text" class="form-control" id="new_task_name" ng-model="new_task_name">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+                <button type="button" class="btn btn-primary" ng-click="createAdvanceTask()">
+                    创建
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 
 
 
+<!-- 添加信息 -->
+<div class="modal" id="modal-add">
 
+    <div class="modal-dialog">
 
+        <div class="modal-content">
 
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+                <h3 class="modal-title">添加信息</h3>
+            </div>
 
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <br/>
+                        <span ng-model="t_index"></span>
+                        <label for="projectname" class="col-sm-2 control-label">模式名称</label>
+                        <div class="col-xs-4">
+                            <input type="text" class="form-control" name="patternName"
+                                   placeholder="请输入模式名称"
+                                   ng-model="creep_name" ng-init="creep_name=''">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskname" class="col-sm-2 control-label">读取模式</label>
+                        <div class="col-xs-4">
+                            <select class="form-control" name="crawltype"
+                                    ng-model="creep_pattern" ng-init="creep_pattern='单体'">
+                                <option value="单体" ng-selected="true">单体</option>
+                                <option value="列表">列表</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskname" class="col-sm-2 control-label">是否使用Ajax</label>
+                        <div class="col-xs-4">
+                            <select class="form-control" name="ifajax" ng-click="changeifHide(x)" ng-model="x" ng-init="x='true'">
+                                <option value="true" ng-selected="true" >是</option>
+                                <option value="false" >否</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="x=='true'" >
+                        <label for="taskname" class="col-sm-2 control-label">Ajax类型</label>
+                        <div class="col-xs-4">
+                            <select class="form-control" name="ajaxtype" ng-model="ajax_pattern" ng-init="ajax_pattern='点击'">
+                                <option value="点击" ng-selected="true">点击</option>
+                                <option value="滚动" >滚动</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="x=='true'" >
+                        <label for="manager" class="col-sm-2 control-label">点击元素的Xpath</label>
+                        <div class="col-xs-4">
+                            <input type="text" class="form-control" name="ajaxxpath"
+                                   placeholder="请输入要点击的对象的xpath"
+                                   ng-model="button_xpath" ng-init="button_xpath=''">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="manager" class="col-sm-2 control-label">Xpath</label>
+                        <div class="col-xs-4">
+                            <input type="text" class="form-control" name="xpath"
+                                   placeholder="请输入xpath"
+                                   ng-model="attribute_xpath" ng-init="attribute_xpath=''">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskdescription" class="col-sm-2 control-label">属性名称</label>
+                        <div class="col-xs-4">
+                            <input type="text" class="form-control" name="nameindb"
+                                   placeholder="请输入属性名称"
+                                   ng-model="attribute_name" ng-init="attribute_name=''">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div style="text-align:center">
+                            <div class="col-xs-8">
+                                <button  ng-click="testCrawler()">测试</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button class="btn btn-success" data-dismiss="modal" ng-click="save()">保存</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 修改信息 -->
+<div class="modal" id="modal-update">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+                <h3 class="modal-title">修改信息</h3>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <br/>
+                        <span ng-model="t_index"></span>
+                        <label for="projectname" class="col-sm-2 control-label">模式名称</label>
+                        <div class="col-xs-4">
+                            <input type="text" class="form-control" name="patternName"
+                                   placeholder="请输入模式名称"
+                                   ng-model="creep_name" ng-init="creep_name=''">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskname" class="col-sm-2 control-label">读取模式</label>
+                        <div class="col-xs-4">
+                            <select class="form-control" name="crawltype"
+                                    ng-model="creep_pattern" ng-init="creep_pattern='单体'">
+                                <option value="单体" ng-selected="true">单体</option>
+                                <option value="列表">列表</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskname" class="col-sm-2 control-label">是否使用Ajax</label>
+                        <div class="col-xs-4">
+                            <select class="form-control" name="ifajax" ng-click="changeifHide(x)" ng-model="x" ng-init="x='true'">
+                                <option value="true" ng-selected="true" >是</option>
+                                <option value="false" >否</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="x=='true'" >
+                        <label for="taskname" class="col-sm-2 control-label">Ajax类型</label>
+                        <div class="col-xs-4">
+                            <select class="form-control" name="ajaxtype" ng-model="ajax_pattern" ng-init="ajax_pattern='点击'">
+                                <option value="点击" ng-selected="true">点击</option>
+                                <option value="滚动" >滚动</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="x=='true'" >
+                        <label for="manager" class="col-sm-2 control-label">点击元素的Xpath</label>
+                        <div class="col-xs-4">
+                            <input type="text" class="form-control" name="ajaxxpath"
+                                   placeholder="请输入要点击的对象的xpath"
+                                   ng-model="button_xpath" ng-init="button_xpath=''">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="manager" class="col-sm-2 control-label">Xpath</label>
+                        <div class="col-xs-4">
+                            <input type="text" class="form-control" name="xpath"
+                                   placeholder="请输入xpath"
+                                   ng-model="attribute_xpath" ng-init="attribute_xpath=''">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskdescription" class="col-sm-2 control-label">属性名称</label>
+                        <div class="col-xs-4">
+                            <input type="text" class="form-control" name="nameindb"
+                                   placeholder="请输入属性名称"
+                                   ng-model="attribute_name" ng-init="attribute_name=''">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div style="text-align:center">
+                            <div class="col-xs-8">
+                                <button  ng-click="testCrawler()">测试</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button class="btn btn-success" data-dismiss="modal" ng-click="modify(t_index)">确定</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 
 
