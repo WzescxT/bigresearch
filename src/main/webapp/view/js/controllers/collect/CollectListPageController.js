@@ -171,7 +171,7 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
                 console.log(response.data);
             }, function errorCallback(response) {
                 // 请求失败执行代码
-                console.log("create project bad");
+                console.log("post data bad");
             });
         }
 
@@ -302,6 +302,13 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
     // 创建任务
     $scope.createAdvanceTask = function () {
         if($scope.new_task_name!=""){
+            for(var i = 0; i < $scope.selected_project.advanceTaskEntities.length; i++){
+                if($scope.selected_project.advanceTaskEntities[i].task_name == $scope.new_task_name){
+                    alert("任务已经存在");
+                    return;
+                }
+
+            }
             $http({
                 method: 'POST',
                 url: '/advance/createTask',
@@ -327,35 +334,6 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
                 console.log("create task bad");
             });
         }
-    };
-
-
-    $scope.uploadtest = function () {
-
-        $("#myTab a[href='/#assist']").tab('show');
-
-        // console.log("yes");
-        // console.log($scope.file_upload_path);
-        // var fd = new FormData();
-        // var file = document.querySelector('input[id=file_upload_path]').files[0];
-        // console.log(file);
-        // fd.append('file_upload_path', file);
-        // fd.append('code',"some");
-        // $http({
-        //     method: 'POST',
-        //     url: '/advance/uploadFile',
-        //     data: fd,
-        //     headers: {'Content-Type':undefined},
-        //     transformRequest: angular.identity
-        // }).then(function successCallback(response) {
-        //     // console.log(response.data)
-        //     console.log("yes");
-        //
-        // }, function errorCallback(response) {
-        //     // 请求失败执行代码
-        //     console.log("bad");
-        //
-        // });
     };
 
 
