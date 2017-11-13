@@ -48,7 +48,7 @@ public class XpathCollectorService {
         this.ifajax=ifajax;
         this.ajaxtype=ajaxtype;
         this.ajaxXpath=ajaxXpath;
-        if(single.equals("0"))
+        if(single.equals("单体"))
         {
             List<SpiderListener> spiderlisteners = new ArrayList<>();
             spiderlisteners.add(new SpiderListener() {
@@ -68,10 +68,10 @@ public class XpathCollectorService {
 
                 }
             });
-            if(ifajax.equals("1")) {
+            if(ifajax.equals("false")) {
                 Spider.create(new SingleCrawler()).setSpiderListeners(spiderlisteners).addUrl(url).addPipeline(new MysqlPipline()).addPipeline(new ConsolePipeline()).thread(5).run();
             }
-            else if(ifajax.equals("0")) {
+            else if(ifajax.equals("true")) {
                 Spider.create(new AjaxCrawler()).setSpiderListeners(spiderlisteners).addUrl(url).addPipeline(new MysqlPipline()).addPipeline(new ConsolePipeline()).thread(5).run();
             }
         }
@@ -129,7 +129,7 @@ public class XpathCollectorService {
                 webClient.getOptions().setUseInsecureSSL(true);
                 webClient.getOptions().setJavaScriptEnabled(true);
                 webClient.setAjaxController(new NicelyResynchronizingAjaxController());
-                HtmlPage htmlPage = webClient.getPage("http://www.sse.com.cn/assortment/stock/list/share/");
+                HtmlPage htmlPage = webClient.getPage(url);
                 webClient.waitForBackgroundJavaScript(10000);
                 List<HtmlAnchor> htmlListItems =  htmlPage.getByXPath(ajaxXpath);
                 for(HtmlAnchor htmlAnchor : htmlListItems){
