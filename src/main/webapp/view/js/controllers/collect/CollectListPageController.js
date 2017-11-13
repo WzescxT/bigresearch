@@ -392,15 +392,15 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
         // console.log($scope.creep_rule[$index].creep_pattern);
         // 赵亮
         if($scope.creep_rule[$index].creep_pattern === "单体") {
-            // $http({
-            //     method: 'POST',
-            //     url: '/collect/clues'
-            // }).then(function (response) {
-            //
-            // }, function errorCallback(response) {
-            //     // 请求失败执行代码
-            //     console.log("get projects bad")
-            // });
+            var params = $("#crawlrule").serializeArray();
+            var values = {};
+            for( x in params ){
+                values[params[x].name] = params[x].value;
+            }
+            var idata = JSON.stringify(values)
+            alert(idata.toString());
+            console.log(idata.toString());
+            CollectCusTempService.crawltest(idata);
         }
         // 寸
         else if($scope.creep_rule[$index].creep_pattern === "列表") {
