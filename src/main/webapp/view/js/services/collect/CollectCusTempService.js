@@ -50,7 +50,6 @@ MetronicApp.factory('CollectCusTempService', function ($http, $q, $rootScope) {
                     var testresult=resp["testResult"];
                     var text=$('#testarea').val(testresult);
 
-
                 } else {
 
                 }

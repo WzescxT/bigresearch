@@ -456,6 +456,7 @@
                                     <td>
                                         <button type="button" class="btn btn-warning" ng-click="update($index)">修改</button>
                                         <button type="button" class="btn btn-danger" ng-click="del($index)">删除</button>
+                                        <button type="button" class="btn btn-default" ng-click="test($index)">测试</button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -577,33 +578,6 @@
 <!--<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">-->
     <!--模拟浏览器-->
 <!--</button>-->
-<!-- 模态框（Modal） -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    &times;
-                </button>
-                <h4 class="modal-title" id="myModalLabel">
-                    选取路径
-                </h4>
-            </div>
-            <div class="modal-body">
-                <iframe src="http://www.baidu.com" id="my-iframe" style="height: 500px;width: 100%"></iframe>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">
-                    关闭
-                </button>
-                <button type="button" class="btn btn-primary">
-                    提交
-                </button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
-</div>
-
 
 <!-- 模态框（Modal） -->
 <div class="modal fade" id="modal_create_project" tabindex="-1" role="dialog" aria-labelledby="modal_create_project_title" aria-hidden="true">
@@ -637,7 +611,6 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
-
 
 <!-- 模态框（Modal） -->
 <div class="modal fade" id="modal_create_task" tabindex="-1" role="dialog" aria-labelledby="modal_create_task_title" aria-hidden="true">
@@ -744,6 +717,20 @@
                                    placeholder="请输入xpath"
                                    ng-model="attribute_xpath" ng-init="attribute_xpath=''">
                         </div>
+                        <div class="col-xs-4">
+                            <button id="select_iframe" ng-click="select_xpath()">选择</button>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="creep_pattern=='列表'">
+                        <label for="manager" class="col-sm-2 control-label">Xpath2</label>
+                        <div class="col-xs-4">
+                            <input type="text" class="form-control" name="xpath2"
+                                   placeholder="请输入xpath2"
+                                   ng-model="attribute_xpath2" ng-init="attribute_xpath2=''">
+                        </div>
+                        <div class="col-xs-4">
+                            <button id="select_iframe_two" ng-click="select_xpath2()">选择</button>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="taskdescription" class="col-sm-2 control-label">属性名称</label>
@@ -754,13 +741,13 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div style="text-align:center">
-                            <div class="col-xs-8">
-                                <button  ng-click="testCrawler()">测试</button>
-                            </div>
-                        </div>
-                    </div>
+                    <!--<div class="form-group">-->
+                        <!--<div style="text-align:center">-->
+                            <!--<div class="col-xs-8">-->
+                                <!--<button  ng-click="testCrawler()">测试</button>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
                 </form>
             </div>
 
@@ -775,6 +762,67 @@
 
 </div>
 
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="modal-select-xpath" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <div>
+                    <h4 class="modal-title" id="myModalLabel">
+                        选取路径
+                    </h4>
+                    <input class="col-xs-12 btn btn-default" type="text" id="xpath"/>
+                </div>
+
+            </div>
+            <div class="modal-body">
+                <iframe src="/view/iframe.html" id="iframe" style="height: 500px;width: 100%"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="select_commit()">
+                    提交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="modal-select-xpath2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <div>
+                    <h4 class="modal-title" id="myModalLabel2">
+                        选取路径
+                    </h4>
+                    <input class="col-xs-12 btn btn-default" type="text" id="xpath2"/>
+                </div>
+
+            </div>
+            <div class="modal-body">
+                <iframe src="/view/iframe.html" id="iframe2" style="height: 500px;width: 100%"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="select_commit()">
+                    提交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 <!-- 修改信息 -->
 <div class="modal" id="modal-update">
 
@@ -855,13 +903,13 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div style="text-align:center">
-                            <div class="col-xs-8">
-                                <button  ng-click="testCrawler()">测试</button>
-                            </div>
-                        </div>
-                    </div>
+                    <!--<div class="form-group">-->
+                        <!--<div style="text-align:center">-->
+                            <!--<div class="col-xs-8">-->
+                                <!--<button  ng-click="testCrawler()">测试</button>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
                 </form>
             </div>
 

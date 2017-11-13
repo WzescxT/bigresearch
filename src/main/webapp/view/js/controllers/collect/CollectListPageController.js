@@ -69,6 +69,7 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
                     },
 
                     "attribute_xpath": "abc",
+                    "attribute_xpath2": "abc",
                     "attribute_name": "abc"
                 },
                 {
@@ -174,10 +175,26 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
                 console.log("post data bad");
             });
         }
-
+        if(id === "miningrule") {
+            var url_data = {url_path: $scope.url_path};
+            $http({
+                method: 'POST',
+                url: '/collect/download',
+                data: url_data
+                // data: $.param(jsonData),
+                // headers: {'Content-Type':'application/x-www-form-urlencoded'},
+                // transformRequest: angular.identity
+            }).then(function successCallback(response) {
+                console.log("success！");
+            }, function errorCallback(response) {
+                // 请求失败执行代码
+                console.log("post data bad");
+            });
+        }
         $("#myTab a[href='/#" + id +"']").tab('show')
 
     };
+
 
     $scope.pageTitle = "自定义采集模块";
 
@@ -190,6 +207,8 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
         }
     };
 
+    var select_xpath1;
+    var select_xpath2;
     $scope.add = function () {
         $scope.creep_name = "";
         $scope.creep_pattern = "单体";
@@ -197,10 +216,125 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
         $scope.ajax_pattern = "点击";
         $scope.button_xpath = "";
         $scope.attribute_xpath = "";
+        $scope.attribute_xpath2 = "";
         $scope.attribute_name = "";
+        // 添加规则
         $('#modal-add').modal('show');
     };
-    
+
+    var lastTag = null;
+    var lastTagBorder = null;
+    var index = 0;
+    // 选择xpath
+    $scope.select_xpath = function (){
+        $('#modal-select-xpath').modal('show');
+        //alert("www");
+        //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
+        index = 0;
+        $('#xpath').val("");
+        $('#modal-select-xpath').on('shown.bs.modal', function (e) {
+            $(this).click(function (event) { event.preventDefault(); });
+            index = 0;
+            //对所有的元素添加点击事件，获取xpath
+            $("#iframe").contents().find("*").hover(function(event){
+                event.stopPropagation();
+                // lastTag = $(this);
+                // var css = div.css('border');
+                // console.log($(this).css('border'));
+                if(lastTag !== null){
+                    lastTag.css('border', lastTagBorder);
+                    // console.log(lastTag);
+                    // console.log(lastTagBorder);
+                }
+                lastTagBorder = $(this).css('border');
+                //console.log($(this));
+                $(this).css({'border': '1.5px solid #f0f', 'border-radius': '5px solid'});
+                $(this).click(function (event) {
+                    event.preventDefault();
+                    //console.log("+++++++++++++++++++++++++++++++++\n" + this  + "+++++++++++++++++++++++++++++++++\n");
+                    // if($type === 1) {
+                    //     //console.log("select_xpath1");
+                    //     select_xpath1 = $shadow.domXpath(this);
+                    //     // $scope.attribute_xpath = select_xpath1;
+                    // }else if($type === 2) {
+                    //     //console.log("select_xpath2");
+                    //     select_xpath2 = $shadow.domXpath(this);
+                    //     // $scope.attribute_xpath2 = select_xpath2;
+                    // }
+                    if(index === 0) {
+                        select_xpath1 = $shadow.domXpath(this);
+                        console.log($shadow.domXpath(this));
+                        $('#xpath').val($shadow.domXpath(this));
+                    }
+                    index++;
+                    // console.log(readXPath(this));
+                    // $('#modal-select-xpath').modal("hide");
+
+                })
+                lastTag = $(this);
+                // lastTag.css('border', lastTagBorder);
+                //console.log($shadow.domXpath(this));
+            });
+        });
+        $('#modal-select-xpath').on('hidden.bs.modal', function (e) {
+            console.log("hide the modal");
+            // lastTag.css('border', lastTagBorder);
+            // lastTagBorder = null;
+            // lastTag = null;
+        });
+    }
+    // xpath2
+    $scope.select_xpath2 = function (){
+        $('#modal-select-xpath2').modal('show');
+        //alert("www");
+       // console.log("-------------------------------\n" + $type  + "-------------------------------\n");
+        $('#xpath2').val("");
+        index = 0;
+        $('#modal-select-xpath2').on('shown.bs.modal', function (e) {
+            $(this).click(function (event) { event.preventDefault(); });
+            //对所有的元素添加点击事件，获取xpath
+            $("#iframe2").contents().find("*").hover(function(event){
+                event.stopPropagation();
+                // lastTag = $(this);
+                // var css = div.css('border');
+                // console.log($(this).css('border'));
+                if(lastTag !== null){
+                    lastTag.css('border', lastTagBorder);
+                    // console.log(lastTag);
+                    // console.log(lastTagBorder);
+                }
+                lastTagBorder = $(this).css('border');
+                //console.log($(this));
+                $(this).css({'border': '1.5px solid #f0f', 'border-radius': '5px solid'});
+                $(this).click(function (event) {
+                    event.preventDefault();
+                    if(index === 0) {
+                        select_xpath2 = $shadow.domXpath(this);
+                        console.log($shadow.domXpath(this));
+                        $('#xpath2').val($shadow.domXpath(this));
+                    }
+                    index++;
+                });
+                lastTag = $(this);
+                // lastTag.css('border', lastTagBorder);
+                //console.log($shadow.domXpath(this));
+            });
+        });
+        $('#modal-select-xpath2').on('hidden.bs.modal', function (e) {
+            console.log("hide the modal");
+            // lastTag.css('border', lastTagBorder);
+            // lastTagBorder = null;
+            // lastTag = null;
+        });
+    }
+    //　保存
+    $scope.select_commit = function () {
+        console.log("-------------------------------\n" + select_xpath1 + "\n" +
+            select_xpath2 + "-------------------------------\n");
+        $scope.attribute_xpath = select_xpath1;
+        $scope.attribute_xpath2 = select_xpath2;
+    };
+
     $scope.save = function () {
 
         var newEle = {
@@ -212,6 +346,7 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
                 "button_xpath": $scope.button_xpath
             },
             "attribute_xpath": $scope.attribute_xpath,
+            "attribute_xpath2": $scope.attribute_xpath2,
             "attribute_name":  $scope.attribute_name
         };
         $scope.creep_rule.push(newEle);
@@ -227,6 +362,7 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
         $scope.ajax_pattern = $scope.creep_rule[$index].ajax.ajax_pattern;
         $scope.button_xpath = $scope.creep_rule[$index].ajax.button_xpath;
         $scope.attribute_xpath = $scope.creep_rule[$index].attribute_xpath;
+        $scope.attribute_xpath2 = $scope.creep_rule[$index].attribute_xpath2;
         $scope.attribute_name = $scope.creep_rule[$index].attribute_name;
         $('#modal-update').modal('show');
     };
@@ -241,11 +377,52 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
         $scope.creep_rule[$index].ajax.ajax_pattern = types[$scope.y];
         $scope.creep_rule[$index].ajax.button_xpath = $scope.button_xpath;
         $scope.creep_rule[$index].attribute_xpath = $scope.attribute_xpath;
+        $scope.creep_rule[$index].attribute_xpath2 = $scope.attribute_xpath2;
         $scope.creep_rule[$index].attribute_name = $scope.attribute_name;
 
         $('#modal-update').modal('hide');
 
     }
+    // 测试
+    $scope.test = function($index){
+        var url_path = $scope.url_path;
+        var xpath1 = $scope.creep_rule[$index].attribute_xpath;
+        var xpath2 = $scope.creep_rule[$index].attribute_xpath2;
+        // console.log($index + "\n" + url + "\n" + xpath1 + "\n" + xpath2);
+        // console.log($scope.creep_rule[$index].creep_pattern);
+        // 赵亮
+        if($scope.creep_rule[$index].creep_pattern === "单体") {
+            // $http({
+            //     method: 'POST',
+            //     url: '/collect/clues'
+            // }).then(function (response) {
+            //
+            // }, function errorCallback(response) {
+            //     // 请求失败执行代码
+            //     console.log("get projects bad")
+            // });
+        }
+        // 寸
+        else if($scope.creep_rule[$index].creep_pattern === "列表") {
+            $.post("/collect/clues", {url_path: url_path, xpath1: xpath1, xpath2: xpath2}, function(result){
+                console.log(result.toString());
+                var arr = result.toString().replace(",", "\n");
+                $('#testarea').val($scope.creep_rule[$index].attribute_name + ":\n" + arr);
+            });
+            // $http({
+            //     method: 'POST',
+            //     url: '/collect/clues',
+            //     data: {url_path: url_path, xpath1: xpath1, xpath2: xpath2},
+            //     headers:{'Content-Type': 'application/x-www-form-urlencoded'}
+            // }).then(function successCallback(response) {
+            //     $('#testarea').val(response.toString());
+            //     console.log(response.toString())
+            // }, function errorCallback(response) {
+            //     // 请求失败执行代码
+            //     console.log("get projects bad")
+            // });
+        }
+    };
 
 
     // 渲染项目和任务选择框
@@ -732,3 +909,67 @@ var ModalInstanceCtrl = function ($scope, $modalInstance) {
     };
 };
 
+
+// second method of getting xpath
+var $shadow = new Object();
+/**
+ 获取元素的xpath
+ 特性：
+ - 转换xpath为csspath进行jQuery元素获取
+ - 仅生成自然表述路径（不支持非、或）
+ @param dom {String/Dom} 目标元素
+ @returns {String} dom的xpath路径
+ */
+$shadow.domXpath = function(dom) {
+    dom = $(dom).get(0);
+    var path = "";
+    for (; dom && dom.nodeType == 1; dom = dom.parentNode) {
+        var index = 1;
+        for (var sib = dom.previousSibling; sib; sib = sib.previousSibling) {
+            if (sib.nodeType == 1 && sib.tagName == dom.tagName)
+                index++;
+        }
+        var xname =  dom.tagName.toLowerCase();
+        if (index > 0)
+            xname += "[" + index + "]";
+        // if (dom.id) {
+        //     xname += "[@id=\"" + dom.id + "\"]";
+        // } else {
+        //     if (index > 0)
+        //         xname += "[" + index + "]";
+        // }
+        path = "/" + xname + path;
+    }
+
+    path = path.replace("html[1]/body[1]/","html/body/");
+
+    return path;
+};
+
+/**
+ 根据xpath获取元素
+ 特性：
+ - 转换xpath为csspath进行jQuery元素获取
+ - 仅支持自然表述（不支持非、或元素选取）
+ @param xpath {String} 目标元素xpath
+ @returns {jQuery Object} 元素/元素集合
+ */
+$shadow.xpathDom = function(xpath){
+    // 开始转换 xpath 为 css path
+    // 转换 // 为 " "
+    xpath = xpath.replace(/\/\//g, " ");
+    // 转换 / 为 >
+    xpath = xpath.replace(/\//g, ">");
+    // 转换 [elem] 为 :eq(elem) ： 规则 -1
+    xpath = xpath.replace(/\[([^@].*?)\]/ig, function(matchStr,xPathIndex){
+        var cssPathIndex = parseInt(xPathIndex)-1;
+        return ":eq(" + cssPathIndex + ")";
+    });
+    // 1.2 版本后需要删除@
+    xpath = xpath.replace(/\@/g, "");
+    // 去掉第一个 >
+    xpath = xpath.substr(1);
+    alert(xpath);
+    // 返回jQuery元素
+    return $(xpath);
+};
