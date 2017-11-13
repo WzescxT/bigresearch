@@ -1,6 +1,8 @@
 package com.monetware.controller;
 
+import com.google.gson.Gson;
 import com.monetware.mapper.collect.AdvanceCollectMapper;
+import com.monetware.mapper.collect.SpiderTaskInfoMapper;
 import com.monetware.model.collect.AdvanceProjectEntity;
 import com.monetware.model.collect.AdvanceProjectModel;
 import com.monetware.model.collect.AdvanceTaskEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -25,6 +28,9 @@ public class AdvanceCollectController {
 
     @Autowired
     private AdvanceCollectMapper advanceCollectMapper;
+
+    @Autowired
+    SpiderTaskInfoMapper spiderTaskInfoMapper;
 
     @GetMapping("/getProjectsBasicInfo")
     @ResponseBody
@@ -52,10 +58,6 @@ public class AdvanceCollectController {
         }
 
         return responseList;
-
-
-
-
 
 //            if(projectMap.get(advanceTaskEntity.getProject_id())==null){
 //                ArrayList<AdvanceTaskEntity> advanceTasks = new ArrayList<>();
@@ -131,12 +133,9 @@ public class AdvanceCollectController {
 
     }
 
-
     @PostMapping("/uploadFile")
     @ResponseBody
     public Object upload(HttpServletRequest httpServletRequest,@RequestParam("file_upload_path") MultipartFile file){
-
-
 
         String name = file.getOriginalFilename();
 
@@ -152,19 +151,66 @@ public class AdvanceCollectController {
 
 
         return httpServletRequest.getParameterMap();
-
     }
 
     @PostMapping("/test")
     @ResponseBody
-    public Object test(@RequestBody Map<String,Object> requests){
+    public Object test(@RequestBody Map<String, Object> requests) {
 
         System.out.println(requests);
 
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(requests);
+        System.out.println("----------------------------------");
+        System.out.println(jsonString);
+        System.out.println("----------------------------------");
+
+        String project_id = "";
+        String task_id = "";
+        for (Map.Entry<String, Object> entry : requests.entrySet()) {
+            if (entry.getKey().equals("basic_rule") && entry.getValue() instanceof Map) {
+                Map<String, Object> map = (Map<String, Object>) entry.getValue();
+                for (Map.Entry<String, Object> e : map.entrySet()) {
+                    if (e.getKey().equals("project_id")) {
+                        project_id = e.getValue().toString();
+                    } else if (e.getKey().equals("task_id")) {
+                        task_id = e.getValue().toString();
+                    }
+                }
+            }
+        }
+
+        FileWriter fileWriter = null;
+        File file = null;
+        try {
+            file = new File("task_config_" + project_id + "_" + task_id + ".json");
+            fileWriter = new FileWriter(file);
+            fileWriter.write(jsonString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fileWriter.close();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+
+        String path = file.getAbsolutePath();
+        spiderTaskInfoMapper.saveConfigPathById(path, task_id);
+
+//        System.out.println("----------------------------------");
+//        for (Map.Entry<String, Object> entry : requests.entrySet()) {
+//            if (entry.getValue() instanceof Map) {
+//                System.out.println("entry.getValue() is instanceof Map");
+//            }
+//
+//            System.out.println("entry.getKey() = \"" + entry.getKey() +
+//                    "\", entry.getValue() = \"" + entry.getValue() + "\".");
+//        }
+//        System.out.println("----------------------------------");
+
         return requests;
-
     }
-
-
 
 }
