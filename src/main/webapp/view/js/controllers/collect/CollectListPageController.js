@@ -419,7 +419,6 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
         }
         var idata = JSON.stringify(values)
         alert(idata.toString());
-        alert("if excute");
         console.log(idata.toString());
         CollectCusTempService.crawltest(idata);
 

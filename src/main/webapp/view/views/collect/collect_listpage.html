@@ -433,7 +433,7 @@
 
             <!--采集规则-->
             <div class="tab-pane fade" id="miningrule">
-                <form class="form-horizontal" role="form" action="/collect/CrawledData" method="post" id="crawlrule">
+                <form class="form-horizontal" role="form">
                     <div class="form-group">
                         <div class="col-xs-11">
                             <button type="button" class="btn btn-primary" ng-click="add()">添加</button>
@@ -689,7 +689,7 @@
             </div>
 
             <div class="modal-body">
-                <form class="form-horizontal" role="form">
+                <form class="form-horizontal" role="form"  method="post" id="crawlrule">
                     <div class="form-group">
                         <br/>
                         <span ng-model="t_index"></span>
