@@ -1,0 +1,82 @@
+package com.monetware.model.collect;
+
+import redis.clients.jedis.Pipeline;
+import us.codecraft.webmagic.ResultItems;
+import us.codecraft.webmagic.Task;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Map;
+
+public class FilePipline implements us.codecraft.webmagic.pipeline.Pipeline {
+    public static String tempResult="";
+    @Override
+    public void process(ResultItems resultItems, Task task) {
+
+        Map<String,Object> infos=resultItems.getAll();
+        String result="";
+        if(infos==null||infos.size()==0)
+        {
+            result="nothing to show";
+        }
+        else {
+            for (Map.Entry<String, Object> info : infos.entrySet()) {
+                result += info.getKey() + ":" + info.getValue()==null?"no data crawled":info.getValue();
+            }
+
+        }
+        tempResult=result;
+        try {
+            File direc = new File("F:\\datas");
+            if (direc.isDirectory()) {
+                File[] files = direc.listFiles();
+                if (files.length == 0) {
+                    File file = new File("F:\\datas\\1.txt");
+                    file.createNewFile();
+                    FileWriter writer=new FileWriter(file,true);
+                    writer.write(result);
+                    writer.flush();
+                }
+                else
+                {
+                    int Maxnumber=Integer.parseInt(files[0].getName().replace(".txt",""));
+                    File lastfile=files[0];
+                    for(File file:files)
+                    {
+                        int temp=Integer.parseInt(file.getName().replace(".txt",""));
+                        if(Maxnumber<temp)
+                        {
+                            Maxnumber=temp;
+                            lastfile=file;
+                        }
+                    }
+                    if(lastfile.length()>52428800)
+                    {
+                        int num=Maxnumber+1;
+                        File newfile=new File("F:\\datas\\"+num+".txt");
+                        newfile.createNewFile();
+                        FileWriter writer=new FileWriter(newfile,true);
+                        writer.write(result);
+                        writer.flush();
+                        //写入resulnewt
+                    }
+                    else
+                    {
+                        FileWriter writer=new FileWriter(lastfile   ,true);
+                        writer.write(result);
+                        writer.flush();
+                    }
+
+                }
+            }
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        /*if(news!=null) {
+            System.out.println("insert in news");
+            Dao.getInstance().inertNews(news.getTitle(),news.getBody(),news.getPublish_time(),news.getWriter(),news.getDatasource(),news.getUrl(),news.isYangzhou(),news.isZhenjiang(),news.isBeijing(),news.isShanghai(),news.isHangzhou(),news.isChengdu(),news.isChangsha(),news.isZhangbei(),news.isZhoushan(),news.isCaomei(),news.isMidi(),news.isNanjing());
+        }*/
+
+    }
+}

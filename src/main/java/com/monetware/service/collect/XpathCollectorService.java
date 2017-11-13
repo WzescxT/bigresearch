@@ -5,10 +5,12 @@ import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.monetware.model.collect.FilePipline;
 import com.monetware.model.collect.MysqlPipline;
 import com.monetware.util.Useragnets;
 import us.codecraft.webmagic.*;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
+import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 
@@ -63,16 +65,16 @@ public class XpathCollectorService {
                 @Override
                 public void onError(Request request) {
                     isCompleted = true;
-                    MysqlPipline.tempResult = "error";
+                    FilePipline.tempResult = "error";
                     propertySupport.firePropertyChange("isCompleted", false, true);
 
                 }
             });
             if(ifajax.equals("false")) {
-                Spider.create(new SingleCrawler()).setSpiderListeners(spiderlisteners).addUrl(url).addPipeline(new MysqlPipline()).addPipeline(new ConsolePipeline()).thread(5).run();
+                Spider.create(new SingleCrawler()).setSpiderListeners(spiderlisteners).addUrl(url).addPipeline(new FilePipline()).addPipeline(new ConsolePipeline()).thread(5).run();
             }
             else if(ifajax.equals("true")) {
-                Spider.create(new AjaxCrawler()).setSpiderListeners(spiderlisteners).addUrl(url).addPipeline(new MysqlPipline()).addPipeline(new ConsolePipeline()).thread(5).run();
+                Spider.create(new AjaxCrawler()).setSpiderListeners(spiderlisteners).addUrl(url).addPipeline(new FilePipline()).addPipeline(new ConsolePipeline()).thread(5).run();
             }
         }
         else

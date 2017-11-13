@@ -2,6 +2,7 @@ package com.monetware.controller;
 
 import com.monetware.model.collect.CollectProject;
 import com.monetware.model.collect.CollectTemplate;
+import com.monetware.model.collect.FilePipline;
 import com.monetware.model.collect.MysqlPipline;
 import com.monetware.model.common.RtInfo;
 import com.monetware.service.collect.XpathCollectorService;
@@ -9,6 +10,8 @@ import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+
 
 import javax.servlet.http.HttpServletRequest;
 import java.beans.PropertyChangeEvent;
@@ -47,15 +50,15 @@ public class CollectPageController {
                     e.printStackTrace();
                 }
             }
-            result.put("testResult", MysqlPipline.tempResult);
-            MysqlPipline.tempResult="";
+            result.put("testResult", FilePipline.tempResult);
+            FilePipline.tempResult="";
             return result.toString();
         }
         catch(Exception e)
         {
             result.put("testResult", "error occured");
             e.printStackTrace();
-            MysqlPipline.tempResult="";
+            FilePipline.tempResult="";
             return result.toString();
         }
 
