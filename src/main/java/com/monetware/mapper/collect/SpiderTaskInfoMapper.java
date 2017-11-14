@@ -9,10 +9,13 @@ import org.apache.ibatis.annotations.Update;
 @Mapper
 public interface SpiderTaskInfoMapper {
 
-    @Select("select * from spider_task_info where task_name = #{name}")
+    @Select("SELECT * FROM spider_task_info WHERE task_name = #{name}")
     SpiderTaskInfo findSpiderTaskInfoByName(@Param("name") String name);
 
-    @Update("update spider_task_info set task_config_location = #{path} where task_id = #{id}")
+    @Select("SELECT * FROM spider_task_info WHERE task_id = #{task_id}")
+    SpiderTaskInfo findSpiderTaskInfoById(@Param("task_id") String taskId);
+
+    @Update("UPDATE spider_task_info SET task_config_location = #{path} WHERE task_id = #{id}")
     void saveConfigPathById(@Param("path") String path, @Param("id") String id);
 
 }

@@ -41,24 +41,6 @@ public class FileOpearte {
 
 		}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	// 在文末换行，并添加文本内容
 	public static void addFileContent(InputStream is, String goal) {
 		try {
@@ -83,7 +65,6 @@ public class FileOpearte {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-
 	}
 
 	// 获取文件内容行数
@@ -119,9 +100,6 @@ public class FileOpearte {
 		return 0;
 
 	}
-
-
-	
 
 	// 在文件末尾新增一行内容
 	public static void writeOneLine(String append,String path) {
@@ -179,14 +157,12 @@ public class FileOpearte {
 		}
 	}
 
-
 	/**
 	 *
 	 *拷贝文件
 	 * @param source 源文件
 	 * @param goal 目标路径
 	 */
-
 	public static void fileChannelCopy(String source, String goal) {
 		File s = new File(source);
 		File t = new File(goal);
@@ -236,9 +212,7 @@ public class FileOpearte {
 				out.close();
 
 			} catch (IOException e) {
-
 				e.printStackTrace();
-
 			}
 
 		}
@@ -295,35 +269,29 @@ public class FileOpearte {
 		}
 	}
 
-
-
-
-//写入最后一行
-public static void writeEndline(String filepath, String string)
+	// 写入最后一行
+	public static void writeEndline(String filepath, String string)
 		throws Exception {
 
-	RandomAccessFile file = new RandomAccessFile(filepath, "rw");
-	long len = file.length();
-	long start = file.getFilePointer();
-	long nextend = start + len - 1;
-	byte[] buf = new byte[1];
-	file.seek(nextend);
-	file.read(buf, 0, 1);
+		RandomAccessFile file = new RandomAccessFile(filepath, "rw");
+		long len = file.length();
+		long start = file.getFilePointer();
+		long nextend = start + len - 1;
+		byte[] buf = new byte[1];
+		file.seek(nextend);
+		file.read(buf, 0, 1);
 
-	if (buf[0] == '\n')
+		if (buf[0] == '\n')
+			file.writeBytes(string);
+		else
 
-		file.writeBytes(string);
-	else
+			file.writeBytes("\r\n" + string);
 
-		file.writeBytes("\r\n"+string);
-
-	file.close();
-
-}
-//覆盖最后一行
+		file.close();
+	}
+	// 覆盖最后一行
 	public static void reWriteEndline(String filepath, String string)
 			throws Exception {
-
 		RandomAccessFile file = new RandomAccessFile(filepath, "rw");
 		long len = file.length();
 		long start = file.getFilePointer();
@@ -346,12 +314,6 @@ public static void writeEndline(String filepath, String string)
 		}
 		file.close();
 		writeEndline(filepath, string);
-
 	}
-
-
-
-
-
 
 }

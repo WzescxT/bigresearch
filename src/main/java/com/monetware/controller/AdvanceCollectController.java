@@ -6,6 +6,7 @@ import com.monetware.mapper.collect.SpiderTaskInfoMapper;
 import com.monetware.model.collect.AdvanceProjectEntity;
 import com.monetware.model.collect.AdvanceProjectModel;
 import com.monetware.model.collect.AdvanceTaskEntity;
+import com.monetware.model.collect.SpiderTaskInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,9 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -211,6 +210,114 @@ public class AdvanceCollectController {
 //        System.out.println("----------------------------------");
 
         return requests;
+    }
+
+    @PostMapping(value = "task_config", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Object saveTaskConfig(@RequestBody Map<String, Object> requests) {
+        String project_id = "";
+        String task_id = "";
+        for (Map.Entry<String, Object> entry : requests.entrySet()) {
+            if (entry.getKey().equals("basic_rule")) {
+                Map<String, Object> map = (Map<String, Object>) entry.getValue();
+                for (Map.Entry<String, Object> e : map.entrySet()) {
+                    if (e.getKey().equals("project_id")) {
+                        project_id = e.getValue().toString();
+                    } else if (e.getKey().equals("task_id")) {
+                        task_id = e.getValue().toString();
+                    }
+                }
+            } else if (entry.getKey().equals("url_pattern")) {
+                Map<String, Object> map = (Map<String, Object>) entry.getValue();
+                String currentSelected = map.get("current_selected").toString();
+                switch (currentSelected) {
+                    case "single": {
+                        break;
+                    }
+
+                    case "list": {
+                        Map<String, Object> m = (Map<String, Object>) map.get("list");
+                        String template = m.get("url_wildcard").toString();
+                        int start = Integer.valueOf(m.get("init_value").toString());
+                        int interval = Integer.valueOf(m.get("gap").toString());
+                        int num = Integer.valueOf(m.get("pages_num").toString());
+                        // TODO: store the url in the file
+
+                        break;
+                    }
+
+                    case "click": {
+                        // TODO: store the url in the file
+
+                        break;
+                    }
+
+                    case "import": {
+                        // TODO: store the url in the file
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Convert the requests map to json string
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(requests);
+
+        // Write the json string into the configuration file
+        FileWriter fileWriter = null;
+        File file = null;
+        try {
+            file = new File("task_config_" + project_id + "_" + task_id + ".json");
+            fileWriter = new FileWriter(file);
+            fileWriter.write(jsonString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fileWriter.close();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+
+        // Save the configuration file path into the database
+        String path = file.getAbsolutePath();
+        spiderTaskInfoMapper.saveConfigPathById(path, task_id);
+
+        return requests;
+    }
+
+    @GetMapping(value = "task_config", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String getTaskConfig(@RequestParam("task_id") String taskId) {
+        // Get the path of the configuration file of the task
+        String path = spiderTaskInfoMapper.findSpiderTaskInfoById(taskId)
+                .getTask_config_location();
+
+        // Read the content of the configuration file
+        File file = new File(path);
+        FileInputStream fileInputStream = null;
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            fileInputStream = new FileInputStream(file);
+            byte[] buffer = new byte[1024];
+            int length = -1;
+            while ((length = fileInputStream.read(buffer)) != -1) {
+                stringBuilder.append(new String(buffer, 0, length));
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            try {
+                fileInputStream.close();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+
+        return stringBuilder.toString();
     }
 
 }
