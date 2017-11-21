@@ -8,6 +8,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.monetware.model.collect.FilePipline;
 import com.monetware.model.collect.MysqlPipline;
 import com.monetware.util.Useragnets;
+import org.apache.http.HttpHost;
 import us.codecraft.webmagic.*;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.FilePipeline;
@@ -30,6 +31,10 @@ public class XpathCollectorService {
     private String ajaxXpath;
     private PropertyChangeSupport propertySupport;
     private boolean isCompleted;
+    private String proxy_id;
+    private String starttime;
+    private String endtime;
+    private String header;
     public XpathCollectorService()
     {
         propertySupport = new PropertyChangeSupport(this);
@@ -42,7 +47,7 @@ public class XpathCollectorService {
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         propertySupport.removePropertyChangeListener(listener);
     }
-    public void crawlSingleData(String url,String xpath,String nameinDB,String single,String ifajax,String ajaxtype,String ajaxXpath)
+    public void crawlSingleData(String url,String xpath,String nameinDB,String ifajax,String ajaxtype,String ajaxXpath,String proxy_id,String starttime,String endtime,String header,String storetype)
     {
         this.xpath=xpath;
         this.url=url;
@@ -50,8 +55,17 @@ public class XpathCollectorService {
         this.ifajax=ifajax;
         this.ajaxtype=ajaxtype;
         this.ajaxXpath=ajaxXpath;
-        if(single.equals("单体"))
+        this.proxy_id=proxy_id;
+        this.starttime=starttime;
+        this.endtime=endtime;
+        this.header=header;
+
+        if(this.header==null||this.header.equals(""))
         {
+
+            this.header=Useragnets.getuseragent();
+        }
+
             List<SpiderListener> spiderlisteners = new ArrayList<>();
             spiderlisteners.add(new SpiderListener() {
                 @Override
@@ -76,16 +90,13 @@ public class XpathCollectorService {
             else if(ifajax.equals("true")) {
                 Spider.create(new AjaxCrawler()).setSpiderListeners(spiderlisteners).addUrl(url).addPipeline(new FilePipline()).addPipeline(new ConsolePipeline()).thread(5).run();
             }
-        }
-        else
-        {
-            Spider.create(new SingleCrawler()).addUrl(url).addPipeline(new ConsolePipeline()).thread(5).run();
-        }
+
+
     }
     class SingleCrawler implements PageProcessor{
         private Site site = Site.me().setRetryTimes(3).setSleepTime(1000)
                 //.setDomain("www.douban.com")
-                .setUserAgent(Useragnets.getuseragent())
+                .setUserAgent(header)
                 ;
 
         @Override
@@ -104,7 +115,7 @@ public class XpathCollectorService {
     class MultiCrawler implements PageProcessor{
         private Site site = Site.me().setRetryTimes(3).setSleepTime(1000)
                // .setDomain("www.douban.com")
-                .setUserAgent(Useragnets.getuseragent())
+                .setUserAgent(header)
                 ;
 
         @Override
