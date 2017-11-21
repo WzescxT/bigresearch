@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 
 @Mapper
-@Component(value = "userMapper")
+//@Component(value = "userMapper")
 public interface AdvanceCollectMapper {
 
     @Select("select * from spider_project_info")
