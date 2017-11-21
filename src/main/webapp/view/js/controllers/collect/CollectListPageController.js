@@ -175,6 +175,24 @@ angular.module('MetronicApp')
         $scope.custom_config = jsonData.run_rule.custom_config;
     }
 
+    //执行计划
+    $scope.excuteTask=function() {
+
+        var jsonData = {"task_id":""}
+        jsonData.task_id =  $scope.selected_task.task_id;
+        $http({
+            method: 'POST',
+            url: '/CrawlPlan/Plan',
+            data: jsonData
+        }).then(function successCallback(response) {
+            console.log(response.data);
+        }, function errorCallback(response) {
+            // 请求失败执行代码
+            console.log("post data bad");
+        });
+    }
+
+
     // direction == 0 上一步
     // direction == 1 下一步
     $scope.changeTabs=function(id, flag) {
@@ -279,25 +297,6 @@ angular.module('MetronicApp')
             }
 
         };
-    };
-    //执行计划
-    $scope.excuteTask=function() {
-
-        jsonData.task_id =  $scope.selected_task.task_id;
-        $http({
-            method: 'POST',
-            url: '/CrawlPlan/Plan',
-            data: jsonData
-        }).then(function successCallback(response) {
-            console.log(response.data);
-        }, function errorCallback(response) {
-            // 请求失败执行代码
-            console.log("post data bad");
-        });
-    }
-    // direction == 0 上一步
-    // direction == 1 下一步
-    $scope.changeTabs=function(id, flag) {
 
         if(flag){
 

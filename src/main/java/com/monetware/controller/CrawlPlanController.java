@@ -49,7 +49,7 @@ public class CrawlPlanController {
         {
             e.printStackTrace();
         }
-
+        System.out.println(configdata.toString());
         JSONObject assistant_rule=configdata.getJSONObject("assistant_rule");
         JSONObject url_pattern=configdata.getJSONObject("url_pattern");
         JSONObject store_rule=configdata.getJSONObject("store_rule");
@@ -64,7 +64,7 @@ public class CrawlPlanController {
         {
             //不配置登录
             String urltype=url_pattern.getString("current_selected");
-            if(urltype.equals("single"))
+            if(urltype.equals("单页"))
             {
                 String url=url_pattern.getJSONObject("single").getString("url_path");
                 String store_pattern=store_rule.getString("store_pattern");
@@ -132,15 +132,15 @@ public class CrawlPlanController {
                 }
 
             }
-            else if(urltype.equals("list"))
+            else if(urltype.equals("列表"))
             {
 
             }
-            else if(urltype.equals("click"))
+            else if(urltype.equals("翻页"))
             {
 
             }
-            else if(urltype.equals("import"))
+            else if(urltype.equals("导入"))
             {
 
             }
