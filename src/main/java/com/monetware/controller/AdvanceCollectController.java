@@ -7,6 +7,7 @@ import com.monetware.model.collect.AdvanceProjectEntity;
 import com.monetware.model.collect.AdvanceProjectModel;
 import com.monetware.model.collect.AdvanceTaskEntity;
 import com.monetware.model.collect.SpiderTaskInfo;
+import com.monetware.util.FileUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,7 +43,7 @@ public class AdvanceCollectController {
 
     @GetMapping("/getProjectsDetailInfo")
     @ResponseBody
-    public Object getProjectDetailInfo(){
+    public Object getProjectDetailInfo() {
 
         ArrayList<AdvanceProjectModel> responseList = new ArrayList<>();
 
@@ -69,7 +70,7 @@ public class AdvanceCollectController {
 
     @PostMapping("/createProject")
     @ResponseBody
-    public Object createProject(@RequestBody Map<String,Object> requestMap){
+    public Object createProject(@RequestBody Map<String,Object> requestMap) {
 
 
         AdvanceProjectEntity advanceProjectEntity = new AdvanceProjectEntity();
@@ -84,12 +85,12 @@ public class AdvanceCollectController {
         Map<String,Object> reponse = new HashMap<>();
 
 
-        if(advanceCollectMapper.createProject(advanceProjectEntity)){
+        if (advanceCollectMapper.createProject(advanceProjectEntity)) {
             reponse.put("code",true);
             reponse.put("message","新建项目成功");
             reponse.put("newProject", new AdvanceProjectModel(advanceProjectEntity,new ArrayList<AdvanceTaskEntity>()));
             return reponse;
-        }else {
+        } else {
             reponse.put("code",false);
             reponse.put("message","新建项目失败");
             return reponse;
@@ -98,7 +99,7 @@ public class AdvanceCollectController {
 
     @PostMapping("/createTask")
     @ResponseBody
-    public Object createTask(@RequestBody Map<String,Object> requestMap){
+    public Object createTask(@RequestBody Map<String,Object> requestMap) {
 
         int project_id = (int) requestMap.get("project_id");
         String task_name = (String)requestMap.get("task_name");
@@ -112,19 +113,19 @@ public class AdvanceCollectController {
 
         Map<String,Object> reponse = new HashMap<>();
 
-        if(advanceCollectMapper.createTask(advanceTaskEntity)){
-            if (advanceCollectMapper.setRelation(project_id,advanceTaskEntity.getTask_id())){
+        if (advanceCollectMapper.createTask(advanceTaskEntity)) {
+            if (advanceCollectMapper.setRelation(project_id,advanceTaskEntity.getTask_id())) {
                 reponse.put("code",true);
                 reponse.put("message","新建任务成功");
                 reponse.put("project_id",project_id);
                 reponse.put("newTask",advanceTaskEntity);
                 return reponse;
-            }else {
+            } else {
                 reponse.put("code",false);
                 reponse.put("message","新建任务失败,无法插入项目和任务的关系");
                 return reponse;
             }
-        }else {
+        } else {
             reponse.put("code",false);
             reponse.put("message","新建任务失败，无法插入一个任务");
             return reponse;
@@ -134,7 +135,8 @@ public class AdvanceCollectController {
 
     @PostMapping("/uploadFile")
     @ResponseBody
-    public Object upload(HttpServletRequest httpServletRequest,@RequestParam("file_upload_path") MultipartFile file){
+    public Object upload(HttpServletRequest httpServletRequest,
+                         @RequestParam("file_upload_path") MultipartFile file) {
 
         String name = file.getOriginalFilename();
 
@@ -215,6 +217,7 @@ public class AdvanceCollectController {
     @PostMapping(value = "task_config", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Object saveTaskConfig(@RequestBody Map<String, Object> requests) {
+        // Extract project_id and task_id
         String project_id = "";
         String task_id = "";
         for (Map.Entry<String, Object> entry : requests.entrySet()) {
@@ -227,37 +230,78 @@ public class AdvanceCollectController {
                         task_id = e.getValue().toString();
                     }
                 }
-            } else if (entry.getKey().equals("url_pattern")) {
-                Map<String, Object> map = (Map<String, Object>) entry.getValue();
-                String currentSelected = map.get("current_selected").toString();
-                switch (currentSelected) {
-                    case "single": {
-                        break;
-                    }
+            }
+        }
 
-                    case "list": {
-                        Map<String, Object> m = (Map<String, Object>) map.get("list");
-                        String template = m.get("url_wildcard").toString();
-                        int start = Integer.valueOf(m.get("init_value").toString());
-                        int interval = Integer.valueOf(m.get("gap").toString());
-                        int num = Integer.valueOf(m.get("pages_num").toString());
-                        // TODO: store the url in the file
+        // Store the urls in the file if necessary
+        for (Map.Entry<String, Object> entry : requests.entrySet()) {
+             if (entry.getKey().equals("url_pattern")) {
+                 Map<String, Object> map = (Map<String, Object>) entry.getValue();
+                 String currentSelected = map.get("current_selected").toString();
+                 switch (currentSelected) {
+                     case "single": {
+                         // The single url is stored in the initial json data rather than another file
+                         break;
+                     }
 
-                        break;
-                    }
+                     case "list": {
+                         Map<String, Object> m = (Map<String, Object>) map.get("list");
+                         String template = m.get("url_wildcard").toString();
+                         int start = Integer.valueOf(m.get("init_value").toString());
+                         int interval = Integer.valueOf(m.get("gap").toString());
+                         int num = Integer.valueOf(m.get("pages_num").toString());
 
-                    case "click": {
-                        // TODO: store the url in the file
+                         // Generate the urls
+                         StringBuilder stringBuilder = new StringBuilder();
+                         for (int i = 0; i < num; i++) {
+                             stringBuilder.append(template.replaceAll("\\{[^}]*\\}",
+                                     String.valueOf(start + i * interval))).append("\n");
+                         }
 
-                        break;
-                    }
+                         // Store the urls in the file
+                         File file = new File(generateTaskUrlFilePath(project_id, task_id,
+                                 "list"));
+                         FileUtils.saveStringToFile(stringBuilder.toString(), file);
 
-                    case "import": {
-                        // TODO: store the url in the file
+                         // Save the path of the url file into the json data
+                         m.put("list_url_file_path", file.getAbsolutePath());
 
-                        break;
-                    }
-                }
+                         // Save the path of the url file into the database
+                         spiderTaskInfoMapper.saveUrlFilePathById(file.getAbsolutePath(), task_id);
+
+                         break;
+                     }
+
+                     case "click": {
+                         // TODO: store the url in the file
+
+                         break;
+                     }
+
+                     case "import": {
+                         Map<String, Object> m = (Map<String, Object>) map.get("import");
+                         String[] importUrls = (String[]) m.get("import_urls");
+
+                         // Generate the urls
+                         StringBuilder stringBuilder = new StringBuilder();
+                         for (String url : importUrls) {
+                             stringBuilder.append(url).append("\n");
+                         }
+
+                         // Store the urls in the file
+                         File file = new File(generateTaskUrlFilePath(project_id, task_id,
+                                 "import"));
+                         FileUtils.saveStringToFile(stringBuilder.toString(), file);
+
+                         // Save the path of the url file into the json data
+                         m.put("list_url_file_path", file.getAbsolutePath());
+
+                         // Save the path of the url file into the database
+                         spiderTaskInfoMapper.saveUrlFilePathById(file.getAbsolutePath(), task_id);
+
+                         break;
+                     }
+                 }
             }
         }
 
@@ -269,7 +313,7 @@ public class AdvanceCollectController {
         FileWriter fileWriter = null;
         File file = null;
         try {
-            file = new File("task_config_" + project_id + "_" + task_id + ".json");
+            file = new File(generateTaskConfigFilePath(project_id, task_id));
             fileWriter = new FileWriter(file);
             fileWriter.write(jsonString);
         } catch (Exception e) {
@@ -282,13 +326,18 @@ public class AdvanceCollectController {
             }
         }
 
-        // Save the configuration file path into the database
+        // Save the path of the configuration file into the database
         String path = file.getAbsolutePath();
         spiderTaskInfoMapper.saveConfigPathById(path, task_id);
 
         return requests;
     }
 
+    /**
+     * Returns the config of a certain task
+     * @param taskId The id of this task
+     * @return The configuration of a certain task
+     */
     @GetMapping(value = "task_config", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String getTaskConfig(@RequestParam("task_id") String taskId) {
@@ -318,6 +367,29 @@ public class AdvanceCollectController {
         }
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * Returns a path of the url file of the a certain task of a certain project
+     * @param project_id The id of the project
+     * @param task_id The id of the task
+     * @param appendix The appendix of the file path
+     * @return A path of the url file of the a certain task of a certain project
+     */
+    private static String generateTaskUrlFilePath(String project_id,
+                                                  String task_id,
+                                                  String appendix) {
+        return "task_urls_" + project_id + "_" + task_id + "_" + appendix + ".dat";
+    }
+
+    /**
+     * Returns a path of the configuration file of a certain task of a certain project
+     * @param project_id The id of the project
+     * @param task_id The id of the task
+     * @return A path of the configuration file of a certain task of a certain project
+     */
+    private static String generateTaskConfigFilePath(String project_id, String task_id) {
+        return "task_config_" + project_id + "_" + task_id + ".json";
     }
 
 }

@@ -163,7 +163,7 @@ angular.module('MetronicApp').controller('CollectListPageController', function($
 
             $http({
                 method: 'POST',
-                url: '/advance/test',
+                url: '/advance/task_config',
                 data: jsonData
                 // data: $.param(jsonData),
                 // headers: {'Content-Type':'application/x-www-form-urlencoded'},
