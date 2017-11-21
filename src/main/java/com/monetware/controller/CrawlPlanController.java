@@ -6,6 +6,7 @@ import com.monetware.mapper.collect.AdvanceCollectMapper;
 import com.monetware.mapper.collect.SpiderTaskInfoMapper;
 import com.monetware.model.collect.FilePipline;
 import com.monetware.model.collect.SpiderTaskInfo;
+import com.monetware.service.collect.CollectByCluesService;
 import com.monetware.service.collect.XpathCollectorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.List;
 import java.util.Scanner;
 
 @RequestMapping("/CrawlPlan")
@@ -23,6 +25,8 @@ import java.util.Scanner;
 public class CrawlPlanController {
     @Autowired
     private SpiderTaskInfoMapper spiderTaskInfoMapper;
+    @Autowired
+    CollectByCluesService collectByCluesService;
     private XpathCollectorService service=new XpathCollectorService();
     @RequestMapping(value="/Plan",method = RequestMethod.POST)
     @ResponseBody
@@ -103,7 +107,26 @@ public class CrawlPlanController {
                     }
                     else
                     {
-                    //xuantang here
+                        //xuantang here
+                        String xpath1 = ((JSONObject) eachtask).getString("attribute_xpath");
+                        String xpath2 = ((JSONObject) eachtask).getString("attribute_xpath2");
+                        final String attribute_name = eachtaskJSON.getString("attribute_name");
+                        // out
+                        CollectByCluesService.OnCrawleLinstener onCrawleLinstener = new
+                                CollectByCluesService.OnCrawleLinstener() {
+                                    @Override
+                                    public void onSuccess(List<String> result) {
+                                        for (String s : result) {
+                                            System.out.println(attribute_name + " " + s);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFail(String error) {
+                                        System.out.println("error");
+                                    }
+                                };
+                        collectByCluesService.crawl(onCrawleLinstener, url, xpath1, xpath2);
                     }
 
                 }

@@ -56,12 +56,10 @@ public class CollectByCluesService {
 			String[] mXpaths = new String[size];
 
 			String root = getXpathListTag(xpaths);
-			System.out.println(root);
 			if(root == null) {
 				onCrawleLinstener.onFail("do not find root xpath");
 			}
 			String tmp = xpaths.get(0);
-			System.out.println(tmp);
 			assert root != null;
 			int indexTmp = tmp.substring(root.length()).indexOf(']');
 
