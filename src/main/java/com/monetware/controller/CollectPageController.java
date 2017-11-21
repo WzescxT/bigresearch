@@ -42,7 +42,7 @@ public class CollectPageController {
         final JSONObject result = new JSONObject();
 
         try {
-            service.crawlSingleData("http://www.sse.com.cn/assortment/stock/list/share/"/*"https://www.douban.com/"*/, xpath, nameindb,crawltype,ifajax,ajaxtype,ajaxxpath);
+            service.crawlSingleData("http://www.sse.com.cn/assortment/stock/list/share/"/*"https://www.douban.com/"*/, xpath, nameindb,ifajax,ajaxtype,ajaxxpath,null,null,null,null,null);
             while (!service.getiscompleted()) {
                 try {
                     Thread.sleep(10);
