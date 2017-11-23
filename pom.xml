@@ -146,10 +146,10 @@
     <artifactId>poi-ooxml-schemas</artifactId>  
     <version>3.14-beta1</version>  
 </dependency>  
-<dependency>  
-    <groupId>org.apache.poi</groupId>  
-    <artifactId>poi</artifactId>  
-    <version>3.14-beta1</version>  
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>poi</artifactId>
+	<version>3.14-beta1</version>
 </dependency>  
 		
 		
@@ -176,11 +176,11 @@
 		</dependency>
 		<!-- 文件上传 -->
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/com.springsource.org.apache.commons.fileupload -->
-		<dependency>
-    		<groupId>org.apache.commons</groupId>
-    		<artifactId>com.springsource.org.apache.commons.fileupload</artifactId>
-    		<version>1.2.1</version>
-		</dependency>
+		<!--<dependency>-->
+    		<!--<groupId>org.apache.commons</groupId>-->
+    		<!--<artifactId>com.springsource.org.apache.commons.fileupload</artifactId>-->
+    		<!--<version>1.2.1</version>-->
+		<!--</dependency>-->
 		
 		
 		<!-- carrot2 -->

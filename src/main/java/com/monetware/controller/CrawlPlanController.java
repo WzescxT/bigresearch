@@ -2,11 +2,11 @@ package com.monetware.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.monetware.mapper.collect.AdvanceCollectMapper;
 import com.monetware.mapper.collect.SpiderTaskInfoMapper;
-import com.monetware.model.collect.FilePipline;
 import com.monetware.model.collect.SpiderTaskInfo;
 import com.monetware.service.collect.CollectByCluesService;
+import com.monetware.service.collect.CollectByFlipService;
+import com.monetware.service.collect.CollectService;
 import com.monetware.service.collect.XpathCollectorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,10 +24,11 @@ import java.util.Scanner;
 @Controller
 public class CrawlPlanController {
     @Autowired
-    private SpiderTaskInfoMapper spiderTaskInfoMapper;
+    SpiderTaskInfoMapper spiderTaskInfoMapper;
     @Autowired
-    CollectByCluesService collectByCluesService;
-    private XpathCollectorService service=new XpathCollectorService();
+    CollectService collectService;
+
+    private XpathCollectorService service = new XpathCollectorService();
     @RequestMapping(value="/Plan",method = RequestMethod.POST)
     @ResponseBody
     public String getProject(@RequestBody JSONObject request) {
@@ -74,7 +75,7 @@ public class CrawlPlanController {
                 String custom_config=run_rule.getString("custom_config");
 
 
-                for(Object eachtask:creep_rule)
+                for(final Object eachtask : creep_rule)
                 {
                     JSONObject eachtaskJSON=(JSONObject)eachtask;
                     String creep_pattern=eachtaskJSON.getString("creep_pattern");
@@ -93,10 +94,6 @@ public class CrawlPlanController {
 
 
                             }
-                            else
-                            {
-
-                            }
                         }
                         else
                         {
@@ -105,28 +102,61 @@ public class CrawlPlanController {
                             service.crawlSingleData(url,xpath1,attribute_name,ajax.getBoolean("open").toString(),null,null,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern);
                         }
                     }
-                    else
+                    else if(creep_pattern.equals("线索"))
                     {
-                        //xuantang here
-                        String xpath1 = ((JSONObject) eachtask).getString("attribute_xpath");
-                        String xpath2 = ((JSONObject) eachtask).getString("attribute_xpath2");
-                        final String attribute_name = eachtaskJSON.getString("attribute_name");
-                        // out
-                        CollectByCluesService.OnCrawleLinstener onCrawleLinstener = new
-                                CollectByCluesService.OnCrawleLinstener() {
-                                    @Override
-                                    public void onSuccess(List<String> result) {
-                                        for (String s : result) {
-                                            System.out.println(attribute_name + " " + s);
+                        // xuantang here
+                        JSONObject ajax=eachtaskJSON.getJSONObject("ajax");
+                        // ajax
+                        if(ajax.getBoolean("open")) {
+                            String ajaxPattern = ajax.getString("ajaxPattern");
+                            String ajaxXpath = ajax.getString("button_xpath");
+                            String xpath1 = ((JSONObject) eachtask).getString("attribute_xpath");
+                            String xpath2 = ((JSONObject) eachtask).getString("attribute_xpath2");
+                            final String attributeName = eachtaskJSON.getString("attribute_name");
+                            CollectService.OnCrawleLinstener onCrawleLinstener = new
+                                    CollectService.OnCrawleLinstener() {
+                                        @Override
+                                        public void onSuccess(List<String> result) {
+                                            for (String s : result) {
+                                                System.out.println(attributeName + " " + s);
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onFail(String error) {
-                                        System.out.println("error");
-                                    }
-                                };
-                        collectByCluesService.crawl(onCrawleLinstener, url, xpath1, xpath2);
+                                        @Override
+                                        public void onFail(String error) {
+                                            System.out.println(error);
+                                        }
+                                    };
+                            if(ajaxPattern.equals("点击")) {
+                                collectService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES_AJAX_CLICK,
+                                        ajaxXpath, xpath1, xpath2);
+                            } else if(ajaxPattern.equals("翻页")) {
+                                collectService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES_AJAX_FLIP,
+                                        ajaxXpath, xpath1, xpath2);
+                            }
+                        }
+                        // no ajax
+                        else {
+                            String xpath1 = ((JSONObject) eachtask).getString("attribute_xpath");
+                            String xpath2 = ((JSONObject) eachtask).getString("attribute_xpath2");
+                            final String attributeName = eachtaskJSON.getString("attribute_name");
+                            // out
+                            CollectService.OnCrawleLinstener onCrawleLinstener = new
+                                    CollectService.OnCrawleLinstener() {
+                                        @Override
+                                        public void onSuccess(List<String> result) {
+                                            for (String s : result) {
+                                                System.out.println(attributeName + " " + s);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFail(String error) {
+                                            System.out.println(error);
+                                        }
+                                    };
+                            collectService.crawl(onCrawleLinstener, url, xpath1, xpath2);
+                        }
                     }
 
                 }

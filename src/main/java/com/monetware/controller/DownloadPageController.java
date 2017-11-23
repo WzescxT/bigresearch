@@ -9,9 +9,13 @@ import javax.jnlp.DownloadService;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Create by xuantang
@@ -50,8 +54,17 @@ public class DownloadPageController {
 
         }
         // download page to local
+        String host = null;
+        String filename;
+        String s = "([a-zA-Z0-9-]+)(.com\\b|.net\\b|.edu\\b|.miz\\b|.biz\\b|.cn\\b|.cc\\b|.org\\b){1,}";
+        Pattern pattern1 = Pattern.compile(s);
+        Matcher matcher1 = pattern1.matcher(url_path);
 
-        File file = new File("src/main/webapp/view/iframe.html");
+        if(matcher1.find()) {
+            host = matcher1.group();
+        }
+        filename = "src/main/webapp/view/" + host + ".html";
+        File file = new File(filename);
         if(!file.exists()) {
             try {
                 file.createNewFile();
@@ -66,7 +79,7 @@ public class DownloadPageController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(file.getPath());
         return result;
     }
+
 }

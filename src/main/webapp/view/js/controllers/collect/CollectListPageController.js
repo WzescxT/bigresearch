@@ -367,22 +367,22 @@ angular.module('MetronicApp')
                 console.log("post data bad");
             });
         }
-        // if(id === "miningrule") {
-        //     var url_data = {url_path: $scope.url_path};
-        //     $http({
-        //         method: 'POST',
-        //         url: '/collect/download',
-        //         data: url_data
-        //         // data: $.param(jsonData),
-        //         // headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        //         // transformRequest: angular.identity
-        //     }).then(function successCallback(response) {
-        //         console.log("success！");
-        //     }, function errorCallback(response) {
-        //         // 请求失败执行代码
-        //         console.log("post data bad");
-        //     });
-        // }
+        if(id === "miningrule") {
+            var url_data = {url_path: $scope.url_path};
+            $http({
+                method: 'POST',
+                url: '/collect/download',
+                data: url_data
+                // data: $.param(jsonData),
+                // headers: {'Content-Type':'application/x-www-form-urlencoded'},
+                // transformRequest: angular.identity
+            }).then(function successCallback(response) {
+                console.log("success！");
+            }, function errorCallback(response) {
+                // 请求失败执行代码
+                console.log("post data bad");
+            });
+        }
 
         $("#myTab a[href='/#" + id +"']").tab('show')
 
@@ -402,6 +402,7 @@ angular.module('MetronicApp')
 
     var select_xpath1;
     var select_xpath2;
+    var select_ajax_xpath;
     $scope.add = function () {
         $scope.creep_name = "";
         $scope.creep_pattern = "单体";
@@ -425,6 +426,7 @@ angular.module('MetronicApp')
         //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
         index = 0;
         $('#xpath').val("");
+        $("#iframe").attr("src", getHost($scope.url_path) + ".html");
         $('#modal-select-xpath').on('shown.bs.modal', function (e) {
             $(this).click(function (event) { event.preventDefault(); });
             index = 0;
@@ -458,6 +460,9 @@ angular.module('MetronicApp')
                         select_xpath1 = $shadow.domXpath(this);
                         console.log($shadow.domXpath(this));
                         $('#xpath').val($shadow.domXpath(this));
+                        // select_xpath1 = readXPath(this);
+                        // console.log(readXPath(this));
+                        // $('#xpath').val(readXPath(this));
                     }
                     index++;
                     // console.log(readXPath(this));
@@ -482,6 +487,7 @@ angular.module('MetronicApp')
         //alert("www");
        // console.log("-------------------------------\n" + $type  + "-------------------------------\n");
         $('#xpath2').val("");
+        $("#iframe2").attr("src", getHost($scope.url_path) + ".html");
         index = 0;
         $('#modal-select-xpath2').on('shown.bs.modal', function (e) {
             $(this).click(function (event) { event.preventDefault(); });
@@ -505,6 +511,9 @@ angular.module('MetronicApp')
                         select_xpath2 = $shadow.domXpath(this);
                         console.log($shadow.domXpath(this));
                         $('#xpath2').val($shadow.domXpath(this));
+                        // select_xpath2 = readXPath(this);
+                        // console.log(readXPath(this));
+                        // $('#xpath2').val(readXPath(this));
                     }
                     index++;
                 });
@@ -513,7 +522,66 @@ angular.module('MetronicApp')
                 //console.log($shadow.domXpath(this));
             });
         });
-        $('#modal-select-xpath2').on('hidden.bs.modal', function (e) {
+    }
+    // 选择ajax_xpath
+    $scope.select_ajax_xpath = function () {
+        $('#modal-select-ajax-xpath').modal('show');
+        //alert("www");
+        //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
+        index = 0;
+        $('#xpath').val("");
+        $('#modal-select-ajax-xpath').on('shown.bs.modal', function (e) {
+            $(this).click(function (event) {
+                event.preventDefault();
+            });
+            index = 0;
+            // 获取界面地址
+            $("#iframe3").attr("src", getHost($scope.url_path) + ".html");
+            //对所有的元素添加点击事件，获取xpath
+            $("#iframe3").contents().find("*").hover(function (event) {
+                event.stopPropagation();
+                // lastTag = $(this);
+                // var css = div.css('border');
+                // console.log($(this).css('border'));
+                if (lastTag !== null) {
+                    lastTag.css('border', lastTagBorder);
+                    // console.log(lastTag);
+                    // console.log(lastTagBorder);
+                }
+                lastTagBorder = $(this).css('border');
+                //console.log($(this));
+                $(this).css({'border': '1.5px solid #f0f', 'border-radius': '5px solid'});
+                $(this).click(function (event) {
+                    event.preventDefault();
+                    //console.log("+++++++++++++++++++++++++++++++++\n" + this  + "+++++++++++++++++++++++++++++++++\n");
+                    // if($type === 1) {
+                    //     //console.log("select_xpath1");
+                    //     select_xpath1 = $shadow.domXpath(this);
+                    //     // $scope.attribute_xpath = select_xpath1;
+                    // }else if($type === 2) {
+                    //     //console.log("select_xpath2");
+                    //     select_xpath2 = $shadow.domXpath(this);
+                    //     // $scope.attribute_xpath2 = select_xpath2;
+                    // }
+                    if (index === 0) {
+                        // select_xpath1 = $shadow.domXpath(this);
+                        // console.log($shadow.domXpath(this));
+                        // $('#xpath').val($shadow.domXpath(this));
+                        select_ajax_xpath = $shadow.domXpath(this);
+                        console.log($shadow.domXpath(this));
+                        $('#ajax_xpath').val($shadow.domXpath(this));
+                    }
+                    index++;
+                    // console.log(readXPath(this));
+                    // $('#modal-select-xpath').modal("hide");
+
+                })
+                lastTag = $(this);
+                // lastTag.css('border', lastTagBorder);
+                //console.log($shadow.domXpath(this));
+            });
+        });
+        $('#modal-select-ajax-xpath').on('hidden.bs.modal', function (e) {
             console.log("hide the modal");
             // lastTag.css('border', lastTagBorder);
             // lastTagBorder = null;
@@ -523,9 +591,11 @@ angular.module('MetronicApp')
     //　保存
     $scope.select_commit = function () {
         console.log("-------------------------------\n" + select_xpath1 + "\n" +
-            select_xpath2 + "-------------------------------\n");
+            select_xpath2 + "-------------------------------\n" +
+            select_ajax_xpath + "-------------------------------\n");
         $scope.attribute_xpath = select_xpath1;
         $scope.attribute_xpath2 = select_xpath2;
+        $scope.button_xpath = select_ajax_xpath;
     };
 
     $scope.save = function () {
@@ -565,7 +635,7 @@ angular.module('MetronicApp')
         $scope.creep_rule[$index].creep_name = $scope.creep_name;
         $scope.creep_rule[$index].creep_pattern =$scope.creep_pattern;
 
-        var ajaxTypes = ["点击","滚动"];
+        var ajaxTypes = ["点击", "翻页", "滚动"];
         $scope.creep_rule[$index].ajax.open = $scope.x;
         $scope.creep_rule[$index].ajax.ajax_pattern = types[$scope.y];
         $scope.creep_rule[$index].ajax.button_xpath = $scope.button_xpath;
@@ -578,9 +648,12 @@ angular.module('MetronicApp')
     }
     // 测试
     $scope.test = function($index){
+        $('#loading').modal('show');
         var url_path = $scope.url_path;
         var xpath1 = $scope.creep_rule[$index].attribute_xpath;
         var xpath2 = $scope.creep_rule[$index].attribute_xpath2;
+        var xpath2 = $scope.creep_rule[$index].attribute_xpath2;
+        var ajaxxpath = $scope.creep_rule[$index].button_xpath;
         // console.log($index + "\n" + url + "\n" + xpath1 + "\n" + xpath2);
         // console.log($scope.creep_rule[$index].creep_pattern);
         // 赵亮
@@ -590,18 +663,33 @@ angular.module('MetronicApp')
             for( x in params ){
                 values[params[x].name] = params[x].value;
             }
-            var idata = JSON.stringify(values)
+            var idata = JSON.stringify(values);
             alert(idata.toString());
             console.log(idata.toString());
             CollectCusTempService.crawltest(idata);
+            $('#loading').modal('hide');
         }
         // 寸
-        else if($scope.creep_rule[$index].creep_pattern === "列表") {
-            $.post("/collect/clues", {url_path: url_path, xpath1: xpath1, xpath2: xpath2}, function(result){
-                console.log(result.toString());
-                var arr = result.toString().replace(",", "\n");
-                $('#testarea').val($scope.creep_rule[$index].attribute_name + ":\n" + arr);
-            });
+        else if($scope.creep_rule[$index].creep_pattern === "线索") {
+            if($scope.creep_rule[$index].x === true) {
+                if($scope.creep_rule[$index].ajax_pattern === "翻页") {
+                    $.post("/collect/flip", {url_path: url_path, ajax_xpath: ajaxxpath, xpath1: xpath1, xpath2: xpath2}, function(result){
+                        console.log(result.toString());
+                        var arr = result.toString().replace(",", "\n");
+                        $('#testarea').val($scope.creep_rule[$index].attribute_name + ":\n" + arr);
+                        $('#loading').modal('hide');
+                    });
+                }
+            }
+            else {
+                $.post("/collect/clues", {url_path: url_path, xpath1: xpath1, xpath2: xpath2}, function(result){
+                    console.log(result.toString());
+                    var arr = result.toString().replace(",", "\n");
+                    $('#testarea').val($scope.creep_rule[$index].attribute_name + ":\n" + arr);
+                    $('#loading').modal('hide');
+                });
+            }
+
             // $http({
             //     method: 'POST',
             //     url: '/collect/clues',
@@ -1194,26 +1282,31 @@ var $shadow = new Object();
 $shadow.domXpath = function(dom) {
     dom = $(dom).get(0);
     var path = "";
+    var xname = "";
+    var isID = false;
     for (; dom && dom.nodeType == 1; dom = dom.parentNode) {
         var index = 1;
         for (var sib = dom.previousSibling; sib; sib = sib.previousSibling) {
             if (sib.nodeType == 1 && sib.tagName == dom.tagName)
                 index++;
         }
-        var xname =  dom.tagName.toLowerCase();
-        if (index > 0)
-            xname += "[" + index + "]";
-        // if (dom.id) {
-        //     xname += "[@id=\"" + dom.id + "\"]";
-        // } else {
-        //     if (index > 0)
-        //         xname += "[" + index + "]";
-        // }
+        xname =  dom.tagName.toLowerCase();
+        // if (index > 0)
+        //     xname += "[" + index + "]";
+        if (dom.id) {
+            xname = "//*[@id=\"" + dom.id + "\"]";
+            isID = true;
+            break;
+        } else {
+            if (index > 0)
+                xname += "[" + index + "]";
+        }
         path = "/" + xname + path;
     }
-
+    if(isID) {
+        path = xname + path;
+    }
     path = path.replace("html[1]/body[1]/","html/body/");
-
     return path;
 };
 
@@ -1244,3 +1337,40 @@ $shadow.xpathDom = function(xpath){
     // 返回jQuery元素
     return $(xpath);
 };
+
+//获取xpath
+function readXPath(element) {
+    if (element.id !== "") { //判断id属性，如果这个元素有id，则显 示//*[@id="xPath"]  形式内容
+        if(element.id == undefined) {
+            return "";
+        }
+        console.log(element.id);
+        return '//*[@id=\"' + element.id + '\"]';
+    }
+    //这里需要需要主要字符串转译问题，可参考js 动态生成html时字符串和变量转译（注意引号的作用）
+    if (element == document.body) {//递归到body处，结束递归
+        return '/html/' + element.tagName.toLowerCase();
+    }
+    var ix = 1,//在nodelist中的位置，且每次点击初始化
+        siblings = element.parentNode.childNodes;//同级的子元素
+
+    for (var i = 0, l = siblings.length; i < l; i++) {
+        var sibling = siblings[i];
+        //如果这个元素是siblings数组中的元素，则执行递归操作
+        if (sibling == element) {
+            return arguments.callee(element.parentNode) + '/' + element.tagName.toLowerCase() + '[' + (ix) + ']';
+            //如果不符合，判断是否是element元素，并且是否是相同元素，如果是相同的就开始累加
+        } else if (sibling.nodeType == 1 && sibling.tagName == element.tagName) {
+            ix++;
+        }
+    }
+};
+
+function getHost(sUrl){
+    var sDomain='';
+    var rDomain=/([a-zA-Z0-9-]+)(.com\b|.net\b|.edu\b|.miz\b|.biz\b|.cn\b|.cc\b|.org\b){1,}/g;
+    if(sUrl !== ""){
+        sDomain = sUrl.match(rDomain);
+    }
+    return sDomain;
+}

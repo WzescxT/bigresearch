@@ -679,7 +679,7 @@
                             <select class="form-control" name="crawltype"
                                     ng-model="creep_pattern" ng-init="creep_pattern='单体'">
                                 <option value="单体" ng-selected="true">单体</option>
-                                <option value="列表">列表</option>
+                                <option value="线索">线索</option>
                             </select>
                         </div>
                     </div>
@@ -698,6 +698,7 @@
                             <select class="form-control" name="ajaxtype" ng-model="ajax_pattern" ng-init="ajax_pattern='点击'">
                                 <option value="点击" ng-selected="true">点击</option>
                                 <option value="滚动" >滚动</option>
+                                <option value="翻页" >翻页</option>
                             </select>
                         </div>
                     </div>
@@ -707,6 +708,9 @@
                             <input type="text" class="form-control" name="ajaxxpath"
                                    placeholder="请输入要点击的对象的xpath"
                                    ng-model="button_xpath" ng-init="button_xpath=''">
+                        </div>
+                        <div class="col-xs-4">
+                            <button id="select_iframe_ajax" ng-click="select_ajax_xpath()">选择</button>
                         </div>
                     </div>
                     <div class="form-group">
@@ -720,7 +724,7 @@
                             <button id="select_iframe" ng-click="select_xpath()">选择</button>
                         </div>
                     </div>
-                    <div class="form-group" ng-show="creep_pattern=='列表'">
+                    <div class="form-group" ng-show="creep_pattern=='线索'">
                         <label for="manager" class="col-sm-2 control-label">Xpath2</label>
                         <div class="col-xs-4">
                             <input type="text" class="form-control" name="xpath2"
@@ -822,6 +826,37 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+
+<!-- 模态框3（Modal） -->
+<div class="modal fade" id="modal-select-ajax-xpath" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <div>
+                    <h4 class="modal-title" id="myModalLabel3">
+                        选取路径
+                    </h4>
+                    <input class="col-xs-12 btn btn-default" type="text" id="ajax_xpath"/>
+                </div>
+
+            </div>
+            <div class="modal-body">
+                <iframe src="/view/iframe.html" id="iframe3" style="height: 500px;width: 100%"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="select_commit()">
+                    提交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 <!-- 修改信息 -->
 <div class="modal" id="modal-update">
 
@@ -855,7 +890,7 @@
                             <select class="form-control" name="crawltype"
                                     ng-model="creep_pattern" ng-init="creep_pattern='单体'">
                                 <option value="单体" ng-selected="true">单体</option>
-                                <option value="列表">列表</option>
+                                <option value="线索" >线索</option>
                             </select>
                         </div>
                     </div>
@@ -874,6 +909,7 @@
                             <select class="form-control" name="ajaxtype" ng-model="ajax_pattern" ng-init="ajax_pattern='点击'">
                                 <option value="点击" ng-selected="true">点击</option>
                                 <option value="滚动" >滚动</option>
+                                <option value="翻页" >翻页</option>
                             </select>
                         </div>
                     </div>
@@ -884,6 +920,7 @@
                                    placeholder="请输入要点击的对象的xpath"
                                    ng-model="button_xpath" ng-init="button_xpath=''">
                         </div>
+
                     </div>
                     <div class="form-group">
                         <label for="manager" class="col-sm-2 control-label">Xpath</label>
@@ -892,7 +929,22 @@
                                    placeholder="请输入xpath"
                                    ng-model="attribute_xpath" ng-init="attribute_xpath=''">
                         </div>
+                        <div class="col-xs-4">
+                            <button id="select_iframe_update_one" ng-click="select_xpath()">选择</button>
+                        </div>
                     </div>
+                    <div class="form-group" ng-show="creep_pattern=='线索'">
+                        <label for="manager" class="col-sm-2 control-label">Xpath2</label>
+                        <div class="col-xs-4">
+                            <input type="text" class="form-control" name="xpath2"
+                                   placeholder="请输入xpath2"
+                                   ng-model="attribute_xpath2" ng-init="attribute_xpath2=''">
+                        </div>
+                        <div class="col-xs-4">
+                            <button id="select_iframe_update_two" ng-click="select_xpath2()">选择</button>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label for="taskdescription" class="col-sm-2 control-label">属性名称</label>
                         <div class="col-xs-4">
@@ -921,4 +973,19 @@
 
     </div>
 
+</div>
+
+
+<!-- loading -->
+<div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4" data-backdrop='static'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel4">提示</h4>
+            </div>
+            <div class="modal-body">
+                请稍候。。。
+            </div>
+        </div>
+    </div>
 </div>
