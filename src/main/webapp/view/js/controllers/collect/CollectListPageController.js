@@ -267,7 +267,8 @@ angular.module('MetronicApp')
 
                         "attribute_xpath": "",
                         "attribute_xpath2": "",
-                        "attribute_name": ""
+                        "attribute_name": "",
+                        "extract_way": ""
                     },
                     {
                         "creep_pattern_name": "",
@@ -278,7 +279,9 @@ angular.module('MetronicApp')
                         },
 
                         "attribute_xpath": "",
-                        "attribute_name": ""
+                        "attribute_xpath2": "",
+                        "attribute_name": "",
+                        "extract_way": ""
                     }
                 ],
 
@@ -412,6 +415,7 @@ angular.module('MetronicApp')
         $scope.attribute_xpath = "";
         $scope.attribute_xpath2 = "";
         $scope.attribute_name = "";
+        $scope.extract_way = "";
         // 添加规则
         $('#modal-add').modal('show');
     };
@@ -610,7 +614,8 @@ angular.module('MetronicApp')
             },
             "attribute_xpath": $scope.attribute_xpath,
             "attribute_xpath2": $scope.attribute_xpath2,
-            "attribute_name":  $scope.attribute_name
+            "attribute_name":  $scope.attribute_name,
+            "extract_way": $scope.extract_way
         };
         $scope.creep_rule.push(newEle);
 
@@ -627,6 +632,7 @@ angular.module('MetronicApp')
         $scope.attribute_xpath = $scope.creep_rule[$index].attribute_xpath;
         $scope.attribute_xpath2 = $scope.creep_rule[$index].attribute_xpath2;
         $scope.attribute_name = $scope.creep_rule[$index].attribute_name;
+        $scope.extract_way = $scope.creep_rule[$index].extract_way;
         $('#modal-update').modal('show');
     };
 
@@ -642,7 +648,7 @@ angular.module('MetronicApp')
         $scope.creep_rule[$index].attribute_xpath = $scope.attribute_xpath;
         $scope.creep_rule[$index].attribute_xpath2 = $scope.attribute_xpath2;
         $scope.creep_rule[$index].attribute_name = $scope.attribute_name;
-
+        $scope.extract_way = $scope.creep_rule[$index].extract_way;
         $('#modal-update').modal('hide');
 
     }
@@ -654,6 +660,7 @@ angular.module('MetronicApp')
         var xpath2 = $scope.creep_rule[$index].attribute_xpath2;
         var xpath2 = $scope.creep_rule[$index].attribute_xpath2;
         var ajaxxpath = $scope.creep_rule[$index].button_xpath;
+        var extract_way = $scope.creep_rule[$index].extract_way;
         // console.log($index + "\n" + url + "\n" + xpath1 + "\n" + xpath2);
         // console.log($scope.creep_rule[$index].creep_pattern);
         // 赵亮

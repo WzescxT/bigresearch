@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.monetware.mapper.collect.SpiderTaskInfoMapper;
 import com.monetware.model.collect.SpiderTaskInfo;
-import com.monetware.service.collect.CollectByCluesService;
-import com.monetware.service.collect.CollectByFlipService;
 import com.monetware.service.collect.CollectService;
 import com.monetware.service.collect.XpathCollectorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +77,8 @@ public class CrawlPlanController {
                 {
                     JSONObject eachtaskJSON=(JSONObject)eachtask;
                     String creep_pattern=eachtaskJSON.getString("creep_pattern");
+                    // extract_way
+                    String extract_way = eachtaskJSON.getString("extract_way");
                     if(creep_pattern.equals("单体"))
                     {
                         JSONObject ajax=eachtaskJSON.getJSONObject("ajax");
@@ -129,10 +129,10 @@ public class CrawlPlanController {
                                     };
                             if(ajaxPattern.equals("点击")) {
                                 collectService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES_AJAX_CLICK,
-                                        ajaxXpath, xpath1, xpath2);
+                                        extract_way, ajaxXpath, xpath1, xpath2);
                             } else if(ajaxPattern.equals("翻页")) {
                                 collectService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES_AJAX_FLIP,
-                                        ajaxXpath, xpath1, xpath2);
+                                        extract_way, ajaxXpath, xpath1, xpath2);
                             }
                         }
                         // no ajax
@@ -155,7 +155,7 @@ public class CrawlPlanController {
                                             System.out.println(error);
                                         }
                                     };
-                            collectService.crawl(onCrawleLinstener, url, xpath1, xpath2);
+                            collectService.crawl(onCrawleLinstener, url, extract_way, xpath1, xpath2);
                         }
                     }
 
