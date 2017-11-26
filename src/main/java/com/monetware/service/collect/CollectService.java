@@ -215,7 +215,7 @@ public class CollectService {
 							results.add(((HtmlLink) o).getTextContent());
 						}
 					}else if ("链接".equals(extract_way)) {
-						results.add(((HtmlAnchor) o).getBaseURI());
+						results.add(((HtmlAnchor) o).getHrefAttribute());
 					}
 
 				}
