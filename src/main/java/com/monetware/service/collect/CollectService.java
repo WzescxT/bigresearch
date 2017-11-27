@@ -136,9 +136,6 @@ public class CollectService {
 					}
 					// extract content
 					List<String> results = getContent(page, mXpaths, extract_way);
-					for (String s : results) {
-						System.out.println(s);
-					}
 					if(results == null || results.size() == 0) {
 						onCrawleLinstener.onFail("results is null");
 						return;
@@ -218,7 +215,7 @@ public class CollectService {
 							results.add(((HtmlLink) o).getTextContent());
 						}
 					}else if ("链接".equals(extract_way)) {
-						results.add(((HtmlAnchor) o).getHrefAttribute());
+						results.add(((HtmlAnchor) o).getBaseURI());
 					}
 
 				}
@@ -321,9 +318,9 @@ public class CollectService {
 		clues.add(xpath1);
 		clues.add(xpath2);
 		CollectProcessor clueProcessor = new CollectProcessor(url, CollectService.TYPE_CLUES, extract_way);
-		clueProcessor.setOnCrawleLinstener(this.onCrawleLinstener);
 		clueProcessor.setXpaths(clues);
 		clueProcessor.start();
+		clueProcessor.setOnCrawleLinstener(this.onCrawleLinstener);
 	}
 
 	public OnCrawleLinstener getOnCrawleLinstener() {

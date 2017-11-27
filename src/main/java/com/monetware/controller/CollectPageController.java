@@ -34,15 +34,22 @@ public class CollectPageController {
         String ifajax=(String) request.get("ifajax");
         String ajaxtype=(String) request.get("ajaxtype");
         String ajaxxpath=(String) request.get("ajaxxpath");
+        String url=(String) request.get("currenturl");
+        String extract_way=(String) request.get("extract_way");
         System.out.println(xpath);
         System.out.println(nameindb);
         System.out.println(crawltype);
         System.out.println(ajaxxpath);
         System.out.println(ifajax);
+        System.out.println(url);
+        System.out.println(extract_way);
+        if(extract_way.equals("链接"))
+        {
+            xpath=xpath+"/@href";
+        }
         final JSONObject result = new JSONObject();
-
         try {
-            service.crawlSingleData("http://www.sse.com.cn/assortment/stock/list/share/"/*"https://www.douban.com/"*/, xpath, nameindb,ifajax,ajaxtype,ajaxxpath,null,null,null,null,null);
+            service.crawlSingleData(url, xpath, nameindb,ifajax,ajaxtype,ajaxxpath,null,null,null,null,null,extract_way);
             while (!service.getiscompleted()) {
                 try {
                     Thread.sleep(10);
