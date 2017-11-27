@@ -9,7 +9,7 @@ var MetronicApp = angular.module("MetronicApp", [
     "ui.bootstrap",
     "oc.lazyLoad",
     "ngSanitize",
-    "ui.bootstrap",
+    "ui.bootstrap"
 ]);
 
 /* Configure ocLazyLoader(refer: https://github.com/ocombe/ocLazyLoad) */
@@ -23,8 +23,7 @@ MetronicApp.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
  BEGIN: BREAKING CHANGE in AngularJS v1.3.x:
 *********************************************/
 
-
-//AngularJS v1.3.x workaround for old style controller declarition in HTML
+// AngularJS v1.3.x workaround for old style controller declaration in HTML
 MetronicApp.config(['$controllerProvider', function($controllerProvider) {
     // this option might be handy for migrating old apps, but please don't use it
     // in new ones!
