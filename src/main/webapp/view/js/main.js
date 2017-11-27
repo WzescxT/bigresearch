@@ -12,21 +12,12 @@ var MetronicApp = angular.module("MetronicApp", [
     "ui.bootstrap",
 ]);
 
-
-
 /* Configure ocLazyLoader(refer: https://github.com/ocombe/ocLazyLoad) */
 MetronicApp.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
     $ocLazyLoadProvider.config({
         // global configs go here
     });
 }]);
-
-
-
-
-
-
-
 
 /********************************************
  BEGIN: BREAKING CHANGE in AngularJS v1.3.x:
@@ -99,17 +90,15 @@ MetronicApp.controller('HeaderController',  ['$cookieStore','$scope','$rootScope
 
 */
 
-
-    $rootScope.AuthSetting={"LoginUser":{}};
+    $rootScope.AuthSetting = {"LoginUser": {}};
 
     //判断登录状态
-    $scope.token= $cookieStore.get('token');
+    $scope.token = $cookieStore.get('token');
 
-    if(angular.isUndefined($scope.token)){
+    if (angular.isUndefined($scope.token)) {
         //登录状态：没有登录
-        $scope.loginStatus=0;
-
-    }else{
+        $scope.loginStatus = 0;
+    } else {
         //刷新时有token
         LoginService.parseToken().then(function(resp) {
             if (resp.error_code == 0) {
@@ -122,10 +111,6 @@ MetronicApp.controller('HeaderController',  ['$cookieStore','$scope','$rootScope
         }, function(resp) {
         })
 
-
-
-
-
         //调用service获取当前用户信息
     }
 
@@ -133,56 +118,36 @@ MetronicApp.controller('HeaderController',  ['$cookieStore','$scope','$rootScope
     $rootScope.toLogin = function(){  //打开模态
             var loginModal = $modal.open({
                 templateUrl : 'tpl/modal-login.html',  //指向上面创建的视图
-                controller : 'ModalLoginCtrl',// 初始化模态范围
-                size : 'md' ,//大小配置,
-            })
+                controller : 'ModalLoginCtrl', // 初始化模态范围
+                size : 'md' //大小配置,
+            });
 
-            loginModal.result.then(function(resp){
+            loginModal.result.then(function(resp) {
                 $scope.loginStatus=1;
                 $scope.LoginUser = resp.rt_info.user;
                 $cookieStore.put('token',resp.rt_info.token);
                 $rootScope.AuthSetting.LoginUser=resp.rt_info.user;
 
-            },function(){
+            }, function() {
                 //$log.info('Modal dismissed at: ' + new Date())
             })
-        }
+        };
 
-//登出
-        $scope.loginOut=function(){
-            $scope.LoginUser =null;
-            $rootScope.AuthSetting.LoginUser=null;
+        //登出
+        $scope.loginOut = function() {
+            $scope.LoginUser = null;
+            $rootScope.AuthSetting.LoginUser = null;
             $cookieStore.remove('token');
-            $scope.loginStatus=0;
+            $scope.loginStatus = 0;
             $state.go("dashboard");
-        }
-
-
-
-
-
-
-
-
-
-
-
+        };
 
     $scope.designCollectTemplate = function(id) {
         $state.go("collect_listpage", {
             tabId : id
         });
     }
-
-
-
-
-
-
-
 }]);
-
-
 
 /*LoginModal*/
 MetronicApp.controller('ModalLoginCtrl',function($scope,$modalInstance,LoginService){ //依赖于modalInstance
@@ -205,14 +170,6 @@ MetronicApp.controller('ModalLoginCtrl',function($scope,$modalInstance,LoginServ
     }
 });
 
-
-
-
-
-
-
-
-
 /* Setup Layout Part - Sidebar */
 MetronicApp.controller('SidebarController', ['$scope', function($scope) {
     $scope.$on('$includeContentLoaded', function() {
@@ -234,11 +191,6 @@ MetronicApp.controller('PageHeadController', ['$scope', function($scope) {
     $scope.$on('$includeContentLoaded', function() {
         Demo.init(); // init theme panel
     })
-
-
-
-
-
 }]);
  */
 /* Setup Layout Part - Sidebar */
@@ -266,9 +218,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
     $stateProvider
 
         // Dashboard
-
-
-
         .state('dashboard', {
             url: "/dashboard.html",
             templateUrl: "views/dashboard.html",            
@@ -404,12 +353,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
             }
         })
 
-
-
-
-
-
-
         // 商业数据
         .state('collect_business', {
             url: "/collect_business.html",
@@ -432,34 +375,11 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
 
                             '../assets/pages/scripts/components-bootstrap-select.min.js',
                             '../assets/pages/scripts/components-select2.min.js'
-
                         ]
                     }]);
                 }]
             }
         })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         // 分页采集
         .state('collect_listpage', {
@@ -513,9 +433,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
             }
         })
 
-
-
-
         //采集项目管理
         .state('collectproject_manage', {
             url: "/collectproject_manage.html",
@@ -535,8 +452,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
                 }]
             }
         })
-
-
 
         //采集项目数据展示
         .state('showCollectInfo', {
@@ -589,13 +504,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
             }
         })
 
-
-
-
-
-
-
-
         // 项目创建
         .state('collectproject_create', {
             cache:'false',
@@ -622,18 +530,11 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
                             <!--plugin : bootstrap timepicker-->
                             '../assets/global/plugins//timepicker/css/bootstrap-datetimepicker.min.css',
                             '../assets/global/plugins/timepicker/bootstrap-datetimepicker.js'
-
-
-
                         ]
                     }]);
                 }]
             }
         })
-
-
-
-
 
         //模板管理
         .state('template_manage', {
@@ -655,18 +556,11 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
                             '../assets/global/plugins/jquery-json/jquery.json.js',
                             '../assets/global/plugins/jquery-json/json2.js',
                             '../assets/global/plugins/jquery-json/jsonlint.js'
-
-
                         ]
                     }]);
                 }]
             }
         })
-
-
-
-
-
 
         // 文本库创建
         .state('textlibrary_manage', {
@@ -681,17 +575,11 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
                         files: [
                             'js/controllers/analysis/TextLibraryManageController.js',
                             'js/services/analysis/TextLibraryService.js'
-
-
-
                         ]
                     }]);
                 }]
             }
         })
-
-
-
 
         // 文本导入
         .state('textlibrary_import', {
@@ -716,7 +604,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
             }
         })
 
-
         // 分析项目管理
         .state('analysisproject_manage', {
             url: "/analysisproject_manage.html",
@@ -730,34 +617,12 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
                         files: [
                             'js/controllers/analysis/AnalysisProjectManageController.js',
                             'js/services/analysis/AnalysisProjectService.js',
-
                             'js/services/analysis/TextLibraryService.js'
-
-
-
                         ]
                     }]);
                 }]
             }
         })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         //分析项目词频统计
         .state('analysis_wordfrequency', {
@@ -780,8 +645,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
                 }]
             }
         })
-
-
 
         //分析项目聚类分析
         .state('analysis_cluste', {
@@ -810,9 +673,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
             }
         })
 
-
-
-
         //聚类结果具体文本信息展示
         .state('analysis_clusteInfo', {
             params:{"analysisProjectId":null,"clusteId":null},
@@ -832,9 +692,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
                 }]
             }
         })
-
-
-
 
     //分类训练集管理
         .state('analysisproject_training', {
@@ -877,11 +734,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
                 }]
             }
         })
-
-
-
-
-
 
         //分析项目文本分类
         .state('analysis_classify', {
@@ -928,10 +780,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
             }
         })
 
-
-
-
-
         //情感词典
         .state('analysis_sentime_dictionary', {
             url: "/analysis_sentime_dictionary.html",
@@ -973,17 +821,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
             }
         })
 
-
-
-
-
-
-
-
-
-
-
-
         //情感分析
         .state('analysis_sentime', {
             params:{"analysisProjectId":null},
@@ -1007,12 +844,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
                 }]
             }
         })
-
-
-
-
-
-
 
         //在线分析
         .state('analysis_online', {
@@ -1040,9 +871,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
             }
         })
 
-
-
-
         //数据库可视化工具
         .state('analysis_db', {
             url: '/analysis_db.html',
@@ -1055,7 +883,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
                     return $ocLazyLoad.load([{
                         name: 'MetronicApp',
                         files: [
-
                             'js/controllers/analysis/AnalysisDBController.js',
                             'js/services/analysis/AnalysisDBService.js',
 
@@ -1067,45 +894,11 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
                             //tooltips
                             '../assets/global/plugins/angularjs/plugins/angular-tooltips/angular-tooltips.js',
                             '../assets/global/plugins/angularjs/plugins/angular-tooltips/angular-tooltips.css'
-
                         ]
                     }]);
                 }]
             }
         })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         // UI Bootstrap
         .state('uibootstrap', {
@@ -1385,7 +1178,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
                 }]
             }
         })
-
 }]);
 
 /* Init global settings and run the app */
@@ -1394,47 +1186,4 @@ MetronicApp.run(["$rootScope", "settings", "$state", function($rootScope, settin
     $rootScope.$settings = settings; // state to be accessed from view
     // $rootScope.ServerUrl="http://localhost:8888/";
     $rootScope.ServerUrl="../";
-
 }]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
