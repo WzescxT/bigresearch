@@ -6,12 +6,9 @@ import com.monetware.mapper.collect.SpiderTaskInfoMapper;
 import com.monetware.model.collect.AdvanceProjectEntity;
 import com.monetware.model.collect.AdvanceProjectModel;
 import com.monetware.model.collect.AdvanceTaskEntity;
-import com.monetware.model.collect.SpiderTaskInfo;
 import com.monetware.util.FileUtils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -152,66 +149,6 @@ public class AdvanceCollectController {
 
 
         return httpServletRequest.getParameterMap();
-    }
-
-    @PostMapping("/test")
-    @ResponseBody
-    public Object test(@RequestBody Map<String, Object> requests) {
-
-        System.out.println(requests);
-
-        Gson gson = new Gson();
-        String jsonString = gson.toJson(requests);
-        System.out.println("----------------------------------");
-        System.out.println(jsonString);
-        System.out.println("----------------------------------");
-
-        String project_id = "";
-        String task_id = "";
-        for (Map.Entry<String, Object> entry : requests.entrySet()) {
-            if (entry.getKey().equals("basic_rule") && entry.getValue() instanceof Map) {
-                Map<String, Object> map = (Map<String, Object>) entry.getValue();
-                for (Map.Entry<String, Object> e : map.entrySet()) {
-                    if (e.getKey().equals("project_id")) {
-                        project_id = e.getValue().toString();
-                    } else if (e.getKey().equals("task_id")) {
-                        task_id = e.getValue().toString();
-                    }
-                }
-            }
-        }
-
-        FileWriter fileWriter = null;
-        File file = null;
-        try {
-            file = new File("task_config_" + project_id + "_" + task_id + ".json");
-            fileWriter = new FileWriter(file);
-            fileWriter.write(jsonString);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fileWriter.close();
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-        }
-
-        String path = file.getAbsolutePath();
-        spiderTaskInfoMapper.saveConfigPathById(path, task_id);
-
-//        System.out.println("----------------------------------");
-//        for (Map.Entry<String, Object> entry : requests.entrySet()) {
-//            if (entry.getValue() instanceof Map) {
-//                System.out.println("entry.getValue() is instanceof Map");
-//            }
-//
-//            System.out.println("entry.getKey() = \"" + entry.getKey() +
-//                    "\", entry.getValue() = \"" + entry.getValue() + "\".");
-//        }
-//        System.out.println("----------------------------------");
-
-        return requests;
     }
 
     @PostMapping(value = "task_config", produces = "application/json;charset=UTF-8")
