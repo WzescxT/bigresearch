@@ -319,8 +319,8 @@ public class CollectService {
 		clues.add(xpath2);
 		CollectProcessor clueProcessor = new CollectProcessor(url, CollectService.TYPE_CLUES, extract_way);
 		clueProcessor.setXpaths(clues);
-		clueProcessor.start();
 		clueProcessor.setOnCrawleLinstener(this.onCrawleLinstener);
+		clueProcessor.start();
 	}
 
 	public OnCrawleLinstener getOnCrawleLinstener() {

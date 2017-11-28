@@ -95,7 +95,7 @@ public class DownloadPageService {
         try {
             URL url = new URL(url_path);
             root_path = url.getProtocol() + "://" + url.getHost();
-            System.out.println(root_path);
+            // System.out.println(root_path);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

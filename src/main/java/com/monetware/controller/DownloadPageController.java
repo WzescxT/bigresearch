@@ -79,7 +79,7 @@ public class DownloadPageController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result;
+        return "success";
     }
 
 }
