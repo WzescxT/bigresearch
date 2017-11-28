@@ -166,7 +166,7 @@ public class CrawlPlanController {
                                             System.out.println(error);
                                         }
                                     };
-                            collectService.crawl(onCrawleLinstener, url, extract_way, xpath1, xpath2);
+                            collectService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES, extract_way, "", xpath1, xpath2);
                         }
                     }
 

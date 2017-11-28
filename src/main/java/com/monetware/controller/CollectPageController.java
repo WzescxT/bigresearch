@@ -127,7 +127,7 @@ public class CollectPageController {
                                 success = 2;
                             }
                         };
-                collectService.crawl(onCrawleLinstener, url, extract_way, xpath, xpath2);
+                collectService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES, extract_way, "", xpath, xpath2);
             }
             while (success == 0) {
 

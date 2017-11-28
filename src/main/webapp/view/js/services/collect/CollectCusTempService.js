@@ -46,7 +46,7 @@ MetronicApp.factory('CollectCusTempService', function ($http, $q, $rootScope) {
             var deferred = $q.defer();
             var promise = deferred.promise;
             $http.post($rootScope.ServerUrl + "collect/CrawledData", data).success(function (resp) {
-                var testresult=resp["testResult"];
+                var testresult = resp["testResult"];
                 return testresult;
             });
         },

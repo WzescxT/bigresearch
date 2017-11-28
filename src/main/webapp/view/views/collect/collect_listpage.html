@@ -737,9 +737,9 @@
                     <div class="form-group">
                         <label for="taskname" class="col-sm-2 control-label">是否使用Ajax</label>
                         <div class="col-xs-4">
-                            <select class="form-control" name="ifajax" ng-click="changeifHide(x)" ng-model="x" ng-init="x='true'">
-                                <option value="true" ng-selected="true" >是</option>
-                                <option value="false" >否</option>
+                            <select class="form-control" name="ifajax" ng-click="changeifHide(x)" ng-model="x" ng-init="x=false">
+                                <option value="false" ng-selected="true">否</option>
+                                <option value="true">是</option>
                             </select>
                         </div>
                     </div>
@@ -958,9 +958,9 @@
                     <div class="form-group">
                         <label for="taskname" class="col-sm-2 control-label">是否使用Ajax</label>
                         <div class="col-xs-4">
-                            <select class="form-control" name="ifajax" ng-click="changeifHide(x)" ng-model="x" ng-init="x='true'">
-                                <option value="true" ng-selected="true" >是</option>
-                                <option value="false" >否</option>
+                            <select class="form-control" name="ifajax" ng-click="changeifHide(x)" ng-model="x" ng-init="x=false">
+                                <option value="false" ng-selected="true">否</option>
+                                <option value="true">是</option>
                             </select>
                         </div>
                     </div>
@@ -1051,7 +1051,10 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel4">提示</h4>
+                <button class="close" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+                <h3 class="modal-title">提示</h3>
             </div>
             <div class="modal-body">
                 请稍候。。。

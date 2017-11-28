@@ -7,6 +7,8 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,20 +77,20 @@ public class CollectService {
 		public void start() {
 			// new webclient and initialize configure
 			WebClient webClient = new WebClient(BrowserVersion.CHROME);
-			webClient.getOptions().setJavaScriptEnabled(true);
 			webClient.getOptions().setCssEnabled(false);
-			webClient.setAjaxController(new NicelyResynchronizingAjaxController());
 			webClient.getOptions().setTimeout(35000);
 			webClient.getOptions().setThrowExceptionOnScriptError(false);
 			webClient.addRequestHeader("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3192.0 Safari/537.36");
 			try {
-				//　get page
-				HtmlPage page = webClient.getPage(url);
-				webClient.waitForBackgroundJavaScript(10000);
-
 				// ajax flip and clues
 				if(collectType == CollectService.TYPE_CLUES_AJAX_FLIP) {
-					// note the page
+					//　get page
+					webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+					webClient.getOptions().setJavaScriptEnabled(true);
+					HtmlPage page = webClient.getPage(url);
+					webClient.waitForBackgroundJavaScript(10000);
+
+					// note the page for share page
 					List<Integer> pages = new ArrayList<>();
 					Integer currentPage = 1;
 					boolean isEnd = true;
@@ -101,16 +103,24 @@ public class CollectService {
 						results.addAll(getContent(page, mXpaths, extract_way));
 						// next page
 						List<HtmlAnchor> htmlListItems = page.getByXPath(ajaxXpath);
-						for(HtmlAnchor htmlAnchor: htmlListItems){
-							String number = htmlAnchor.asText();
-							if(isNumeric(number)){
-								Integer pageNumber = Integer.valueOf(number);
-								if(pageNumber > currentPage){
-									isEnd = false;
-									pages.add(pageNumber);
-									currentPage = pageNumber;
-									htmlAnchor.click();
-									break;
+						// should be one
+						if (htmlListItems.size() == 0) {
+							isEnd = true;
+						} else if (htmlListItems.size() == 1) {
+							htmlListItems.get(0).click();
+						}
+						// > 1
+						else {
+							for(HtmlAnchor htmlAnchor: htmlListItems){
+								String number = htmlAnchor.asText();
+								if(isNumeric(number)){
+									Integer pageNumber = Integer.valueOf(number);
+									if(pageNumber > currentPage){
+										isEnd = false;
+										pages.add(pageNumber);
+										currentPage = pageNumber;
+										break;
+									}
 								}
 							}
 						}
@@ -128,7 +138,17 @@ public class CollectService {
 					}
 				}
 				else if(collectType == CollectService.TYPE_CLUES) {
-					// get absolute xpath
+					webClient.getOptions().setJavaScriptEnabled(false);
+					HtmlPage page = webClient.getPage(url);
+
+					// the page is ajax page
+					if (isAjaxHtml(page, xpaths.get(0))) {
+						webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+						webClient.getOptions().setJavaScriptEnabled(false);
+						page = webClient.getPage(url);
+						webClient.waitForBackgroundJavaScript(10000);
+					}
+
 					List<String> mXpaths = produceXpaths(page, xpaths);
 					if(mXpaths == null || mXpaths.size() == 0) {
 						onCrawleLinstener.onFail("xpath is error");
@@ -143,6 +163,12 @@ public class CollectService {
 					onCrawleLinstener.onSuccess(results);
 				}
 				else if(collectType == CollectService.TYPE_CLUES_AJAX_CLICK) {
+					//　get page
+					webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+					webClient.getOptions().setJavaScriptEnabled(true);
+					HtmlPage page = webClient.getPage(url);
+					webClient.waitForBackgroundJavaScript(10000);
+
 					List<String> results = new ArrayList<>();
 					// click
 					List<HtmlAnchor> htmlListItems = page.getByXPath(ajaxXpath);
@@ -206,16 +232,17 @@ public class CollectService {
 					Object o = byXPath.get(0);
 					if ("文本".equals(extract_way)) {
 						if( o instanceof HtmlTableDataCell) {
-							results.add(((HtmlTableDataCell) o).getTextContent());
+							results.add(((HtmlTableDataCell) o).getTextContent().trim());
 						}else if( o instanceof HtmlAnchor) {
-							results.add(((HtmlAnchor) o).getTextContent());
+							results.add(((HtmlAnchor) o).getTextContent().trim());
 						}else if( o instanceof HtmlArticle) {
-							results.add(((HtmlArticle) o).getTextContent());
+							results.add(((HtmlArticle) o).getTextContent().trim());
 						}else if( o instanceof HtmlLink) {
-							results.add(((HtmlLink) o).getTextContent());
+							results.add(((HtmlLink) o).getTextContent().trim());
 						}
 					}else if ("链接".equals(extract_way)) {
-						results.add(((HtmlAnchor) o).getBaseURI());
+						results.add(getAbsUrl(((HtmlAnchor) o).getBaseURI(),
+								((HtmlAnchor) o).getHrefAttribute()));
 					}
 
 				}
@@ -251,7 +278,7 @@ public class CollectService {
 				while(index < minLength && mainXpath[index] == secondXpath[index]){
 					index++;
 				}
-				return xpaths.get(0).substring(0, index-1);
+				return xpaths.get(0).substring(0, index - 1);
 
 			}else {
 				return null;
@@ -260,28 +287,66 @@ public class CollectService {
 	}
 
 	/**
+	 *
+	 * @param absolutePath
+	 * @param relativePath
+	 * @return
+	 */
+	public static String getAbsUrl(String absolutePath, String relativePath){
+		try {
+			URL absoluteUrl = new URL(absolutePath);
+			URL parseUrl = new URL(absoluteUrl ,relativePath );
+			return parseUrl.toString();
+		}
+		catch (MalformedURLException e) {
+			return "";
+		}
+	}
+	/**
 	 * 测试　只需要两个xpath和一个url
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String xpath1 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[2]/td[2]";
-		String xpath2 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[3]/td[2]";
-		String url = "http://www.sse.com.cn/assortment/stock/list/share/";
+		// share crawler
+//		String xpath1 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[2]/td[2]";
+//		String xpath2 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[3]/td[2]";
+//		String url = "http://www.sse.com.cn/assortment/stock/list/share/";
+//		CollectService collectByCluesService = new CollectService();
+//
+//		OnCrawleLinstener onCrawleLinstener = new OnCrawleLinstener() {
+//			@Override
+//			public void onSuccess(List<String> result) {
+//				System.out.println(result.size());
+//			}
+//
+//			@Override
+//			public void onFail(String error) {
+//
+//			}
+//		};
+//		String ajaxXpath = "//*[@id=\"idStr\"]";
+//		collectByCluesService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES_AJAX_FLIP, "文本",
+//				ajaxXpath, xpath1, xpath2);
+		// tongji crawler
+		String xpath1 = "/html/body/div[3]/div/div[3]/div/ul/li[1]/a[1]";
+		String xpath2 = "/html/body/div[3]/div/div[3]/div/ul/li[2]/a[1]";
+		String url = "http://sse.tongji.edu.cn/data/list/xwdt";
 		CollectService collectByCluesService = new CollectService();
 
 		OnCrawleLinstener onCrawleLinstener = new OnCrawleLinstener() {
 			@Override
 			public void onSuccess(List<String> result) {
-				System.out.println(result.size());
+				for (String str : result) {
+					System.out.println(str);
+				}
 			}
-
 			@Override
 			public void onFail(String error) {
-
+				System.out.println(error);
 			}
 		};
-		String ajaxXpath = "//*[@id=\"idStr\"]";
-		collectByCluesService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES_AJAX_FLIP, "文本",
+		String ajaxXpath = "";
+		collectByCluesService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES, "链接",
 				ajaxXpath, xpath1, xpath2);
 
 	}
@@ -299,26 +364,26 @@ public class CollectService {
 		List<String> clues = new ArrayList<>();
 		clues.add(xpath1);
 		clues.add(xpath2);
-		CollectProcessor clueAjaxProcessor = new CollectProcessor(url, type, extract_way);
-		clueAjaxProcessor.setXpaths(clues);
-		clueAjaxProcessor.setAjaxXpath(ajaxXpath);
-		clueAjaxProcessor.setOnCrawleLinstener(this.onCrawleLinstener);
-		clueAjaxProcessor.start();
+		CollectProcessor clueProcessor = new CollectProcessor(url, type, extract_way);
+		clueProcessor.setXpaths(clues);
+		clueProcessor.setAjaxXpath(ajaxXpath);
+		clueProcessor.setOnCrawleLinstener(this.onCrawleLinstener);
+		clueProcessor.start();
 	}
 	/**
-	 * 线索
+	 * 单
 	 * @param onCrawleLinstener
 	 * @param url
 	 * @param xpath1
 	 * @param xpath2
 	 */
-	public void crawl(OnCrawleLinstener onCrawleLinstener, String url, String extract_way, String xpath1, String xpath2) {
+	public void crawl(OnCrawleLinstener onCrawleLinstener, String url, int type, String extract_way, String ajaxXpath, String xpath) {
 		this.onCrawleLinstener = onCrawleLinstener;
 		List<String> clues = new ArrayList<>();
-		clues.add(xpath1);
-		clues.add(xpath2);
-		CollectProcessor clueProcessor = new CollectProcessor(url, CollectService.TYPE_CLUES, extract_way);
+		clues.add(xpath);
+		CollectProcessor clueProcessor = new CollectProcessor(url, type, extract_way);
 		clueProcessor.setXpaths(clues);
+		clueProcessor.setAjaxXpath(ajaxXpath);
 		clueProcessor.setOnCrawleLinstener(this.onCrawleLinstener);
 		clueProcessor.start();
 	}
@@ -329,6 +394,13 @@ public class CollectService {
 
 	public void setOnCrawleLinstener(OnCrawleLinstener onCrawleLinstener) {
 		this.onCrawleLinstener = onCrawleLinstener;
+	}
+
+	public boolean isAjaxHtml(HtmlPage page, String xpath) {
+		if (page.getByXPath(xpath).size() < 1) {
+			return true;
+		}
+		return false;
 	}
 
 	/**

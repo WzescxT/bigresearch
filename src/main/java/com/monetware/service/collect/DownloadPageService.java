@@ -100,7 +100,6 @@ public class DownloadPageService {
             e.printStackTrace();
         }
 
-
         String regEx1="href=\"/";
         Pattern pattern1 = Pattern.compile(regEx1);
         Matcher matcher1 = pattern1.matcher(xml);
