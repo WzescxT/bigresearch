@@ -670,8 +670,9 @@ angular.module('MetronicApp')
             for( x in params ){
                 values[params[x].name] = params[x].value;
             }
+            values['currenturl']=url_path;
             var idata = JSON.stringify(values);
-            alert(idata.toString());
+            alert(idata);
             console.log(idata.toString());
             CollectCusTempService.crawltest(idata);
             $('#loading').modal('hide');
