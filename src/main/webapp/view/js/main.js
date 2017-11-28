@@ -382,9 +382,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
 
         // 分页采集
         .state('collect_listpage', {
-            params:{"tabId":null},
-            cache:false,
-            url: "/collect_listpage.html",
+            params: {"tabId": null},
+            cache: false,
+            url: "/collect_listpage",
             templateUrl: "views/collect/collect_listpage.html",
             data: {pageTitle: '自定义模板'},
             controller: "CollectListPageController",
@@ -425,7 +425,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
                             'js/services/collect/CollectProjectService.js',
                             '../assets/global/plugins/angularjs/plugins/angular-tooltips/angular-tooltips.js',
                             '../assets/global/plugins/angularjs/plugins/angular-tooltips/angular-tooltips.css'
-
                         ]
                     }]);
                 }]

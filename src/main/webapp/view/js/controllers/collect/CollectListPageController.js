@@ -21,8 +21,8 @@ angular.module('MetronicApp')
     //     }
     // })
 
-    .controller('CollectListPageController', function($rootScope, $scope, $http, $state,$timeout,CollectNewsService,anchorScroll,CollectCusTempService,$stateParams,$cookieStore, $q) {
-        $scope.mycheck ="Y";
+    .controller('CollectListPageController', function($rootScope, $scope, $http, $state, $timeout, CollectNewsService, anchorScroll, CollectCusTempService, $stateParams, $cookieStore, $q) {
+        $scope.mycheck = "Y";
 
         $scope.onInputChange = function() {
             console.log("input change");
@@ -34,10 +34,9 @@ angular.module('MetronicApp')
 
             reader.onload = function(event) {
                 // $scope.image_source = event.target.result
-                var proxy_ids=event.target.result.split("\n");
+                var proxy_ids = event.target.result.split("\n");
                 $scope.proxy_ids = proxy_ids;
                 $scope.$apply()
-
             };
             // when the file is read it triggers the onload event above.
             reader.readAsText(element.files[0]);
@@ -48,10 +47,9 @@ angular.module('MetronicApp')
 
             reader.onload = function(event) {
                 // $scope.image_source = event.target.result
-                var import_urls=event.target.result.split("\n");
+                var import_urls = event.target.result.split("\n");
                 $scope.import_urls = import_urls;
                 $scope.$apply()
-
             };
             // when the file is read it triggers the onload event above.
             reader.readAsText(element.files[0]);
@@ -74,10 +72,10 @@ angular.module('MetronicApp')
         });
     };
 
-    $scope.getProjectsDetailInfo()
+    $scope.getProjectsDetailInfo();
 
     $scope.changeProject = function () {
-        $scope.selected_task=$scope.selected_project.advanceTaskEntities[$scope.selected_project.advanceTaskEntities.length-1]
+        $scope.selected_task = $scope.selected_project.advanceTaskEntities[$scope.selected_project.advanceTaskEntities.length-1];
         setTaskInfo($scope.selected_task.task_id);
     };
 
@@ -92,14 +90,11 @@ angular.module('MetronicApp')
             method: 'GET',
             url: '/advance/task_config?task_id=' + task_id
         }).then(function successCallback(response) {
-
             var jsonData = response.data;
             changeFrontData(jsonData);
-
-
         }, function errorCallback(response) {
             // 请求失败执行代码
-            console.log("get TaskInfo bad")
+            console.log("get TaskInfo bad");
         });
     }
     
@@ -154,8 +149,8 @@ angular.module('MetronicApp')
     }
 
     //执行计划
-    $scope.excuteTask=function() {
-        var jsonData = {"task_id":""}
+    $scope.excuteTask = function() {
+        var jsonData = {"task_id": ""};
         jsonData.task_id =  $scope.selected_task.task_id;
         $http({
             method: 'POST',
@@ -169,10 +164,9 @@ angular.module('MetronicApp')
         });
     };
 
-    // direction == 0 上一步
-    // direction == 1 下一步
+    // flag == 0 上一步
+    // flag == 1 下一步
     $scope.changeTabs = function(id, flag) {
-
         var jsonData = {
 
             "basic_rule": {
@@ -214,7 +208,6 @@ angular.module('MetronicApp')
                     "list_url_file_path": ""
                 },
 
-
                 "click": {
                     // "click_url_pattern_name": "abc",
                     "url_index_path": "",
@@ -228,7 +221,6 @@ angular.module('MetronicApp')
                     "file_upload_path": "",
                     "import_url_file_path": ""
                 }
-
             },
 
             "creep_rule":
@@ -367,7 +359,7 @@ angular.module('MetronicApp')
     $scope.creep_rule = [];
     
     $scope.del = function ($index) {
-        if($index>=0){
+        if ($index >= 0) {
             $scope.creep_rule.splice($index,1);
         }
     };
@@ -393,7 +385,7 @@ angular.module('MetronicApp')
     var lastTagBorder = null;
     var index = 0;
     // 选择xpath
-    $scope.select_xpath = function (){
+    $scope.select_xpath = function () {
         $('#modal-select-xpath').modal('show');
         //alert("www");
         //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
@@ -404,12 +396,12 @@ angular.module('MetronicApp')
             $(this).click(function (event) { event.preventDefault(); });
             index = 0;
             //对所有的元素添加点击事件，获取xpath
-            $("#iframe").contents().find("*").hover(function(event){
+            $("#iframe").contents().find("*").hover(function (event) {
                 event.stopPropagation();
                 // lastTag = $(this);
                 // var css = div.css('border');
                 // console.log($(this).css('border'));
-                if(lastTag !== null){
+                if (lastTag !== null) {
                     lastTag.css('border', lastTagBorder);
                     // console.log(lastTag);
                     // console.log(lastTagBorder);
@@ -429,7 +421,7 @@ angular.module('MetronicApp')
                     //     select_xpath2 = $shadow.domXpath(this);
                     //     // $scope.attribute_xpath2 = select_xpath2;
                     // }
-                    if(index === 0) {
+                    if (index === 0) {
                         select_xpath1 = $shadow.domXpath(this);
                         console.log($shadow.domXpath(this));
                         $('#xpath').val($shadow.domXpath(this));
@@ -456,7 +448,7 @@ angular.module('MetronicApp')
     };
 
     // xpath2
-    $scope.select_xpath2 = function (){
+    $scope.select_xpath2 = function () {
         $('#modal-select-xpath2').modal('show');
         //alert("www");
        // console.log("-------------------------------\n" + $type  + "-------------------------------\n");
@@ -466,12 +458,12 @@ angular.module('MetronicApp')
         $('#modal-select-xpath2').on('shown.bs.modal', function (e) {
             $(this).click(function (event) { event.preventDefault(); });
             //对所有的元素添加点击事件，获取xpath
-            $("#iframe2").contents().find("*").hover(function(event){
+            $("#iframe2").contents().find("*").hover(function (event) {
                 event.stopPropagation();
                 // lastTag = $(this);
                 // var css = div.css('border');
                 // console.log($(this).css('border'));
-                if(lastTag !== null){
+                if (lastTag !== null) {
                     lastTag.css('border', lastTagBorder);
                     // console.log(lastTag);
                     // console.log(lastTagBorder);
@@ -481,7 +473,7 @@ angular.module('MetronicApp')
                 $(this).css({'border': '1.5px solid #f0f', 'border-radius': '5px solid'});
                 $(this).click(function (event) {
                     event.preventDefault();
-                    if(index === 0) {
+                    if (index === 0) {
                         select_xpath2 = $shadow.domXpath(this);
                         console.log($shadow.domXpath(this));
                         $('#xpath2').val($shadow.domXpath(this));
@@ -844,10 +836,54 @@ angular.module('MetronicApp')
             $scope.usertemplateStr = angular.toJson($scope.temp3);
         } else if (tableId == 4) {
             $scope.isadvanced = true;
+            $scope.side_index = 0;
         }
 
         initTemplate();
-    }
+    };
+
+    $scope.changeTab_advancedTemplate = function(tabIndex) {
+        ///////////////////////////////////////////////
+        // Jianfeng is debugging...
+        console.log("changeTab_advancedTemplate(" + tabIndex + ") called.");
+        ///////////////////////////////////////////////
+        switch (tabIndex) {
+            // The editing tab
+            case 0: {
+                $scope.side_index = 0;
+
+                break;
+            }
+
+            // The importing tab
+            case 1: {
+                $scope.side_index = 1;
+
+                break;
+            }
+
+            // The exporting tab
+            case 2: {
+                $scope.side_index = 2;
+
+                break;
+            }
+
+            // The monitoring tab
+            case 3: {
+                $scope.side_index = 3;
+
+                break;
+            }
+
+            // Illegal input
+            default: {
+                console.log("changeTab_advancedTemplate: The parameter tabIndex cannot be " + tabIndex + "!");
+
+                break;
+            }
+        }
+    };
 
     $scope.reset = function() {
         //刷新页面，重新加载
@@ -1033,7 +1069,7 @@ angular.module('MetronicApp')
         } else {
             $('#json-target').html('');
         }
-    }
+    };
 
 //解析json(等时间充裕改写成angularjs语法)
     var current_json = '';
@@ -1078,20 +1114,19 @@ angular.module('MetronicApp')
 
     $scope.$on('$viewContentLoaded', function() {
 
-        if ($stateParams.tabId>0) {
+        if ($stateParams.tabId > 0) {
             //console.log("初始化方法")
             $cookieStore.put('refreshPageParam',$stateParams);
-
         }
         //console.log("初始化获取tabId");
         $scope.tabId = $cookieStore.get('refreshPageParam').tabId;
         $scope.changeTemplate($scope.tabId);
         //console.log("初始化完毕");
         $scope.active = {
-            "tab1":$scope.tabId==1?true:false,
-            "tab2":$scope.tabId==2?true:false,
-            "tab3":$scope.tabId==3?true:false,
-            "tab3":$scope.tabId==4?true:false,
+            "tab1": $scope.tabId == 1,
+            "tab2": $scope.tabId == 2,
+            "tab3": $scope.tabId == 3,
+            "tab4": $scope.tabId == 4
         }
     });
 
