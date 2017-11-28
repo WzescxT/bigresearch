@@ -143,7 +143,7 @@
     
     <!-- 采集区域 -->
     <!-- “编辑” -->
-    <div class="col-lg-7" ng-show="side_index==0">
+    <div class="col-lg-11" ng-show="side_index==0">
         <!-- 标签 -->
         <ul id="myTab" class="nav nav-tabs">
 
@@ -465,7 +465,8 @@
 
             <!-- 采集规则 -->
             <div class="tab-pane fade" id="miningrule">
-                <form class="form-horizontal" role="form">
+                <div class="col-lg-7">
+                    <form class="form-horizontal" role="form">
                     <div class="form-group">
                         <div class="col-xs-11">
                             <button type="button" class="btn btn-primary" ng-click="add()">添加</button>
@@ -507,6 +508,11 @@
                     </div>
 
                 </form>
+                </div>
+
+                <div class="col-lg-4">
+                    <textarea class="form-control" id="testarea" rows="3" placeholder="测试模块占位" style="height: 400px"></textarea>
+                </div>
             </div>
 
             <!-- 持久化规则 -->
@@ -599,24 +605,24 @@
     </div>
 
     <!-- “导入” The importing area -->
-    <div class="col-lg-7" ng-show="side_index==1">
+    <div class="col-lg-11" ng-show="side_index==1">
         importing area
     </div>
 
     <!-- “导出” The exporting area -->
-    <div class="col-lg-7" ng-show="side_index==2">
+    <div class="col-lg-11" ng-show="side_index==2">
         exporting area
     </div>
 
     <!-- “监控” The monitoring area -->
-    <div class="col-lg-7" ng-show="side_index==3">
+    <div class="col-lg-11" ng-show="side_index==3">
         monitoring area
     </div>
 
-    <!-- 测试模块 -->
-    <div class="col-lg-4">
-        <textarea class="form-control" id="testarea" rows="3" placeholder="测试模块占位" style="height: 400px"></textarea>
-    </div>
+    <!--&lt;!&ndash; 测试模块 &ndash;&gt;-->
+    <!--<div class="col-lg-4">-->
+        <!--<textarea class="form-control" id="testarea" rows="3" placeholder="测试模块占位" style="height: 400px"></textarea>-->
+    <!--</div>-->
 
 </div>
 
