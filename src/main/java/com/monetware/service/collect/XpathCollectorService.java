@@ -21,6 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.jsoup.helper.StringUtil.isNumeric;
 
@@ -108,6 +109,24 @@ public class XpathCollectorService {
 
         @Override
         public void process(Page page) {
+            if(proxy_id!=null || proxy_id!="")
+            {
+                getSite().setHttpProxy(new HttpHost(proxy_id));
+            }
+            if(starttime!=null && starttime!=""&&endtime!=null&&endtime!="")
+            {
+                double startT=Double.parseDouble(starttime);
+                double endT=Double.parseDouble(endtime);
+                double randomT=startT+new Random().nextDouble()*(endT-startT);
+                System.out.println(randomT);
+                try {
+                    Thread.sleep((long)randomT * 1000);
+                }catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
             String value=page.getHtml().xpath(xpath).toString();
             page.putField(nameinDB,value);
 
@@ -143,6 +162,24 @@ public class XpathCollectorService {
         @SuppressWarnings("deprecation")
         @Override
         public void process(Page page) {
+            /*if(proxy_id!=null || proxy_id!="[]")
+            {
+                getSite().setHttpProxy(new HttpHost(proxy_id));
+            }*/
+            if(starttime!=null && starttime!=""&&endtime!=null&&endtime!="")
+            {
+                double startT=Double.parseDouble(starttime);
+                double endT=Double.parseDouble(endtime);
+                double randomT=startT+new Random().nextDouble()*(endT-startT);
+                System.out.println(randomT);
+                try {
+                    Thread.sleep((long)randomT * 1000);
+                }catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
             if(ajaxtype.equals("点击")) {
                 try {
                     WebClient webClient = new WebClient(BrowserVersion.CHROME);
@@ -157,7 +194,7 @@ public class XpathCollectorService {
                     for (HtmlAnchor htmlAnchor : htmlListItems) {
                         System.out.println("afbkasbdk");
                         htmlPage = (HtmlPage) htmlAnchor.click();
-                        webClient.waitForBackgroundJavaScript(10000);
+                        webClient.waitForBackgroundJavaScript(1000);
                         i++;
                         if (i == 3) {
                             break;
@@ -199,9 +236,23 @@ public class XpathCollectorService {
                     int pages = 0;
                     String result="";
                     while (pages<10) {
+                        if(starttime!=null && starttime!=""&&endtime!=null&&endtime!="")
+                        {
+                            double startT=Double.parseDouble(starttime);
+                            double endT=Double.parseDouble(endtime);
+                            double randomT=startT+new Random().nextDouble()*(endT-startT);
+                            System.out.println(randomT);
+                            try {
+                                Thread.sleep((long)randomT * 1000);
+                            }catch(Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+
+                        }
                         List<HtmlAnchor> htmlListItems = htmlPage.getByXPath(ajaxXpath);
                         System.out.println("afbkasbdk");
-                        htmlPage = (HtmlPage) htmlListItems.get(7).click();
+                        htmlPage = (HtmlPage) htmlListItems.get(htmlListItems.size()-1).click();
                         webClient.waitForBackgroundJavaScript(1000);
                         page.setRawText(htmlPage.asXml());
                         page.setHtml(new Html(htmlPage.asXml()));

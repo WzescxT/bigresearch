@@ -99,6 +99,21 @@ public class CrawlPlanController {
 
 
                             }
+                            else if(ajax_pattern.equals("翻页"))
+                            {
+                                String button_xpath=ajax.getString("button_xpath");
+                                String xpath1=((JSONObject) eachtask).getString("attribute_xpath");
+                                if(extract_way.equals("链接"))
+                                {
+                                    System.out.println("lianjie here");
+                                    xpath1=xpath1+"/@href";
+                                }
+                                String attribute_name=eachtaskJSON.getString("attribute_name");
+                                service.crawlSingleData(url,xpath1,attribute_name,ajax.getBoolean("open").toString(),ajax_pattern,button_xpath,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
+
+
+                            }
+
                         }
                         else
                         {
