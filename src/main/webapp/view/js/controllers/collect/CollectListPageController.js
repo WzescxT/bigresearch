@@ -335,24 +335,34 @@ angular.module('MetronicApp')
             });
         }
         if (id === "miningrule") {
+            // same as last
+            if (downloadPageLink === $scope.url_path && isFinishDownloadPage === true) {
+                isFinishDownloadPage = true;
+            } else {
+                downloadPageLink = $scope.url_path;
+                isFinishDownloadPage = false;
+            }
+
             var url_data = {url_path: $scope.url_path};
             $http({
                 method: 'POST',
                 url: '/collect/download',
                 data: url_data
-                // data: $.param(jsonData),
-                // headers: {'Content-Type':'application/x-www-form-urlencoded'},
-                // transformRequest: angular.identity
             }).then(function successCallback(response) {
                 console.log("success！");
+                isFinishDownloadPage = true;
             }, function errorCallback(response) {
                 // 请求失败执行代码
                 console.log("post data bad");
+                isFinishDownloadPage = false;
             });
         }
 
         $("#myTab a[href='/#" + id +"']").tab('show')
     };
+
+    var isFinishDownloadPage;
+    var downloadPageLink;
 
     $scope.pageTitle = "自定义采集模块";
 
@@ -389,6 +399,18 @@ angular.module('MetronicApp')
     var index = 0;
     // 选择xpath
     $scope.select_xpath = function () {
+        // check if download page finishing
+        if (!isFinishDownloadPage) {
+            $('#loading').modal('show');
+            while (true) {
+                if (isFinishDownloadPage) {
+                    $('#loading').modal('hide');
+                    return;
+                }
+                sleep(1000);
+            }
+        }
+
         $('#modal-select-xpath').modal('show');
         //alert("www");
         //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
@@ -425,8 +447,19 @@ angular.module('MetronicApp')
 
     // xpath2
     $scope.select_xpath2 = function () {
+        // check if download page finishing
+        if (!isFinishDownloadPage) {
+            $('#loading').modal('show');
+            while (true) {
+                if (isFinishDownloadPage) {
+                    $('#loading').modal('hide');
+                    return;
+                }
+                sleep(1000);
+            }
+        }
+
         $('#modal-select-xpath2').modal('show');
-        //alert("www");
        // console.log("-------------------------------\n" + $type  + "-------------------------------\n");
         $('#xpath2').val("");
         $("#iframe2").attr("src", getHost($scope.url_path) + ".html");
@@ -469,8 +502,19 @@ angular.module('MetronicApp')
 
     // 选择ajax_xpath
     $scope.select_ajax_xpath = function () {
+        // check if download page finishing
+        if (!isFinishDownloadPage) {
+            $('#loading').modal('show');
+            while (true) {
+                if (isFinishDownloadPage) {
+                    $('#loading').modal('hide');
+                    return;
+                }
+                sleep(1000);
+            }
+        }
+
         $('#modal-select-ajax-xpath').modal('show');
-        //alert("www");
         //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
         $('#ajax_xpath').val("");
         $("#iframe3").attr("src", getHost($scope.url_path) + ".html");
