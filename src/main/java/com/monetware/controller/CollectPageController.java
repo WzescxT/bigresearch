@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,8 @@ public class CollectPageController {
         String ajaxxpath=(String) request.get("ajaxxpath");
         String url=(String) request.get("currenturl");
         String extract_way=(String) request.get("extract_way");
+        ArrayList<String> urls=new ArrayList<>();
+        urls.add(url);
         System.out.println(xpath);
         System.out.println(xpath2);
         System.out.println(nameindb);
@@ -59,7 +62,7 @@ public class CollectPageController {
             }
             final JSONObject result = new JSONObject();
             try {
-                service.crawlSingleData(url, xpath, nameindb,ifajax,ajaxtype,ajaxxpath,null,null,null,null,null,extract_way);
+                service.crawlSingleData(urls, xpath, nameindb,ifajax,ajaxtype,ajaxxpath,null,null,null,null,null,extract_way);
                 while (!service.getiscompleted()) {
                     try {
                         Thread.sleep(10);
