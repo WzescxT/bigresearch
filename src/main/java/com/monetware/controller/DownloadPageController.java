@@ -82,4 +82,17 @@ public class DownloadPageController {
         return "success";
     }
 
+    /**
+     * Check file exist
+     * @param filename
+     * @return
+     */
+    @RequestMapping(value = "/file/exist", method = RequestMethod.POST)
+    public boolean checkFileExist(@RequestParam("filename") String filename) {
+        File file = new File("src/main/webapp/view/" + filename);
+        if (file.exists()) {
+            return true;
+        }
+        return false;
+    }
 }

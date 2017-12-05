@@ -308,46 +308,49 @@ public class CollectService {
 	 */
 	public static void main(String[] args) {
 		// share crawler
-//		String xpath1 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[2]/td[2]";
-//		String xpath2 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[3]/td[2]";
-//		String url = "http://www.sse.com.cn/assortment/stock/list/share/";
-//		CollectService collectByCluesService = new CollectService();
-//
-//		OnCrawleLinstener onCrawleLinstener = new OnCrawleLinstener() {
-//			@Override
-//			public void onSuccess(List<String> result) {
-//				System.out.println(result.size());
-//			}
-//
-//			@Override
-//			public void onFail(String error) {
-//
-//			}
-//		};
-//		String ajaxXpath = "//*[@id=\"idStr\"]";
-//		collectByCluesService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES_AJAX_FLIP, "文本",
-//				ajaxXpath, xpath1, xpath2);
-		// tongji crawler
-		String xpath1 = "/html/body/div[3]/div/div[3]/div/ul/li[1]/a[1]";
-		String xpath2 = "/html/body/div[3]/div/div[3]/div/ul/li[2]/a[1]";
-		String url = "http://sse.tongji.edu.cn/data/list/xwdt";
+		String xpath1 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[2]/td[6]";
+		String xpath2 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[3]/td[6]";
+		String url = "http://www.sse.com.cn/assortment/stock/list/share/";
 		CollectService collectByCluesService = new CollectService();
 
 		OnCrawleLinstener onCrawleLinstener = new OnCrawleLinstener() {
 			@Override
 			public void onSuccess(List<String> result) {
-				for (String str : result) {
-					System.out.println(str);
+				for (String string : result) {
+					System.out.println(string);
 				}
+ 				System.out.println(result.size());
 			}
+
 			@Override
 			public void onFail(String error) {
-				System.out.println(error);
+
 			}
 		};
-		String ajaxXpath = "";
-		collectByCluesService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES, "链接",
+		String ajaxXpath = "//*[@id=\"idStr\"]";
+		collectByCluesService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES_AJAX_FLIP, "文本",
 				ajaxXpath, xpath1, xpath2);
+		// tongji crawler
+//		String xpath1 = "/html/body/div[3]/div/div[3]/div/ul/li[1]/a[1]";
+//		String xpath2 = "/html/body/div[3]/div/div[3]/div/ul/li[2]/a[1]";
+//		String url = "http://sse.tongji.edu.cn/data/list/xwdt";
+//		CollectService collectByCluesService = new CollectService();
+//
+//		OnCrawleLinstener onCrawleLinstener = new OnCrawleLinstener() {
+//			@Override
+//			public void onSuccess(List<String> result) {
+//				for (String str : result) {
+//					System.out.println(str);
+//				}
+//			}
+//			@Override
+//			public void onFail(String error) {
+//				System.out.println(error);
+//			}
+//		};
+//		String ajaxXpath = "";
+//		collectByCluesService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES, "链接",
+//				ajaxXpath, xpath1, xpath2);
 
 	}
 

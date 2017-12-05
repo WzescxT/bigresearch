@@ -399,144 +399,149 @@ angular.module('MetronicApp')
     var index = 0;
     // 选择xpath
     $scope.select_xpath = function () {
-        // check if download page finishing
-        if (!isFinishDownloadPage) {
-            $('#download_page_loading').modal('show');
-        }
+        // check if download page is exist
+        var filename = getHost($scope.url_path) + ".html";
+        $.post("/collect/file/exist", { filename:　filename}, function(result){
+            // exits
+            if (result) {
+                $('#modal-select-xpath').modal('show');
 
-        $('#modal-select-xpath').modal('show');
-        //alert("www");
-        //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
-        index = 0;
-        $('#xpath').val("");
-        $("#iframe").attr("src", getHost($scope.url_path) + ".html");
-        $('#modal-select-xpath').on('shown.bs.modal', function (e) {
-            $(this).click(function (event) { event.preventDefault(); });
-            //对所有的元素添加点击事件，获取xpath
-            $("#iframe").contents().find("*").hover(function (event) {
-                event.stopPropagation();
-                if (lastTag !== null) {
-                    lastTag.css('border', lastTagBorder);
-                }
-                lastTagBorder = $(this).css('border');
-                $(this).css({'border': '1.5px solid #f0f', 'border-radius': '5px solid'});
-                $(this).click(function (event) {
-                    event.preventDefault();
-                    if (index === 0) {
-                        select_xpath1 = $shadow.domXpath(this);
-                        console.log($shadow.domXpath(this));
-                        $('#xpath').val($shadow.domXpath(this));
-                    }
-                    index++;
-                })
-                lastTag = $(this);
                 index = 0;
-            });
-        });
-        $('#modal-select-xpath').on('hidden.bs.modal', function (e) {
-            console.log("hide the modal");
+                $('#xpath').val("");
+                $("#iframe").attr("src", getHost($scope.url_path) + ".html");
+                $('#modal-select-xpath').on('shown.bs.modal', function (e) {
+                    $(this).click(function (event) { event.preventDefault(); });
+                    //对所有的元素添加点击事件，获取xpath
+                    $("#iframe").contents().find("*").hover(function (event) {
+                        event.stopPropagation();
+                        if (lastTag !== null) {
+                            lastTag.css('border', lastTagBorder);
+                        }
+                        lastTagBorder = $(this).css('border');
+                        $(this).css({'border': '1.5px solid #f0f', 'border-radius': '5px solid'});
+                        $(this).click(function (event) {
+                            event.preventDefault();
+                            if (index === 0) {
+                                select_xpath1 = $shadow.domXpath(this);
+                                console.log($shadow.domXpath(this));
+                                $('#xpath').val($shadow.domXpath(this));
+                            }
+                            index++;
+                        })
+                        lastTag = $(this);
+                        index = 0;
+                    });
+                });
+            } else {
+                // check if download page finishing
+                if (!isFinishDownloadPage) {
+                    $('#download_page_loading').modal('show');
+                }
+            }
         });
     };
-
     // xpath2
     $scope.select_xpath2 = function () {
-        // check if download page finishing
-        if (!isFinishDownloadPage) {
-            $('#download_page_loading').modal('show');
-        }
-
-        $('#modal-select-xpath2').modal('show');
-       // console.log("-------------------------------\n" + $type  + "-------------------------------\n");
-        $('#xpath2').val("");
-        $("#iframe2").attr("src", getHost($scope.url_path) + ".html");
-        index = 0;
-        $('#modal-select-xpath2').on('shown.bs.modal', function (e) {
-            $(this).click(function (event) { event.preventDefault(); });
-            //对所有的元素添加点击事件，获取xpath
-            $("#iframe2").contents().find("*").hover(function (event) {
-                event.stopPropagation();
-                // lastTag = $(this);
-                // var css = div.css('border');
-                // console.log($(this).css('border'));
-                if (lastTag !== null) {
-                    lastTag.css('border', lastTagBorder);
-                    // console.log(lastTag);
-                    // console.log(lastTagBorder);
-                }
-                lastTagBorder = $(this).css('border');
-                //console.log($(this));
-                $(this).css({'border': '1.5px solid #f0f', 'border-radius': '5px solid'});
-                $(this).click(function (event) {
-                    event.preventDefault();
-                    if (index === 0) {
-                        select_xpath2 = $shadow.domXpath(this);
-                        console.log($shadow.domXpath(this));
-                        $('#xpath2').val($shadow.domXpath(this));
-                        // select_xpath2 = readXPath(this);
-                        // console.log(readXPath(this));
-                        // $('#xpath2').val(readXPath(this));
-                    }
-                    index++;
-                });
-                lastTag = $(this);
+        // check if download page is exist
+        var filename = getHost($scope.url_path) + ".html";
+        $.post("/collect/file/exist", { filename:　filename}, function(result){
+            // exits
+            if (result) {
+                $('#modal-select-xpath2').modal('show');
+                // console.log("-------------------------------\n" + $type  + "-------------------------------\n");
+                $('#xpath2').val("");
+                $("#iframe2").attr("src", getHost($scope.url_path) + ".html");
                 index = 0;
-                // lastTag.css('border', lastTagBorder);
-                //console.log($shadow.domXpath(this));
-            });
+                $('#modal-select-xpath2').on('shown.bs.modal', function (e) {
+                    $(this).click(function (event) { event.preventDefault(); });
+                    //对所有的元素添加点击事件，获取xpath
+                    $("#iframe2").contents().find("*").hover(function (event) {
+                        event.stopPropagation();
+                        // lastTag = $(this);
+                        // var css = div.css('border');
+                        // console.log($(this).css('border'));
+                        if (lastTag !== null) {
+                            lastTag.css('border', lastTagBorder);
+                        }
+                        lastTagBorder = $(this).css('border');
+                        //console.log($(this));
+                        $(this).css({'border': '1.5px solid #f0f', 'border-radius': '5px solid'});
+                        $(this).click(function (event) {
+                            event.preventDefault();
+                            if (index === 0) {
+                                select_xpath2 = $shadow.domXpath(this);
+                                console.log($shadow.domXpath(this));
+                                $('#xpath2').val($shadow.domXpath(this));
+                            }
+                            index++;
+                        });
+                        lastTag = $(this);
+                        index = 0;
+                        // lastTag.css('border', lastTagBorder);
+                        //console.log($shadow.domXpath(this));
+                    });
+                });
+            } else {
+                // check if download page finishing
+                if (!isFinishDownloadPage) {
+                    $('#download_page_loading').modal('show');
+                }
+            }
         });
     };
     // 选择ajax_xpath
     $scope.select_ajax_xpath = function () {
-        // check if download page finishing
-        if (!isFinishDownloadPage) {
-            $('#download_page_loading').modal('show');
-        }
-
-        $('#modal-select-ajax-xpath').modal('show');
-        //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
-        $('#ajax_xpath').val("");
-        $("#iframe3").attr("src", getHost($scope.url_path) + ".html");
-        $('#modal-select-ajax-xpath').on('shown.bs.modal', function (e) {
-            $(this).click(function (event) {
-                event.preventDefault();
-            });
-            //对所有的元素添加点击事件，获取xpath
-            $("#iframe3").contents().find("*").hover(function (event) {
-                event.stopPropagation();
-                // lastTag = $(this);
-                // var css = div.css('border');
-                // console.log($(this).css('border'));
-                if (lastTag !== null) {
-                    lastTag.css('border', lastTagBorder);
-                    // console.log(lastTag);
-                    // console.log(lastTagBorder);
+        // check if download page is exist
+        var filename = getHost($scope.url_path) + ".html";
+        $.post("/collect/file/exist", { filename:　filename}, function(result){
+            // exits
+            if (result) {
+                $('#modal-select-ajax-xpath').modal('show');
+                //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
+                $('#ajax_xpath').val("");
+                $("#iframe3").attr("src", getHost($scope.url_path) + ".html");
+                $('#modal-select-ajax-xpath').on('shown.bs.modal', function (e) {
+                    $(this).click(function (event) {
+                        event.preventDefault();
+                    });
+                    //对所有的元素添加点击事件，获取xpath
+                    $("#iframe3").contents().find("*").hover(function (event) {
+                        event.stopPropagation();
+                        // lastTag = $(this);
+                        // var css = div.css('border');
+                        // console.log($(this).css('border'));
+                        if (lastTag !== null) {
+                            lastTag.css('border', lastTagBorder);
+                            // console.log(lastTag);
+                            // console.log(lastTagBorder);
+                        }
+                        lastTagBorder = $(this).css('border');
+                        //console.log($(this));
+                        $(this).css({'border': '1.5px solid #f0f', 'border-radius': '5px solid'});
+                        $(this).click(function (event) {
+                            event.preventDefault();
+                            if (index === 0) {
+                                // select_xpath1 = $shadow.domXpath(this);
+                                // console.log($shadow.domXpath(this));
+                                // $('#xpath').val($shadow.domXpath(this));
+                                select_ajax_xpath = $shadow.domXpath(this);
+                                console.log($shadow.domXpath(this));
+                                $('#ajax_xpath').val($shadow.domXpath(this));
+                            }
+                            index++;
+                        })
+                        lastTag = $(this);
+                        index = 0;
+                        // lastTag.css('border', lastTagBorder);
+                        //console.log($shadow.domXpath(this));
+                    });
+                });
+            } else {
+                // check if download page finishing
+                if (!isFinishDownloadPage) {
+                    $('#download_page_loading').modal('show');
                 }
-                lastTagBorder = $(this).css('border');
-                //console.log($(this));
-                $(this).css({'border': '1.5px solid #f0f', 'border-radius': '5px solid'});
-                $(this).click(function (event) {
-                    event.preventDefault();
-                    if (index === 0) {
-                        // select_xpath1 = $shadow.domXpath(this);
-                        // console.log($shadow.domXpath(this));
-                        // $('#xpath').val($shadow.domXpath(this));
-                        select_ajax_xpath = $shadow.domXpath(this);
-                        console.log($shadow.domXpath(this));
-                        $('#ajax_xpath').val($shadow.domXpath(this));
-                    }
-                    index++;
-                })
-                lastTag = $(this);
-                index = 0;
-                // lastTag.css('border', lastTagBorder);
-                //console.log($shadow.domXpath(this));
-            });
-        });
-        $('#modal-select-ajax-xpath').on('hidden.bs.modal', function (e) {
-            console.log("hide the modal");
-            // lastTag.css('border', lastTagBorder);
-            // lastTagBorder = null;
-            // lastTag = null;
+            }
         });
     };
 
@@ -1232,6 +1237,11 @@ function readXPath(element) {
     }
 }
 
+/**
+ * Get the host
+ * @param sUrl
+ * @returns {string}
+ */
 function getHost(sUrl) {
     var sDomain = '';
     var rDomain = /([a-zA-Z0-9-]+)(.com\b|.net\b|.edu\b|.miz\b|.biz\b|.cn\b|.cc\b|.org\b){1,}/g;
@@ -1239,4 +1249,11 @@ function getHost(sUrl) {
         sDomain = sUrl.match(rDomain);
     }
     return sDomain;
+}
+
+function exist(filename) {
+    $.post("/collect/file/exist", { filename:　filename}, function(result){
+        console.log(result.toString());
+        return result;
+    });
 }

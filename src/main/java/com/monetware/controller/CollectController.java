@@ -7,6 +7,7 @@ import com.monetware.service.collect.CollectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -44,7 +45,7 @@ public class CollectController {
         success = 0;
         JSONObject jsonObject = JSON.parseObject(data);
 
-        System.out.println(jsonObject.toJSONString());
+        // System.out.println(jsonObject.toJSONString());
         final String attribute_name = jsonObject.getString("attribute_name");
         String xpath1 = jsonObject.getString("attribute_xpath");
         String xpath2 = jsonObject.getString("attribute_xpath2");
@@ -58,7 +59,6 @@ public class CollectController {
         String ajax_pattern = ajax.getString("ajax_pattern");
         String button_xpath = ajax.getString("button_xpath");
 
-
         System.out.println(jsonObject.toJSONString());
         CollectService.OnCrawleLinstener onCrawleLinstener = new
                 CollectService.OnCrawleLinstener() {
@@ -66,12 +66,14 @@ public class CollectController {
                     public void onSuccess(List<String> result) {
                         for (String str : result) {
                             res.append(attribute_name).append("\t").append(str).append("\n");
+                            // System.out.println(attribute_name + " " + str);
                         }
                         success = 1;
                     }
 
                     @Override
                     public void onFail(String error) {
+                        res.append(error);
                         success = 2;
                     }
                 };
@@ -86,10 +88,14 @@ public class CollectController {
         else if (crawlType.equals("线索") && !open ) {
             collectType = CollectService.TYPE_CLUES;
         }
+        // start crawler
         collectService.crawl(onCrawleLinstener, url_path, collectType, extract_way, button_xpath, xpath1, xpath2);
+        // start crawler
+
         while (success == 0) {
 
         }
         return res.toString();
     }
+
 }

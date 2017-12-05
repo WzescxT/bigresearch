@@ -111,7 +111,7 @@ public class XpathCollectorService {
 
         @Override
         public void process(Page page) {
-            if(proxy_id!=null || proxy_id!="")
+            if(proxy_id!=null && proxy_id.length() > 0)
             {
                 getSite().setHttpProxy(new HttpHost(proxy_id));
             }
