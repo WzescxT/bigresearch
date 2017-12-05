@@ -61,7 +61,7 @@ public class DownloadPageService {
         webClient.addRequestHeader("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3192.0 Safari/537.36");
         try {
             HtmlPage page = webClient.getPage(url);
-            webClient.waitForBackgroundJavaScript(20000);
+            webClient.waitForBackgroundJavaScript(10000);
             String xml = page.asXml();
             // System.out.println(xml);
             onCrawleLinstener.onSuccess(replaceAll(url, xml));

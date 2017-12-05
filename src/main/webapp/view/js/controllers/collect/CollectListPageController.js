@@ -354,7 +354,7 @@ angular.module('MetronicApp')
             }, function errorCallback(response) {
                 // 请求失败执行代码
                 console.log("post data bad");
-                isFinishDownloadPage = false;
+                isFinishDownloadPage = true;
             });
         }
 
@@ -401,14 +401,7 @@ angular.module('MetronicApp')
     $scope.select_xpath = function () {
         // check if download page finishing
         if (!isFinishDownloadPage) {
-            $('#loading').modal('show');
-            while (true) {
-                if (isFinishDownloadPage) {
-                    $('#loading').modal('hide');
-                    return;
-                }
-                sleep(1000);
-            }
+            $('#download_page_loading').modal('show');
         }
 
         $('#modal-select-xpath').modal('show');
@@ -449,14 +442,7 @@ angular.module('MetronicApp')
     $scope.select_xpath2 = function () {
         // check if download page finishing
         if (!isFinishDownloadPage) {
-            $('#loading').modal('show');
-            while (true) {
-                if (isFinishDownloadPage) {
-                    $('#loading').modal('hide');
-                    return;
-                }
-                sleep(1000);
-            }
+            $('#download_page_loading').modal('show');
         }
 
         $('#modal-select-xpath2').modal('show');
@@ -499,19 +485,11 @@ angular.module('MetronicApp')
             });
         });
     };
-
     // 选择ajax_xpath
     $scope.select_ajax_xpath = function () {
         // check if download page finishing
         if (!isFinishDownloadPage) {
-            $('#loading').modal('show');
-            while (true) {
-                if (isFinishDownloadPage) {
-                    $('#loading').modal('hide');
-                    return;
-                }
-                sleep(1000);
-            }
+            $('#download_page_loading').modal('show');
         }
 
         $('#modal-select-ajax-xpath').modal('show');
@@ -623,6 +601,10 @@ angular.module('MetronicApp')
     // 测试
     $scope.test = function($index) {
         $('#loading').modal('show');
+
+        // var target = document.getElementById('loading_spinner');
+        // new Spinner({color:'#fff', lines: 12}).spin(target);
+
         var url_path = $scope.url_path;
         var data = $scope.creep_rule[$index];
         data['url_path'] = $scope.url_path;
