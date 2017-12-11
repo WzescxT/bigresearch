@@ -863,10 +863,6 @@ angular.module('MetronicApp')
          * @param tabIndex The index of the destination tab
          */
         $scope.changeTab_advancedTemplate = function(tabIndex) {
-            ///////////////////////////////////////////////
-            // Jianfeng is debugging...
-            console.log("changeTab_advancedTemplate(" + tabIndex + ") called.");
-            ///////////////////////////////////////////////
             switch (tabIndex) {
                 // The editing tab
                 case 0: {
@@ -906,16 +902,12 @@ angular.module('MetronicApp')
         };
 
         /**
-         *  TODO: Complete this comment
+         *  Imports the configuration data from the file into the editing area and change the tab
          */
         $scope.importIntoEditingTab = function() {
-            ////////////////////////////////////////////////
-            // Jianfeng is debugging...
-            console.log("importIntoEditingTab() called.");
-            ////////////////////////////////////////////////
-
             $scope.side_index = 0;
-            $scope.active_side = 0;
+
+            // TODO: Change the JSON data for the editing area
         };
 
         // For importing file from the local machine
@@ -954,62 +946,6 @@ angular.module('MetronicApp')
             // oReq.send(oData);
             ev.preventDefault();
         }, false);
-
-        // /**
-        //  * Changes the tab in the advanced template
-        //  * @param tabIndex The index of the destination tab
-        //  */
-        // $scope.importConfigJson = function(tabIndex) {
-        //     ///////////////////////////////////////////////
-        //     // Jianfeng is debugging...
-        //     // console.log("changeTab_advancedTemplate(" + tabIndex + ") called.");
-        //     console.log("fuck, this is first function, tabIndex = " + tabIndex + ".");
-        //     ///////////////////////////////////////////////
-        //     switch (tabIndex) {
-        //         // The editing tab
-        //         case 0: {
-        //             $scope.side_index = 0;
-        //
-        //             break;
-        //         }
-        //
-        //         // The importing tab
-        //         case 1: {
-        //             $scope.side_index = 1;
-        //
-        //             break;
-        //         }
-        //
-        //         // The exporting tab
-        //         case 2: {
-        //             $scope.side_index = 2;
-        //
-        //             break;
-        //         }
-        //
-        //         // The monitoring tab
-        //         case 3: {
-        //             $scope.side_index = 3;
-        //
-        //             break;
-        //         }
-        //
-        //         // Illegal input
-        //         default: {
-        //             console.log("changeTab_advancedTemplate: The parameter tabIndex cannot be " + tabIndex + "!");
-        //
-        //             break;
-        //         }
-        //     }
-        // };
-        //
-        // /**
-        //  * Imports JSON configuration file from the user's computer
-        //  */
-        // $scope.changeTab_advancedTemplate = function(tabIndex) {
-        //     console.log("importConfigJson_advancedTemplate() called.");
-        //     alert("importConfigJson_advancedTemplate() called.");
-        // };
 
         $scope.reset = function() {
             //刷新页面，重新加载
