@@ -139,9 +139,8 @@
         </tabset>
     </div>
 
-    <!-- 采集区域 -->
     <!-- “编辑” The editing area -->
-    <div class="col-lg-11" ng-show="side_index==0">
+    <div class="col-lg-11" ng-show="side_index == 0">
         <!-- 标签 -->
         <ul id="myTab" class="nav nav-tabs">
 
@@ -603,7 +602,7 @@
     </div>
 
     <!-- “导入” The importing area -->
-    <div class="col-lg-11" ng-show="side_index==1">
+    <div class="col-lg-11" ng-show="side_index == 1">
         <!-- The form to import the file -->
         <form enctype="multipart/form-data" method="post" name="fileinfo">
             <label>请选择需要导入的配置文件：</label>
@@ -621,12 +620,47 @@
     </div>
 
     <!-- “导出” The exporting area -->
-    <div class="col-lg-11" ng-show="side_index==2">
-        The Exporting Area
+    <div class="col-lg-11" ng-show="side_index == 2">
+        <form>
+            <br/>
+            <label for="projectName_exporting" class="col-sm-2 control-label">项目名称</label>
+            <div class="col-xs-4">
+                <select id="projectName_exporting"
+                        class="form-control"
+                        ng-init="selected_project_exporting = projects[0]"
+                        ng-model="selected_project_exporting"
+                        ng-change="changeProject_exporting()">
+                    <option
+                            ng-repeat="option in projects"
+                            ng-value="{{option.advanceProjectEntity.project_id}}">
+                        {{option.advanceProjectEntity.project_name}}
+                    </option>
+                </select>
+            </div>
+        </form>
+
+        <form>
+            <label for="taskName_exporting" class="col-sm-2 control-label">任务名称</label>
+            <div class="col-xs-4">
+                <select id="taskName_exporting"
+                        class="form-control"
+                        ng-init="selected_task_exporting = selected_project.advanceTaskEntities[0]"
+                        ng-model="selected_task_exporting"
+                        ng-change="changeTask_exporting()">
+                    <option
+                            ng-repeat="option in selected_project.advanceTaskEntities"
+                            ng-value="{{option.task_id}}">
+                        {{option.task_name}}
+                    </option>
+                </select>
+            </div>
+        </form>
+
+        <button class="btn btn-primary" ng-click="exportConfigJson_advancedTemplate()">导出</button>
     </div>
 
     <!-- “监控” The monitoring area -->
-    <div class="col-lg-11" ng-show="side_index==3">
+    <div class="col-lg-11" ng-show="side_index == 3">
         The Monitoring Area
     </div>
 

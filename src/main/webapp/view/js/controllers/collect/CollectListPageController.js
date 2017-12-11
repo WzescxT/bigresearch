@@ -56,16 +56,17 @@ angular.module('MetronicApp')
             reader.readAsText(element.files[0]);
         };
 
-        // 渲染项目和任务选择框
         $scope.getProjectsDetailInfo = function() {
             $http({
                 method: 'GET',
                 url: '/advance/getProjectsDetailInfo'
             }).then(function successCallback(response) {
                 $scope.projects = response.data;
-                $scope.selected_project = $scope.projects[$scope.projects.length-1];
+                $scope.selected_project = $scope.projects[$scope.projects.length - 1];
+                $scope.selected_project_exporting = $scope.projects[$scope.projects.length - 1];
                 tasks = $scope.selected_project.advanceTaskEntities;
-                $scope.selected_task = tasks[tasks.length-1];
+                $scope.selected_task = tasks[tasks.length - 1];
+                $scope.selected_task_exporting = tasks[tasks.length - 1];
                 setTaskInfo($scope.selected_task.task_id);
             }, function errorCallback(response) {
                 // 请求失败执行代码
@@ -80,8 +81,22 @@ angular.module('MetronicApp')
             setTaskInfo($scope.selected_task.task_id);
         };
 
+        $scope.changeProject_exporting = function() {
+            //////////////////////////////////////////////
+            // Jianfeng is debugging...
+            console.log("$scope.selected_project_exporting = " + $scope.selected_project_exporting);
+            //////////////////////////////////////////////
+        };
+
         $scope.changeTask = function () {
             setTaskInfo($scope.selected_task.task_id);
+        };
+
+        $scope.changeTask_exporting = function() {
+            //////////////////////////////////////////////
+            // Jianfeng is debugging...
+            console.log("$scope.selected_task_exporting = " + $scope.selected_task_exporting);
+            //////////////////////////////////////////////
         };
 
         $scope.clearData = function () {};
@@ -907,7 +922,37 @@ angular.module('MetronicApp')
         $scope.importIntoEditingTab = function() {
             $scope.side_index = 0;
 
-            // TODO: Change the JSON data for the editing area
+            // Change the data displayed in the web page
+            changeFrontData(angular.fromJson($scope.import_result_content));
+
+            // TODO: Update the data in the Angular level: select_project, select_task, ...
+        };
+
+        /**
+         * Exports the configuration json file to the local
+         */
+        $scope.exportConfigJson_advancedTemplate = function() {
+            var id = $scope.selected_task.task_id;
+
+            $http({
+                url: '/advance/task_config?task_id=' + id,
+                method: "GET"
+            }).success(function (data, status, headers, config) {
+                console.log("get task config json success...");
+
+                var blob = new Blob([angular.toJson(data)], {type: "text/plain"});
+                var objectUrl = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                document.body.appendChild(a);
+                a.setAttribute('style', 'display:none');
+                a.setAttribute('href', objectUrl);
+                var filename = "config.json";
+                a.setAttribute('download', filename);
+                a.click();
+                URL.revokeObjectURL(objectUrl);
+            }).error(function (data, status, headers, config) {
+                console.log("get task config json error...");
+            });
         };
 
         // For importing file from the local machine
@@ -926,6 +971,7 @@ angular.module('MetronicApp')
                 console.log("this.result = \"" + this.result + "\".");
                 console.log("configJsonFile.size = " + configJsonFile.size + ".");
                 document.getElementById("import_result").innerHTML = this.result;
+                $scope.import_result_content = this.result;
             };
             reader.readAsText(configJsonFile);
 
