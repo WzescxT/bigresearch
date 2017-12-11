@@ -1,25 +1,25 @@
 angular.module('MetronicApp')
-    // .directive("filesInput", function() {
-    //     return {
-    //         require: "ngModel",
-    //         link: function postLink(scope,elem,attrs,ngModel) {
-    //             elem.on("change", function(e) {
-    //                 // var files = elem[0].files;
-    //                 // var reader = new FileReader();
-    //                 // reader.onload = function(e){
-    //                 //     ngModel.$setViewValue("hello");
-    //                 // };
-    //                 // reader.readAsText(files);
-    //                 var input = document.querySelector('#input');
-    //                 var reader = new FileReader();
-    //                 reader.onload = function(e){
-    //                     span.innerText = e.target.result;
-    //                 };
-    //                 reader.readAsText(file);
-    //             })
-    //         }
-    //     }
-    // })
+// .directive("filesInput", function() {
+//     return {
+//         require: "ngModel",
+//         link: function postLink(scope,elem,attrs,ngModel) {
+//             elem.on("change", function(e) {
+//                 // var files = elem[0].files;
+//                 // var reader = new FileReader();
+//                 // reader.onload = function(e){
+//                 //     ngModel.$setViewValue("hello");
+//                 // };
+//                 // reader.readAsText(files);
+//                 var input = document.querySelector('#input');
+//                 var reader = new FileReader();
+//                 reader.onload = function(e){
+//                     span.innerText = e.target.result;
+//                 };
+//                 reader.readAsText(file);
+//             })
+//         }
+//     }
+// })
 
     .controller('CollectListPageController', function($rootScope, $scope, $http, $state, $timeout, CollectNewsService, anchorScroll, CollectCusTempService, $stateParams, $cookieStore, $q) {
         $scope.mycheck = "Y";
@@ -41,6 +41,7 @@ angular.module('MetronicApp')
             // when the file is read it triggers the onload event above.
             reader.readAsText(element.files[0]);
         };
+
         $scope.setUrls = function(element) {
             $scope.currentFile = element.files[0];
             var reader = new FileReader();
@@ -55,596 +56,598 @@ angular.module('MetronicApp')
             reader.readAsText(element.files[0]);
         };
 
-    // 渲染项目和任务选择框
-    $scope.getProjectsDetailInfo = function() {
-        $http({
-            method: 'GET',
-            url: '/advance/getProjectsDetailInfo'
-        }).then(function successCallback(response) {
-            $scope.projects = response.data;
-            $scope.selected_project = $scope.projects[$scope.projects.length-1];
-            tasks = $scope.selected_project.advanceTaskEntities;
-            $scope.selected_task = tasks[tasks.length-1];
-            setTaskInfo($scope.selected_task.task_id);
-        }, function errorCallback(response) {
-            // 请求失败执行代码
-            console.log("get projects bad")
-        });
-    };
-
-    $scope.getProjectsDetailInfo();
-
-    $scope.changeProject = function () {
-        $scope.selected_task = $scope.selected_project.advanceTaskEntities[$scope.selected_project.advanceTaskEntities.length-1];
-        setTaskInfo($scope.selected_task.task_id);
-    };
-
-    $scope.changeTask = function () {
-        setTaskInfo($scope.selected_task.task_id);
-    };
-
-    $scope.clearData = function () {};
-
-    function setTaskInfo(task_id) {
-        $http({
-            method: 'GET',
-            url: '/advance/task_config?task_id=' + task_id
-        }).then(function successCallback(response) {
-            var jsonData = response.data;
-            changeFrontData(jsonData);
-        }, function errorCallback(response) {
-            // 请求失败执行代码
-            console.log("get TaskInfo bad");
-        });
-    }
-    
-    function changeFrontData(jsonData) {
-        // 基本规则
-        $scope.selected_project.advanceProjectEntity.project_id = jsonData.basic_rule.project_id;
-        $scope.selected_task.task_id = jsonData.basic_rule.task_id;
-        $scope.task_leader = jsonData.basic_rule.task_leader;
-        $scope.task_description = jsonData.basic_rule.task_description;
-
-        // // 辅助规则
-        $scope.open = jsonData.assistant_rule.open;
-        $scope.login_page_path = jsonData.assistant_rule.login_page_path;
-        $scope.login_username = jsonData.assistant_rule.login_username;
-        $scope.login_username_xpath = jsonData.assistant_rule.login_username_xpath;
-        $scope.login_password = jsonData.assistant_rule.login_password;
-        $scope.login_password_xpath = jsonData.assistant_rule.login_password_xpath;
-        $scope.login_verifycode = jsonData.assistant_rule.login_verifycode;
-        $scope.login_verifycode_xpath = jsonData.assistant_rule.login_verifycode_xpath;
-        $scope.cookie = jsonData.assistant_rule.cookie;
-
-        $scope.crawl_pattern = jsonData.url_pattern.current_selected;
-        $scope.url_path = jsonData.url_pattern.single.url_path;
-
-        $scope.url_wildcard = jsonData.url_pattern.list.url_wildcard;
-        $scope.init_value = jsonData.url_pattern.list.init_value;
-        $scope.gap = jsonData.url_pattern.list.gap;
-        $scope.pages_num = jsonData.url_pattern.list.pages_num;
-        // jsonData.url_pattern.list.list_url_file_path = "";
-        //
-        $scope.url_index_path = jsonData.url_pattern.click.url_index_path;
-        $scope.next_page_xpath = jsonData.url_pattern.click.next_page_xpath;
-        // jsonData.url_pattern.click.click_url_file_path = "";
-
-        $scope.import_urls = jsonData.url_pattern.import.import_urls;
-        //jsonData.url_pattern.import.file_upload_path = "";
-        //jsonData.url_pattern.import.import_url_file_path="";
-        //
-        //
-        // 持久化规则
-        $scope.store_pattern =  jsonData.store_rule.store_pattern;
-        //
-        // 采集规则
-        $scope.creep_rule  = jsonData.creep_rule;
-        //
-        // 执行计划
-        $scope.proxy_ids = jsonData.run_rule.proxy_ids;
-        $scope.start_time = jsonData.run_rule.time.start_time;
-        $scope.end_time = jsonData.run_rule.time.end_time;
-        $scope.headers = jsonData.run_rule.headers;
-        $scope.custom_config = jsonData.run_rule.custom_config;
-    }
-
-    //执行计划
-    $scope.excuteTask = function() {
-        var jsonData = {"task_id": ""};
-        jsonData.task_id =  $scope.selected_task.task_id;
-        $http({
-            method: 'POST',
-            url: '/CrawlPlan/Plan',
-            data: jsonData
-        }).then(function successCallback(response) {
-            console.log(response.data);
-        }, function errorCallback(response) {
-            // 请求失败执行代码
-            console.log("post data bad");
-        });
-    };
-
-    // flag == 0 上一步
-    // flag == 1 下一步
-    $scope.changeTabs = function(id, flag) {
-        var jsonData = {
-
-            "basic_rule": {
-                "project_id": $scope.selected_project.advanceProjectEntity.project_id,
-                "task_id": $scope.selected_task.task_id,
-                "task_leader": "",
-                "task_description": ""
-            },
-
-            "assistant_rule": {
-                "open": false,
-                "login_page_path": "",
-                "login_username": "",
-                "login_username_xpath": "",
-                "login_password": "",
-                "login_password_xpath": "",
-                "login_verifycode": "",
-                "login_verifycode_xpath": "",
-                "cookie": "abc"
-            },
-
-            "url_pattern": {
-
-                "current_selected": "",
-
-                "single": {
-
-                    // "single_url_pattern_name": "abc",
-                    "url_path": ""
-
-                },
-
-                "list": {
-                    // "list_url_pattern_name": "abc",
-                    "url_wildcard": "",
-                    "init_value": 0,
-                    "gap": 0,
-                    "pages_num": 0,
-                    "list_url_file_path": ""
-                },
-
-                "click": {
-                    // "click_url_pattern_name": "abc",
-                    "url_index_path": "",
-                    "next_page_xpath": "",
-                    "click_url_file_path": ""
-                },
-
-                "import": {
-                    // "import_url_pattern_name": "abc",
-                    "import_urls": [],
-                    "file_upload_path": "",
-                    "import_url_file_path": ""
-                }
-            },
-
-            "creep_rule":
-                [
-                    {
-                        "creep_pattern_name": "",
-                        "ajax": {
-                            "open": true,
-                            "ajax_pattern": "",
-                            "button_xpath": ""
-                        },
-
-                        "attribute_xpath": "",
-                        "attribute_xpath2": "",
-                        "attribute_name": "",
-                        "extract_way": ""
-                    },
-                    {
-                        "creep_pattern_name": "",
-                        "ajax": {
-                            "open": true,
-                            "ajax_pattern": "",
-                            "button_xpath": ""
-                        },
-
-                        "attribute_xpath": "",
-                        "attribute_xpath2": "",
-                        "attribute_name": "",
-                        "extract_way": ""
-                    }
-                ],
-
-            "store_rule": {
-                "store_pattern": ""
-            },
-
-            "run_rule": {
-                "proxy_ids": [],
-                "time": {
-                    "start_time": "",
-                    "end_time": ""
-                },
-                "headers": "",
-                "custom_config": ""
-            }
-
+        // 渲染项目和任务选择框
+        $scope.getProjectsDetailInfo = function() {
+            $http({
+                method: 'GET',
+                url: '/advance/getProjectsDetailInfo'
+            }).then(function successCallback(response) {
+                $scope.projects = response.data;
+                $scope.selected_project = $scope.projects[$scope.projects.length-1];
+                tasks = $scope.selected_project.advanceTaskEntities;
+                $scope.selected_task = tasks[tasks.length-1];
+                setTaskInfo($scope.selected_task.task_id);
+            }, function errorCallback(response) {
+                // 请求失败执行代码
+                console.log("get projects bad")
+            });
         };
 
-        if (flag) {
+        $scope.getProjectsDetailInfo();
+
+        $scope.changeProject = function () {
+            $scope.selected_task = $scope.selected_project.advanceTaskEntities[$scope.selected_project.advanceTaskEntities.length-1];
+            setTaskInfo($scope.selected_task.task_id);
+        };
+
+        $scope.changeTask = function () {
+            setTaskInfo($scope.selected_task.task_id);
+        };
+
+        $scope.clearData = function () {};
+
+        function setTaskInfo(task_id) {
+            $http({
+                method: 'GET',
+                url: '/advance/task_config?task_id=' + task_id
+            }).then(function successCallback(response) {
+                var jsonData = response.data;
+                changeFrontData(jsonData);
+            }, function errorCallback(response) {
+                // 请求失败执行代码
+                console.log("get TaskInfo bad");
+            });
+        }
+
+        function changeFrontData(jsonData) {
             // 基本规则
-            jsonData.basic_rule.project_id = $scope.selected_project.advanceProjectEntity.project_id;
-            jsonData.basic_rule.task_id =  $scope.selected_task.task_id;
-            jsonData.basic_rule.task_leader = $scope.task_leader;
-            jsonData.basic_rule.task_description =  $scope.task_description;
+            $scope.selected_project.advanceProjectEntity.project_id = jsonData.basic_rule.project_id;
+            $scope.selected_task.task_id = jsonData.basic_rule.task_id;
+            $scope.task_leader = jsonData.basic_rule.task_leader;
+            $scope.task_description = jsonData.basic_rule.task_description;
 
-            // 辅助规则
-            jsonData.assistant_rule.open = $scope.open;
-            jsonData.assistant_rule.login_page_path = $scope.login_page_path;
-            jsonData.assistant_rule.login_username = $scope.login_username;
-            jsonData.assistant_rule.login_username_xpath = $scope.login_username_xpath;
-            jsonData.assistant_rule.login_password =  $scope.login_password;
-            jsonData.assistant_rule.login_password_xpath = $scope.login_password_xpath;
-            jsonData.assistant_rule.login_verifycode = $scope.login_verifycode;
-            jsonData.assistant_rule.login_verifycode_xpath = $scope.login_verifycode_xpath;
-            jsonData.assistant_rule.cookie = $scope.cookie;
+            // // 辅助规则
+            $scope.open = jsonData.assistant_rule.open;
+            $scope.login_page_path = jsonData.assistant_rule.login_page_path;
+            $scope.login_username = jsonData.assistant_rule.login_username;
+            $scope.login_username_xpath = jsonData.assistant_rule.login_username_xpath;
+            $scope.login_password = jsonData.assistant_rule.login_password;
+            $scope.login_password_xpath = jsonData.assistant_rule.login_password_xpath;
+            $scope.login_verifycode = jsonData.assistant_rule.login_verifycode;
+            $scope.login_verifycode_xpath = jsonData.assistant_rule.login_verifycode_xpath;
+            $scope.cookie = jsonData.assistant_rule.cookie;
 
-            // URL规则
-            jsonData.url_pattern.current_selected = $scope.crawl_pattern;
+            $scope.crawl_pattern = jsonData.url_pattern.current_selected;
+            $scope.url_path = jsonData.url_pattern.single.url_path;
 
-            jsonData.url_pattern.single.url_path = $scope.url_path;
-
-            // 文件怎么上传？？url_file_path 是什么
-            jsonData.url_pattern.list.url_wildcard = $scope.url_wildcard;
-            jsonData.url_pattern.list.init_value =  $scope.init_value;
-            jsonData.url_pattern.list.gap = $scope.gap;
-            jsonData.url_pattern.list.pages_num =  $scope.pages_num;
+            $scope.url_wildcard = jsonData.url_pattern.list.url_wildcard;
+            $scope.init_value = jsonData.url_pattern.list.init_value;
+            $scope.gap = jsonData.url_pattern.list.gap;
+            $scope.pages_num = jsonData.url_pattern.list.pages_num;
             // jsonData.url_pattern.list.list_url_file_path = "";
-
-            jsonData.url_pattern.click.url_index_path =  $scope.url_index_path;
-            jsonData.url_pattern.click.next_page_xpath = $scope.next_page_xpath;
+            //
+            $scope.url_index_path = jsonData.url_pattern.click.url_index_path;
+            $scope.next_page_xpath = jsonData.url_pattern.click.next_page_xpath;
             // jsonData.url_pattern.click.click_url_file_path = "";
 
-            jsonData.url_pattern.import.import_urls = $scope.import_urls;
-            // jsonData.url_pattern.import.file_upload_path = "";
-            // jsonData.url_pattern.import.import_url_file_path="";
-
+            $scope.import_urls = jsonData.url_pattern.import.import_urls;
+            //jsonData.url_pattern.import.file_upload_path = "";
+            //jsonData.url_pattern.import.import_url_file_path="";
+            //
+            //
             // 持久化规则
-            jsonData.store_rule.store_pattern = $scope.store_pattern;
-
+            $scope.store_pattern =  jsonData.store_rule.store_pattern;
+            //
             // 采集规则
-            jsonData.creep_rule = $scope.creep_rule;
-
+            $scope.creep_rule  = jsonData.creep_rule;
+            //
             // 执行计划
-            jsonData.run_rule.proxy_ids = $scope.proxy_ids;
-            jsonData.run_rule.time.start_time=$scope.start_time;
-            jsonData.run_rule.time.end_time=$scope.end_time;
-            jsonData.run_rule.headers=$scope.headers;
-            jsonData.run_rule.custom_config=$scope.custom_config;
+            $scope.proxy_ids = jsonData.run_rule.proxy_ids;
+            $scope.start_time = jsonData.run_rule.time.start_time;
+            $scope.end_time = jsonData.run_rule.time.end_time;
+            $scope.headers = jsonData.run_rule.headers;
+            $scope.custom_config = jsonData.run_rule.custom_config;
+        }
 
+        // 执行计划
+        $scope.excuteTask = function() {
+            var jsonData = {"task_id": ""};
+            jsonData.task_id =  $scope.selected_task.task_id;
             $http({
                 method: 'POST',
-                url: '/advance/task_config',
+                url: '/CrawlPlan/Plan',
                 data: jsonData
-                // data: $.param(jsonData),
-                // headers: {'Content-Type':'application/x-www-form-urlencoded'},
-                // transformRequest: angular.identity
             }).then(function successCallback(response) {
                 console.log(response.data);
             }, function errorCallback(response) {
                 // 请求失败执行代码
                 console.log("post data bad");
             });
-        }
-        if (id === "miningrule") {
-            var url_data = {url_path: $scope.url_path};
-            $http({
-                method: 'POST',
-                url: '/collect/download',
-                data: url_data
-                // data: $.param(jsonData),
-                // headers: {'Content-Type':'application/x-www-form-urlencoded'},
-                // transformRequest: angular.identity
-            }).then(function successCallback(response) {
-                console.log("success！");
-            }, function errorCallback(response) {
-                // 请求失败执行代码
-                console.log("post data bad");
-            });
-        }
-
-        $("#myTab a[href='/#" + id +"']").tab('show')
-    };
-
-    $scope.pageTitle = "自定义采集模块";
-
-    $scope.creep_rule = [];
-    
-    $scope.del = function ($index) {
-        if ($index >= 0) {
-            $scope.creep_rule.splice($index,1);
-        }
-    };
-
-    var select_xpath1;
-    var select_xpath2;
-    var select_ajax_xpath;
-    $scope.add = function () {
-        $scope.creep_name = "";
-        $scope.creep_pattern = "单体";
-        $scope.x = false;
-        $scope.ajax_pattern = "点击";
-        $scope.button_xpath = "";
-        $scope.attribute_xpath = "";
-        $scope.attribute_xpath2 = "";
-        $scope.attribute_name = "";
-        $scope.extract_way = "";
-        // 添加规则
-        $('#modal-add').modal('show');
-    };
-
-    var lastTag = null;
-    var lastTagBorder = null;
-    var index = 0;
-    // 选择xpath
-    $scope.select_xpath = function () {
-        $('#modal-select-xpath').modal('show');
-        //alert("www");
-        //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
-        index = 0;
-        $('#xpath').val("");
-        $("#iframe").attr("src", getHost($scope.url_path) + ".html");
-        $('#modal-select-xpath').on('shown.bs.modal', function (e) {
-            $(this).click(function (event) { event.preventDefault(); });
-            index = 0;
-            //对所有的元素添加点击事件，获取xpath
-            $("#iframe").contents().find("*").hover(function (event) {
-                event.stopPropagation();
-                // lastTag = $(this);
-                // var css = div.css('border');
-                // console.log($(this).css('border'));
-                if (lastTag !== null) {
-                    lastTag.css('border', lastTagBorder);
-                    // console.log(lastTag);
-                    // console.log(lastTagBorder);
-                }
-                lastTagBorder = $(this).css('border');
-                //console.log($(this));
-                $(this).css({'border': '1.5px solid #f0f', 'border-radius': '5px solid'});
-                $(this).click(function (event) {
-                    event.preventDefault();
-                    //console.log("+++++++++++++++++++++++++++++++++\n" + this  + "+++++++++++++++++++++++++++++++++\n");
-                    // if($type === 1) {
-                    //     //console.log("select_xpath1");
-                    //     select_xpath1 = $shadow.domXpath(this);
-                    //     // $scope.attribute_xpath = select_xpath1;
-                    // }else if($type === 2) {
-                    //     //console.log("select_xpath2");
-                    //     select_xpath2 = $shadow.domXpath(this);
-                    //     // $scope.attribute_xpath2 = select_xpath2;
-                    // }
-                    if (index === 0) {
-                        select_xpath1 = $shadow.domXpath(this);
-                        console.log($shadow.domXpath(this));
-                        $('#xpath').val($shadow.domXpath(this));
-                        // select_xpath1 = readXPath(this);
-                        // console.log(readXPath(this));
-                        // $('#xpath').val(readXPath(this));
-                    }
-                    index++;
-                    // console.log(readXPath(this));
-                    // $('#modal-select-xpath').modal("hide");
-
-                })
-                lastTag = $(this);
-                // lastTag.css('border', lastTagBorder);
-                //console.log($shadow.domXpath(this));
-            });
-        });
-        $('#modal-select-xpath').on('hidden.bs.modal', function (e) {
-            console.log("hide the modal");
-            // lastTag.css('border', lastTagBorder);
-            // lastTagBorder = null;
-            // lastTag = null;
-        });
-    };
-
-    // xpath2
-    $scope.select_xpath2 = function () {
-        $('#modal-select-xpath2').modal('show');
-        //alert("www");
-       // console.log("-------------------------------\n" + $type  + "-------------------------------\n");
-        $('#xpath2').val("");
-        $("#iframe2").attr("src", getHost($scope.url_path) + ".html");
-        index = 0;
-        $('#modal-select-xpath2').on('shown.bs.modal', function (e) {
-            $(this).click(function (event) { event.preventDefault(); });
-            //对所有的元素添加点击事件，获取xpath
-            $("#iframe2").contents().find("*").hover(function (event) {
-                event.stopPropagation();
-                // lastTag = $(this);
-                // var css = div.css('border');
-                // console.log($(this).css('border'));
-                if (lastTag !== null) {
-                    lastTag.css('border', lastTagBorder);
-                    // console.log(lastTag);
-                    // console.log(lastTagBorder);
-                }
-                lastTagBorder = $(this).css('border');
-                //console.log($(this));
-                $(this).css({'border': '1.5px solid #f0f', 'border-radius': '5px solid'});
-                $(this).click(function (event) {
-                    event.preventDefault();
-                    if (index === 0) {
-                        select_xpath2 = $shadow.domXpath(this);
-                        console.log($shadow.domXpath(this));
-                        $('#xpath2').val($shadow.domXpath(this));
-                        // select_xpath2 = readXPath(this);
-                        // console.log(readXPath(this));
-                        // $('#xpath2').val(readXPath(this));
-                    }
-                    index++;
-                });
-                lastTag = $(this);
-                // lastTag.css('border', lastTagBorder);
-                //console.log($shadow.domXpath(this));
-            });
-        });
-    };
-
-    // 选择ajax_xpath
-    $scope.select_ajax_xpath = function () {
-        $('#modal-select-ajax-xpath').modal('show');
-        //alert("www");
-        //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
-        index = 0;
-        $('#ajax_xpath').val("");
-        $("#iframe3").attr("src", getHost($scope.url_path) + ".html");
-        $('#modal-select-ajax-xpath').on('shown.bs.modal', function (e) {
-            $(this).click(function (event) {
-                event.preventDefault();
-            });
-            //对所有的元素添加点击事件，获取xpath
-            $("#iframe3").contents().find("*").hover(function (event) {
-                event.stopPropagation();
-                // lastTag = $(this);
-                // var css = div.css('border');
-                // console.log($(this).css('border'));
-                if (lastTag !== null) {
-                    lastTag.css('border', lastTagBorder);
-                    // console.log(lastTag);
-                    // console.log(lastTagBorder);
-                }
-                lastTagBorder = $(this).css('border');
-                //console.log($(this));
-                $(this).css({'border': '1.5px solid #f0f', 'border-radius': '5px solid'});
-                $(this).click(function (event) {
-                    event.preventDefault();
-                    if (index === 0) {
-                        // select_xpath1 = $shadow.domXpath(this);
-                        // console.log($shadow.domXpath(this));
-                        // $('#xpath').val($shadow.domXpath(this));
-                        select_ajax_xpath = $shadow.domXpath(this);
-                        console.log($shadow.domXpath(this));
-                        $('#ajax_xpath').val($shadow.domXpath(this));
-                    }
-                    index++;
-                })
-                lastTag = $(this);
-                // lastTag.css('border', lastTagBorder);
-                //console.log($shadow.domXpath(this));
-            });
-        });
-        $('#modal-select-ajax-xpath').on('hidden.bs.modal', function (e) {
-            console.log("hide the modal");
-            // lastTag.css('border', lastTagBorder);
-            // lastTagBorder = null;
-            // lastTag = null;
-        });
-    };
-
-    //　保存
-    $scope.select_commit = function () {
-        console.log("-------------------------------\n" + select_xpath1 + "\n" +
-            select_xpath2 + "-------------------------------\n" +
-            select_ajax_xpath + "-------------------------------\n");
-        $scope.attribute_xpath = select_xpath1;
-        $scope.attribute_xpath2 = select_xpath2;
-        $scope.button_xpath = select_ajax_xpath;
-    };
-
-    $scope.save = function () {
-
-        var newEle = {
-            "creep_name": $scope.creep_name,
-            "creep_pattern": $scope.creep_pattern,
-            "ajax": {
-                "open": $scope.x,
-                "ajax_pattern": $scope.ajax_pattern,
-                "button_xpath": $scope.button_xpath
-            },
-            "attribute_xpath": $scope.attribute_xpath,
-            "attribute_xpath2": $scope.attribute_xpath2,
-            "attribute_name":  $scope.attribute_name,
-            "extract_way": $scope.extract_way
         };
-        $scope.creep_rule.push(newEle);
 
-        $('#modal-add').modal('hide');
-    };
+        // flag == 0 上一步
+        // flag == 1 下一步
+        $scope.changeTabs = function(id, flag) {
+            var jsonData = {
 
-    $scope.update = function($index) {
-        $scope.t_index = $index;
-        $scope.creep_name = $scope.creep_rule[$index].creep_name;
-        $scope.creep_pattern = $scope.creep_rule[$index].creep_pattern;
-        $scope.x = $scope.creep_rule[$index].ajax.open;
-        $scope.ajax_pattern = $scope.creep_rule[$index].ajax.ajax_pattern;
-        $scope.button_xpath = $scope.creep_rule[$index].ajax.button_xpath;
-        $scope.attribute_xpath = $scope.creep_rule[$index].attribute_xpath;
-        $scope.attribute_xpath2 = $scope.creep_rule[$index].attribute_xpath2;
-        $scope.attribute_name = $scope.creep_rule[$index].attribute_name;
-        $scope.extract_way = $scope.creep_rule[$index].extract_way;
-        $('#modal-update').modal('show');
-    };
+                "basic_rule": {
+                    "project_id": $scope.selected_project.advanceProjectEntity.project_id,
+                    "task_id": $scope.selected_task.task_id,
+                    "task_leader": "",
+                    "task_description": ""
+                },
 
-    $scope.modify = function ($index) {
-        $scope.creep_rule[$index].creep_name = $scope.creep_name;
-        $scope.creep_rule[$index].creep_pattern =$scope.creep_pattern;
+                "assistant_rule": {
+                    "open": false,
+                    "login_page_path": "",
+                    "login_username": "",
+                    "login_username_xpath": "",
+                    "login_password": "",
+                    "login_password_xpath": "",
+                    "login_verifycode": "",
+                    "login_verifycode_xpath": "",
+                    "cookie": "abc"
+                },
 
-        var ajaxTypes = ["点击", "翻页", "滚动"];
-        $scope.creep_rule[$index].ajax.open = $scope.x;
-        $scope.creep_rule[$index].ajax.ajax_pattern = types[$scope.y];
-        $scope.creep_rule[$index].ajax.button_xpath = $scope.button_xpath;
-        $scope.creep_rule[$index].attribute_xpath = $scope.attribute_xpath;
-        $scope.creep_rule[$index].attribute_xpath2 = $scope.attribute_xpath2;
-        $scope.creep_rule[$index].attribute_name = $scope.attribute_name;
-        $scope.extract_way = $scope.creep_rule[$index].extract_way;
-        $('#modal-update').modal('hide');
-    };
+                "url_pattern": {
 
-    // 测试
-    $scope.test = function($index) {
-        $('#loading').modal('show');
-        var url_path = $scope.url_path;
-        var xpath1 = $scope.creep_rule[$index].attribute_xpath;
-        var xpath2 = $scope.creep_rule[$index].attribute_xpath2;
-        var ajaxxpath = $scope.creep_rule[$index].button_xpath;
-        var extract_way = $scope.creep_rule[$index].extract_way;
-        // console.log($index + "\n" + url + "\n" + xpath1 + "\n" + xpath2);
-        // console.log($scope.creep_rule[$index].creep_pattern);
-        if ($scope.creep_rule[$index].creep_pattern === "单体") {
-            var params = $("#crawlrule").serializeArray();
-            var values = {};
-            for( x in params ) {
-                values[params[x].name] = params[x].value;
+                    "current_selected": "",
+
+                    "single": {
+
+                        // "single_url_pattern_name": "abc",
+                        "url_path": ""
+
+                    },
+
+                    "list": {
+                        // "list_url_pattern_name": "abc",
+                        "url_wildcard": "",
+                        "init_value": 0,
+                        "gap": 0,
+                        "pages_num": 0,
+                        "list_url_file_path": ""
+                    },
+
+                    "click": {
+                        // "click_url_pattern_name": "abc",
+                        "url_index_path": "",
+                        "next_page_xpath": "",
+                        "click_url_file_path": ""
+                    },
+
+                    "import": {
+                        // "import_url_pattern_name": "abc",
+                        "import_urls": [],
+                        "file_upload_path": "",
+                        "import_url_file_path": ""
+                    }
+                },
+
+                "creep_rule":
+                    [
+                        {
+                            "creep_pattern_name": "",
+                            "ajax": {
+                                "open": true,
+                                "ajax_pattern": "",
+                                "button_xpath": ""
+                            },
+
+                            "attribute_xpath": "",
+                            "attribute_xpath2": "",
+                            "attribute_name": "",
+                            "extract_way": ""
+                        },
+                        {
+                            "creep_pattern_name": "",
+                            "ajax": {
+                                "open": true,
+                                "ajax_pattern": "",
+                                "button_xpath": ""
+                            },
+
+                            "attribute_xpath": "",
+                            "attribute_xpath2": "",
+                            "attribute_name": "",
+                            "extract_way": ""
+                        }
+                    ],
+
+                "store_rule": {
+                    "store_pattern": ""
+                },
+
+                "run_rule": {
+                    "proxy_ids": [],
+                    "time": {
+                        "start_time": "",
+                        "end_time": ""
+                    },
+                    "headers": "",
+                    "custom_config": ""
+                }
+
+            };
+
+            if (flag) {
+                // 基本规则
+                jsonData.basic_rule.project_id = $scope.selected_project.advanceProjectEntity.project_id;
+                jsonData.basic_rule.task_id =  $scope.selected_task.task_id;
+                jsonData.basic_rule.task_leader = $scope.task_leader;
+                jsonData.basic_rule.task_description =  $scope.task_description;
+
+                // 辅助规则
+                jsonData.assistant_rule.open = $scope.open;
+                jsonData.assistant_rule.login_page_path = $scope.login_page_path;
+                jsonData.assistant_rule.login_username = $scope.login_username;
+                jsonData.assistant_rule.login_username_xpath = $scope.login_username_xpath;
+                jsonData.assistant_rule.login_password =  $scope.login_password;
+                jsonData.assistant_rule.login_password_xpath = $scope.login_password_xpath;
+                jsonData.assistant_rule.login_verifycode = $scope.login_verifycode;
+                jsonData.assistant_rule.login_verifycode_xpath = $scope.login_verifycode_xpath;
+                jsonData.assistant_rule.cookie = $scope.cookie;
+
+                // URL规则
+                jsonData.url_pattern.current_selected = $scope.crawl_pattern;
+
+                jsonData.url_pattern.single.url_path = $scope.url_path;
+
+                // 文件怎么上传？？url_file_path 是什么
+                jsonData.url_pattern.list.url_wildcard = $scope.url_wildcard;
+                jsonData.url_pattern.list.init_value =  $scope.init_value;
+                jsonData.url_pattern.list.gap = $scope.gap;
+                jsonData.url_pattern.list.pages_num =  $scope.pages_num;
+                // jsonData.url_pattern.list.list_url_file_path = "";
+
+                jsonData.url_pattern.click.url_index_path =  $scope.url_index_path;
+                jsonData.url_pattern.click.next_page_xpath = $scope.next_page_xpath;
+                // jsonData.url_pattern.click.click_url_file_path = "";
+
+                jsonData.url_pattern.import.import_urls = $scope.import_urls;
+                // jsonData.url_pattern.import.file_upload_path = "";
+                // jsonData.url_pattern.import.import_url_file_path="";
+
+                // 持久化规则
+                jsonData.store_rule.store_pattern = $scope.store_pattern;
+
+                // 采集规则
+                jsonData.creep_rule = $scope.creep_rule;
+
+                // 执行计划
+                jsonData.run_rule.proxy_ids = $scope.proxy_ids;
+                jsonData.run_rule.time.start_time=$scope.start_time;
+                jsonData.run_rule.time.end_time=$scope.end_time;
+                jsonData.run_rule.headers=$scope.headers;
+                jsonData.run_rule.custom_config=$scope.custom_config;
+
+                $http({
+                    method: 'POST',
+                    url: '/advance/task_config',
+                    data: jsonData
+                    // data: $.param(jsonData),
+                    // headers: {'Content-Type':'application/x-www-form-urlencoded'},
+                    // transformRequest: angular.identity
+                }).then(function successCallback(response) {
+                    console.log(response.data);
+                }, function errorCallback(response) {
+                    // 请求失败执行代码
+                    console.log("post data bad");
+                });
             }
+            if (id === "miningrule") {
+                var url_data = {url_path: $scope.url_path};
+                $http({
+                    method: 'POST',
+                    url: '/collect/download',
+                    data: url_data
+                    // data: $.param(jsonData),
+                    // headers: {'Content-Type':'application/x-www-form-urlencoded'},
+                    // transformRequest: angular.identity
+                }).then(function successCallback(response) {
+                    console.log("success！");
+                }, function errorCallback(response) {
+                    // 请求失败执行代码
+                    console.log("post data bad");
+                });
+            }
+
+            $("#myTab a[href='/#" + id +"']").tab('show')
+        };
+
+        $scope.pageTitle = "自定义采集模块";
+
+        $scope.creep_rule = [];
+
+        $scope.del = function ($index) {
+            if ($index >= 0) {
+                $scope.creep_rule.splice($index,1);
+            }
+        };
+
+        var select_xpath1;
+        var select_xpath2;
+        var select_ajax_xpath;
+
+        $scope.add = function () {
+            $scope.creep_name = "";
+            $scope.creep_pattern = "单体";
+            $scope.x = false;
+            $scope.ajax_pattern = "点击";
+            $scope.button_xpath = "";
+            $scope.attribute_xpath = "";
+            $scope.attribute_xpath2 = "";
+            $scope.attribute_name = "";
+            $scope.extract_way = "";
+            // 添加规则
+            $('#modal-add').modal('show');
+        };
+
+        var lastTag = null;
+        var lastTagBorder = null;
+        var index = 0;
+
+        // 选择xpath
+        $scope.select_xpath = function () {
+            $('#modal-select-xpath').modal('show');
+            //alert("www");
+            //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
+            index = 0;
+            $('#xpath').val("");
+            $("#iframe").attr("src", getHost($scope.url_path) + ".html");
+            $('#modal-select-xpath').on('shown.bs.modal', function (e) {
+                $(this).click(function (event) { event.preventDefault(); });
+                index = 0;
+                //对所有的元素添加点击事件，获取xpath
+                $("#iframe").contents().find("*").hover(function (event) {
+                    event.stopPropagation();
+                    // lastTag = $(this);
+                    // var css = div.css('border');
+                    // console.log($(this).css('border'));
+                    if (lastTag !== null) {
+                        lastTag.css('border', lastTagBorder);
+                        // console.log(lastTag);
+                        // console.log(lastTagBorder);
+                    }
+                    lastTagBorder = $(this).css('border');
+                    //console.log($(this));
+                    $(this).css({'border': '1.5px solid #f0f', 'border-radius': '5px solid'});
+                    $(this).click(function (event) {
+                        event.preventDefault();
+                        //console.log("+++++++++++++++++++++++++++++++++\n" + this  + "+++++++++++++++++++++++++++++++++\n");
+                        // if($type === 1) {
+                        //     //console.log("select_xpath1");
+                        //     select_xpath1 = $shadow.domXpath(this);
+                        //     // $scope.attribute_xpath = select_xpath1;
+                        // }else if($type === 2) {
+                        //     //console.log("select_xpath2");
+                        //     select_xpath2 = $shadow.domXpath(this);
+                        //     // $scope.attribute_xpath2 = select_xpath2;
+                        // }
+                        if (index === 0) {
+                            select_xpath1 = $shadow.domXpath(this);
+                            console.log($shadow.domXpath(this));
+                            $('#xpath').val($shadow.domXpath(this));
+                            // select_xpath1 = readXPath(this);
+                            // console.log(readXPath(this));
+                            // $('#xpath').val(readXPath(this));
+                        }
+                        index++;
+                        // console.log(readXPath(this));
+                        // $('#modal-select-xpath').modal("hide");
+
+                    })
+                    lastTag = $(this);
+                    // lastTag.css('border', lastTagBorder);
+                    //console.log($shadow.domXpath(this));
+                });
+            });
+            $('#modal-select-xpath').on('hidden.bs.modal', function (e) {
+                console.log("hide the modal");
+                // lastTag.css('border', lastTagBorder);
+                // lastTagBorder = null;
+                // lastTag = null;
+            });
+        };
+
+        // xpath2
+        $scope.select_xpath2 = function () {
+            $('#modal-select-xpath2').modal('show');
+            //alert("www");
+            // console.log("-------------------------------\n" + $type  + "-------------------------------\n");
+            $('#xpath2').val("");
+            $("#iframe2").attr("src", getHost($scope.url_path) + ".html");
+            index = 0;
+            $('#modal-select-xpath2').on('shown.bs.modal', function (e) {
+                $(this).click(function (event) { event.preventDefault(); });
+                //对所有的元素添加点击事件，获取xpath
+                $("#iframe2").contents().find("*").hover(function (event) {
+                    event.stopPropagation();
+                    // lastTag = $(this);
+                    // var css = div.css('border');
+                    // console.log($(this).css('border'));
+                    if (lastTag !== null) {
+                        lastTag.css('border', lastTagBorder);
+                        // console.log(lastTag);
+                        // console.log(lastTagBorder);
+                    }
+                    lastTagBorder = $(this).css('border');
+                    //console.log($(this));
+                    $(this).css({'border': '1.5px solid #f0f', 'border-radius': '5px solid'});
+                    $(this).click(function (event) {
+                        event.preventDefault();
+                        if (index === 0) {
+                            select_xpath2 = $shadow.domXpath(this);
+                            console.log($shadow.domXpath(this));
+                            $('#xpath2').val($shadow.domXpath(this));
+                            // select_xpath2 = readXPath(this);
+                            // console.log(readXPath(this));
+                            // $('#xpath2').val(readXPath(this));
+                        }
+                        index++;
+                    });
+                    lastTag = $(this);
+                    // lastTag.css('border', lastTagBorder);
+                    //console.log($shadow.domXpath(this));
+                });
+            });
+        };
+
+        // 选择ajax_xpath
+        $scope.select_ajax_xpath = function () {
+            $('#modal-select-ajax-xpath').modal('show');
+            //alert("www");
+            //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
+            index = 0;
+            $('#ajax_xpath').val("");
+            $("#iframe3").attr("src", getHost($scope.url_path) + ".html");
+            $('#modal-select-ajax-xpath').on('shown.bs.modal', function (e) {
+                $(this).click(function (event) {
+                    event.preventDefault();
+                });
+                //对所有的元素添加点击事件，获取xpath
+                $("#iframe3").contents().find("*").hover(function (event) {
+                    event.stopPropagation();
+                    // lastTag = $(this);
+                    // var css = div.css('border');
+                    // console.log($(this).css('border'));
+                    if (lastTag !== null) {
+                        lastTag.css('border', lastTagBorder);
+                        // console.log(lastTag);
+                        // console.log(lastTagBorder);
+                    }
+                    lastTagBorder = $(this).css('border');
+                    //console.log($(this));
+                    $(this).css({'border': '1.5px solid #f0f', 'border-radius': '5px solid'});
+                    $(this).click(function (event) {
+                        event.preventDefault();
+                        if (index === 0) {
+                            // select_xpath1 = $shadow.domXpath(this);
+                            // console.log($shadow.domXpath(this));
+                            // $('#xpath').val($shadow.domXpath(this));
+                            select_ajax_xpath = $shadow.domXpath(this);
+                            console.log($shadow.domXpath(this));
+                            $('#ajax_xpath').val($shadow.domXpath(this));
+                        }
+                        index++;
+                    })
+                    lastTag = $(this);
+                    // lastTag.css('border', lastTagBorder);
+                    //console.log($shadow.domXpath(this));
+                });
+            });
+            $('#modal-select-ajax-xpath').on('hidden.bs.modal', function (e) {
+                console.log("hide the modal");
+                // lastTag.css('border', lastTagBorder);
+                // lastTagBorder = null;
+                // lastTag = null;
+            });
+        };
+
+        //　保存
+        $scope.select_commit = function () {
+            console.log("-------------------------------\n" + select_xpath1 + "\n" +
+                select_xpath2 + "-------------------------------\n" +
+                select_ajax_xpath + "-------------------------------\n");
+            $scope.attribute_xpath = select_xpath1;
+            $scope.attribute_xpath2 = select_xpath2;
+            $scope.button_xpath = select_ajax_xpath;
+        };
+
+        $scope.save = function () {
+
+            var newEle = {
+                "creep_name": $scope.creep_name,
+                "creep_pattern": $scope.creep_pattern,
+                "ajax": {
+                    "open": $scope.x,
+                    "ajax_pattern": $scope.ajax_pattern,
+                    "button_xpath": $scope.button_xpath
+                },
+                "attribute_xpath": $scope.attribute_xpath,
+                "attribute_xpath2": $scope.attribute_xpath2,
+                "attribute_name":  $scope.attribute_name,
+                "extract_way": $scope.extract_way
+            };
+            $scope.creep_rule.push(newEle);
+
+            $('#modal-add').modal('hide');
+        };
+
+        $scope.update = function($index) {
+            $scope.t_index = $index;
+            $scope.creep_name = $scope.creep_rule[$index].creep_name;
+            $scope.creep_pattern = $scope.creep_rule[$index].creep_pattern;
+            $scope.x = $scope.creep_rule[$index].ajax.open;
+            $scope.ajax_pattern = $scope.creep_rule[$index].ajax.ajax_pattern;
+            $scope.button_xpath = $scope.creep_rule[$index].ajax.button_xpath;
+            $scope.attribute_xpath = $scope.creep_rule[$index].attribute_xpath;
+            $scope.attribute_xpath2 = $scope.creep_rule[$index].attribute_xpath2;
+            $scope.attribute_name = $scope.creep_rule[$index].attribute_name;
+            $scope.extract_way = $scope.creep_rule[$index].extract_way;
+            $('#modal-update').modal('show');
+        };
+
+        $scope.modify = function ($index) {
+            $scope.creep_rule[$index].creep_name = $scope.creep_name;
+            $scope.creep_rule[$index].creep_pattern =$scope.creep_pattern;
+
+            var ajaxTypes = ["点击", "翻页", "滚动"];
+            $scope.creep_rule[$index].ajax.open = $scope.x;
+            $scope.creep_rule[$index].ajax.ajax_pattern = types[$scope.y];
+            $scope.creep_rule[$index].ajax.button_xpath = $scope.button_xpath;
+            $scope.creep_rule[$index].attribute_xpath = $scope.attribute_xpath;
+            $scope.creep_rule[$index].attribute_xpath2 = $scope.attribute_xpath2;
+            $scope.creep_rule[$index].attribute_name = $scope.attribute_name;
+            $scope.extract_way = $scope.creep_rule[$index].extract_way;
+            $('#modal-update').modal('hide');
+        };
+
+        // 测试
+        $scope.test = function($index) {
+            $('#loading').modal('show');
+            var url_path = $scope.url_path;
+            var xpath1 = $scope.creep_rule[$index].attribute_xpath;
+            var xpath2 = $scope.creep_rule[$index].attribute_xpath2;
+            var ajaxxpath = $scope.creep_rule[$index].button_xpath;
+            var extract_way = $scope.creep_rule[$index].extract_way;
+            // console.log($index + "\n" + url + "\n" + xpath1 + "\n" + xpath2);
+            // console.log($scope.creep_rule[$index].creep_pattern);
+            if ($scope.creep_rule[$index].creep_pattern === "单体") {
+                var params = $("#crawlrule").serializeArray();
+                var values = {};
+                for( x in params ) {
+                    values[params[x].name] = params[x].value;
+                }
+                var idata = JSON.stringify(values);
+                alert(idata.toString());
+                console.log(idata.toString());
+                CollectCusTempService.crawltest(idata);
+                $('#loading').modal('hide');
+            }
+            values['currenturl']=url_path;
             var idata = JSON.stringify(values);
-            alert(idata.toString());
+            // alert(idata);
             console.log(idata.toString());
-            CollectCusTempService.crawltest(idata);
-            $('#loading').modal('hide');
-        }
-        values['currenturl']=url_path;
-        var idata = JSON.stringify(values);
-        // alert(idata);
-        console.log(idata.toString());
-        CollectCusTempService.crawltest(idata, function (data) {
-            $('#testarea').val(data);
-            $('#loading').modal('hide');
-        });
-        // 寸
-        // else if($scope.creep_rule[$index].creep_pattern === "线索") {
-        //     var params = $("#crawlrule").serializeArray();
-        //     var values = {};
-        //     for( x in params ){
-        //         values[params[x].name] = params[x].value;
-        //     }
-        //     values['currenturl'] = url_path;
-        //     var idata = JSON.stringify(values);
-        //     $.post("/collect/myclues", idata, function(result){
-        //         console.log(result.toString());
-        //         var arr = result.toString().replace(",", "\n");
-        //         $('#testarea').val($scope.creep_rule[$index].attribute_name + ":\n" + arr);
-        //         $('#loading').modal('hide');
-        //     });
+            CollectCusTempService.crawltest(idata, function (data) {
+                $('#testarea').val(data);
+                $('#loading').modal('hide');
+            });
+            // 寸
+            // else if($scope.creep_rule[$index].creep_pattern === "线索") {
+            //     var params = $("#crawlrule").serializeArray();
+            //     var values = {};
+            //     for( x in params ){
+            //         values[params[x].name] = params[x].value;
+            //     }
+            //     values['currenturl'] = url_path;
+            //     var idata = JSON.stringify(values);
+            //     $.post("/collect/myclues", idata, function(result){
+            //         console.log(result.toString());
+            //         var arr = result.toString().replace(",", "\n");
+            //         $('#testarea').val($scope.creep_rule[$index].attribute_name + ":\n" + arr);
+            //         $('#loading').modal('hide');
+            //     });
 
             // if($scope.creep_rule[$index].x === true) {
             //     if($scope.creep_rule[$index].ajax_pattern === "翻页") {
@@ -677,479 +680,582 @@ angular.module('MetronicApp')
             //     // 请求失败执行代码
             //     console.log("get projects bad")
             // });
-        //}
-    };
+            //}
+        };
 
-    // 创建项目
-    $scope.createAdvanceProject = function () {
+        // 创建项目
+        $scope.createAdvanceProject = function () {
 
-        if ($scope.new_project_name != "") {
-
-            for (var i = 0; i < $scope.projects.length; i++) {
-                if ($scope.projects[i].advanceProjectEntity.project_name == $scope.new_project_name) {
-                    alert("项目已经存在");
-                    return;
-                }
-            }
-
-            $http({
-                method: 'POST',
-                url: '/advance/createProject',
-                data:{
-                    project_name:$scope.new_project_name
-                }
-            }).then(function successCallback(response) {
-                console.log(response.data.newProject);
-                $scope.projects.push(response.data.newProject);
-                $scope.selected_project = $scope.projects[$scope.projects.length-1];
-                location.reload();
-                // tasks = $scope.selected_project.advanceTaskEntities;
-                // $scope.selected_task = tasks[tasks.length-1];
-            }, function errorCallback(response) {
-                // 请求失败执行代码
-                console.log("create project bad");
-            });
-        }
-    };
-
-    // 创建任务
-    $scope.createAdvanceTask = function () {
-        if ($scope.new_task_name != "") {
-            for (var i = 0; i < $scope.selected_project.advanceTaskEntities.length; i++) {
-                if ($scope.selected_project.advanceTaskEntities[i].task_name == $scope.new_task_name) {
-                    alert("任务已经存在");
-                    return;
-                }
-            }
-            $http({
-                method: 'POST',
-                url: '/advance/createTask',
-                data:{
-                    project_id: $scope.selected_project.advanceProjectEntity.project_id,
-                    task_name: $scope.new_task_name
-                }
-            }).then(function successCallback(response) {
+            if ($scope.new_project_name != "") {
 
                 for (var i = 0; i < $scope.projects.length; i++) {
-                    if ($scope.projects[i].advanceProjectEntity.project_id == response.data.project_id) {
-                        $scope.projects[i].advanceTaskEntities.push(response.data.newTask);
-                        $scope.selected_project = $scope.projects[i];
-                        tasks = $scope.selected_project.advanceTaskEntities;
-                        $scope.selected_task = tasks[tasks.length-1];
-
-                        var jsonData = {
-
-                            "basic_rule": {
-                                "project_id": $scope.selected_project.advanceProjectEntity.project_id,
-                                "task_id": $scope.selected_task.task_id,
-                                "task_leader": "",
-                                "task_description": ""
-                            },
-
-                            "assistant_rule": {
-                                "open": false,
-                                "login_page_path": "",
-                                "login_username": "",
-                                "login_username_xpath": "",
-                                "login_password": "",
-                                "login_password_xpath": "",
-                                "login_verifycode": "",
-                                "login_verifycode_xpath": "",
-                                "cookie": ""
-                            },
-
-                            "url_pattern": {
-
-                                "current_selected": "单页",
-
-                                "single": {
-
-                                    // "single_url_pattern_name": "abc",
-                                    "url_path": ""
-
-                                },
-
-                                "list": {
-                                    // "list_url_pattern_name": "abc",
-                                    "url_wildcard": "",
-                                    "init_value": 0,
-                                    "gap": 0,
-                                    "pages_num": 0,
-                                    "list_url_file_path": ""
-                                },
-
-
-                                "click": {
-                                    // "click_url_pattern_name": "abc",
-                                    "url_index_path": "",
-                                    "next_page_xpath": "",
-                                    "click_url_file_path": ""
-                                },
-
-                                "import": {
-                                    // "import_url_pattern_name": "abc",
-                                    "import_urls": [],
-                                    "file_upload_path": "",
-                                    "import_url_file_path": ""
-                                }
-
-                            },
-
-                            "creep_rule":
-                                [],
-
-                            "store_rule": {
-                                "store_pattern": "文件"
-                            },
-
-                            "run_rule": {
-                                "proxy_ids": [],
-                                "time": {
-                                    "start_time": "",
-                                    "end_time": ""
-                                },
-                                "headers": "",
-                                "custom_config": ""
-                            }
-
-                        };
-                        $http({
-                            method: 'POST',
-                            url: '/advance/task_config',
-                            data: jsonData
-                        }).then(function successCallback(response) {
-                            console.log(response.data);
-                            location.reload();
-                        }, function errorCallback(response) {
-                            // 请求失败执行代码
-                            console.log("post data bad");
-                        });
-
+                    if ($scope.projects[i].advanceProjectEntity.project_name == $scope.new_project_name) {
+                        alert("项目已经存在");
                         return;
                     }
-                    $('#modal_create_task').modal('hide');
                 }
-            }, function errorCallback(response) {
-                // 请求失败执行代码
-                console.log("create task bad");
-            });
-        }
-    };
 
-    /************************************************新旧分隔线**************************************************/
+                $http({
+                    method: 'POST',
+                    url: '/advance/createProject',
+                    data:{
+                        project_name:$scope.new_project_name
+                    }
+                }).then(function successCallback(response) {
+                    console.log(response.data.newProject);
+                    $scope.projects.push(response.data.newProject);
+                    $scope.selected_project = $scope.projects[$scope.projects.length-1];
+                    location.reload();
+                    // tasks = $scope.selected_project.advanceTaskEntities;
+                    // $scope.selected_task = tasks[tasks.length-1];
+                }, function errorCallback(response) {
+                    // 请求失败执行代码
+                    console.log("create project bad");
+                });
+            }
+        };
 
-    $scope.changeTemplate = function(tableId) {
+        // 创建任务
+        $scope.createAdvanceTask = function () {
+            if ($scope.new_task_name != "") {
+                for (var i = 0; i < $scope.selected_project.advanceTaskEntities.length; i++) {
+                    if ($scope.selected_project.advanceTaskEntities[i].task_name == $scope.new_task_name) {
+                        alert("任务已经存在");
+                        return;
+                    }
+                }
+                $http({
+                    method: 'POST',
+                    url: '/advance/createTask',
+                    data:{
+                        project_id: $scope.selected_project.advanceProjectEntity.project_id,
+                        task_name: $scope.new_task_name
+                    }
+                }).then(function successCallback(response) {
 
-        //console.log("1点击事件，切换tab....");
-        $scope.tabId = tableId;
-        //console.log("2点击事件，切换tab....");
-        if (tableId == 1) {
-            $scope.isadvanced = false;
-            $scope.usertemplateStr = angular.toJson($scope.temp1);
-        } else if (tableId == 2) {
-            $scope.isadvanced = false;
-            $scope.usertemplateStr=angular.toJson($scope.temp2);
-        } else if (tableId == 3) {
-            $scope.isadvanced = false;
-            $scope.usertemplateStr = angular.toJson($scope.temp3);
-        } else if (tableId == 4) {
-            $scope.isadvanced = true;
-            $scope.side_index = 0;
-        }
+                    for (var i = 0; i < $scope.projects.length; i++) {
+                        if ($scope.projects[i].advanceProjectEntity.project_id == response.data.project_id) {
+                            $scope.projects[i].advanceTaskEntities.push(response.data.newTask);
+                            $scope.selected_project = $scope.projects[i];
+                            tasks = $scope.selected_project.advanceTaskEntities;
+                            $scope.selected_task = tasks[tasks.length-1];
 
-        initTemplate();
-    };
+                            var jsonData = {
 
-    $scope.changeTab_advancedTemplate = function(tabIndex) {
-        ///////////////////////////////////////////////
-        // Jianfeng is debugging...
-        console.log("changeTab_advancedTemplate(" + tabIndex + ") called.");
-        ///////////////////////////////////////////////
-        switch (tabIndex) {
-            // The editing tab
-            case 0: {
+                                "basic_rule": {
+                                    "project_id": $scope.selected_project.advanceProjectEntity.project_id,
+                                    "task_id": $scope.selected_task.task_id,
+                                    "task_leader": "",
+                                    "task_description": ""
+                                },
+
+                                "assistant_rule": {
+                                    "open": false,
+                                    "login_page_path": "",
+                                    "login_username": "",
+                                    "login_username_xpath": "",
+                                    "login_password": "",
+                                    "login_password_xpath": "",
+                                    "login_verifycode": "",
+                                    "login_verifycode_xpath": "",
+                                    "cookie": ""
+                                },
+
+                                "url_pattern": {
+
+                                    "current_selected": "单页",
+
+                                    "single": {
+
+                                        // "single_url_pattern_name": "abc",
+                                        "url_path": ""
+
+                                    },
+
+                                    "list": {
+                                        // "list_url_pattern_name": "abc",
+                                        "url_wildcard": "",
+                                        "init_value": 0,
+                                        "gap": 0,
+                                        "pages_num": 0,
+                                        "list_url_file_path": ""
+                                    },
+
+
+                                    "click": {
+                                        // "click_url_pattern_name": "abc",
+                                        "url_index_path": "",
+                                        "next_page_xpath": "",
+                                        "click_url_file_path": ""
+                                    },
+
+                                    "import": {
+                                        // "import_url_pattern_name": "abc",
+                                        "import_urls": [],
+                                        "file_upload_path": "",
+                                        "import_url_file_path": ""
+                                    }
+
+                                },
+
+                                "creep_rule":
+                                    [],
+
+                                "store_rule": {
+                                    "store_pattern": "文件"
+                                },
+
+                                "run_rule": {
+                                    "proxy_ids": [],
+                                    "time": {
+                                        "start_time": "",
+                                        "end_time": ""
+                                    },
+                                    "headers": "",
+                                    "custom_config": ""
+                                }
+
+                            };
+                            $http({
+                                method: 'POST',
+                                url: '/advance/task_config',
+                                data: jsonData
+                            }).then(function successCallback(response) {
+                                console.log(response.data);
+                                location.reload();
+                            }, function errorCallback(response) {
+                                // 请求失败执行代码
+                                console.log("post data bad");
+                            });
+
+                            return;
+                        }
+                        $('#modal_create_task').modal('hide');
+                    }
+                }, function errorCallback(response) {
+                    // 请求失败执行代码
+                    console.log("create task bad");
+                });
+            }
+        };
+
+        $scope.changeTemplate = function(tableId) {
+            $scope.tabId = tableId;
+            if (tableId == 1) {
+                $scope.isadvanced = false;
+                $scope.usertemplateStr = angular.toJson($scope.temp1);
+            } else if (tableId == 2) {
+                $scope.isadvanced = false;
+                $scope.usertemplateStr=angular.toJson($scope.temp2);
+            } else if (tableId == 3) {
+                $scope.isadvanced = false;
+                $scope.usertemplateStr = angular.toJson($scope.temp3);
+            } else if (tableId == 4) {
+                $scope.isadvanced = true;
                 $scope.side_index = 0;
-
-                break;
             }
 
-            // The importing tab
-            case 1: {
-                $scope.side_index = 1;
+            initTemplate();
+        };
 
-                break;
+        /**
+         * Changes the tab in the advanced template
+         * @param tabIndex The index of the destination tab
+         */
+        $scope.changeTab_advancedTemplate = function(tabIndex) {
+            ///////////////////////////////////////////////
+            // Jianfeng is debugging...
+            console.log("changeTab_advancedTemplate(" + tabIndex + ") called.");
+            ///////////////////////////////////////////////
+            switch (tabIndex) {
+                // The editing tab
+                case 0: {
+                    $scope.side_index = 0;
+
+                    break;
+                }
+
+                // The importing tab
+                case 1: {
+                    $scope.side_index = 1;
+
+                    break;
+                }
+
+                // The exporting tab
+                case 2: {
+                    $scope.side_index = 2;
+
+                    break;
+                }
+
+                // The monitoring tab
+                case 3: {
+                    $scope.side_index = 3;
+
+                    break;
+                }
+
+                // Illegal input
+                default: {
+                    console.log("changeTab_advancedTemplate: The parameter tabIndex cannot be " + tabIndex + "!");
+
+                    break;
+                }
+            }
+        };
+
+        /**
+         *  TODO: Complete this comment
+         */
+        $scope.importIntoEditingTab = function() {
+            ////////////////////////////////////////////////
+            // Jianfeng is debugging...
+            console.log("importIntoEditingTab() called.");
+            ////////////////////////////////////////////////
+
+            $scope.side_index = 0;
+            $scope.active_side = 0;
+        };
+
+        // For importing file from the local machine
+        var form = document.forms.namedItem("fileinfo");
+        form.addEventListener('submit', function(ev) {
+
+            // var oOutput = document.querySelector("div");
+            var oOutput = $("#import_result");
+            var oData = new FormData(form);
+
+            var configJsonFile = $("#config_json_file")[0].files[0];
+            console.log("configJsonFile.toString() = \"" + configJsonFile.toString() +"\".");
+            var reader = new FileReader();
+            reader.onload = function() {
+                console.log("reader.onload() called.");
+                console.log("this.result = \"" + this.result + "\".");
+                console.log("configJsonFile.size = " + configJsonFile.size + ".");
+                document.getElementById("import_result").innerHTML = this.result;
+            };
+            reader.readAsText(configJsonFile);
+
+            // $scope.side_index = 0;
+
+            // oData.append("CustomField", "This is some extra data");
+
+            // var oReq = new XMLHttpRequest();
+            // oReq.open("POST", "stash.php", true);
+            // oReq.onload = function(oEvent) {
+            //     if (oReq.status == 200) {
+            //         oOutput.innerHTML = "Uploaded!";
+            //     } else {
+            //         oOutput.innerHTML = "Error " + oReq.status + " occurred when trying to upload your file.<br \/>";
+            //     }
+            // };
+            //
+            // oReq.send(oData);
+            ev.preventDefault();
+        }, false);
+
+        // /**
+        //  * Changes the tab in the advanced template
+        //  * @param tabIndex The index of the destination tab
+        //  */
+        // $scope.importConfigJson = function(tabIndex) {
+        //     ///////////////////////////////////////////////
+        //     // Jianfeng is debugging...
+        //     // console.log("changeTab_advancedTemplate(" + tabIndex + ") called.");
+        //     console.log("fuck, this is first function, tabIndex = " + tabIndex + ".");
+        //     ///////////////////////////////////////////////
+        //     switch (tabIndex) {
+        //         // The editing tab
+        //         case 0: {
+        //             $scope.side_index = 0;
+        //
+        //             break;
+        //         }
+        //
+        //         // The importing tab
+        //         case 1: {
+        //             $scope.side_index = 1;
+        //
+        //             break;
+        //         }
+        //
+        //         // The exporting tab
+        //         case 2: {
+        //             $scope.side_index = 2;
+        //
+        //             break;
+        //         }
+        //
+        //         // The monitoring tab
+        //         case 3: {
+        //             $scope.side_index = 3;
+        //
+        //             break;
+        //         }
+        //
+        //         // Illegal input
+        //         default: {
+        //             console.log("changeTab_advancedTemplate: The parameter tabIndex cannot be " + tabIndex + "!");
+        //
+        //             break;
+        //         }
+        //     }
+        // };
+        //
+        // /**
+        //  * Imports JSON configuration file from the user's computer
+        //  */
+        // $scope.changeTab_advancedTemplate = function(tabIndex) {
+        //     console.log("importConfigJson_advancedTemplate() called.");
+        //     alert("importConfigJson_advancedTemplate() called.");
+        // };
+
+        $scope.reset = function() {
+            //刷新页面，重新加载
+            $state.go('collect_listpage', {}, {reload: true});
+        };
+
+        $scope.ajaxType = false;
+        $scope.ajaxXpath = false;
+        $scope.changeifHide = function (x) {
+            if (x == 0) {
+                $scope.ajaxType = false;
+                $scope.ajaxXpath = false;
+            }
+            else if (x == 1) {
+                $scope.ajaxType = true;
+                $scope.ajaxXpath = true;
+            }
+        };
+
+        $scope.changeXpath = function (x) {
+            if (x == 0) {
+                $scope.ajaxXpath = false;
+            }
+            else if (x == 1) {
+                $scope.ajaxXpath = true;
             }
 
-            // The exporting tab
-            case 2: {
-                $scope.side_index = 2;
+        };
 
-                break;
+        $scope.testCrawler = function () {
+            /* var x = $('#crawlrule').serializeArray();
+             var m = [], idata;
+             $.each(x, function(i, field){
+                 // 由于会出现"双引号字符会导致接下来的数据打包失败，故此对元素内容进行encodeURI编码
+                 // 后台PHP采用urldecode()函数还原数据
+                 m.push('"' + field.name + '":"' + field.value) + '"';
+             });
+             idata ='{' +  m.join(',') + '}';
+             idata = eval('(' +idata+ ')');*/
+            var params = $("#crawlrule").serializeArray();
+            var values = {};
+            for (x in params ) {
+                values[params[x].name] = params[x].value;
+            }
+            var idata = JSON.stringify(values)
+            alert(idata.toString());
+            console.log(idata.toString());
+            CollectCusTempService.crawltest(idata);
+        };
+
+        // 单页采集模板
+        $scope.temp1 = {
+            "name":"模板名称",
+            "description":"描述",
+            "type":"user-singlepage",
+            "domain":"",
+            "cookie":"",
+            "interval":3000,
+            "entryUrls":["入口链接1","入口链接2"],
+            // "depth":1,
+            "contentUrlRegex":"详情页校验",
+            "fields":[
+                {
+                    "name":"info_1",
+                    "contentXpath":"xpath获取info_1",
+                    "require":true
+                },
+                {
+                    "name":"info_2",
+                    "contentXpath":"xpath获取info_2",
+                    "require":false
+                },
+                {
+                    "name":"info_3",
+                    "contentXpath":"xpath获取info_3",
+                    "require":true
+                }
+            ]
+        };
+
+        // 分页采集模板
+        $scope.temp2 = {
+            "name":"模板名称",
+            "description":"描述",
+            "type":"user-listpage",
+            "domain":"",
+            "cookie":"",
+            "interval":3000,
+            "entryUrls":["入口链接1","入口链接2"],
+            // "depth":2,
+            "nextUrlXpath":"xpth获取下一页",
+            "contentUrlXpath":"xpth获取详情页",
+            "listUrlRegex":"列表页校验",
+            "contentUrlRegex":"详情页校验",
+            "fields":[
+                {
+                    "name":"info_1",
+                    "contentXpath":"xpath获取info_1",
+                    "require":true
+                },
+                {
+                    "name":"info_2",
+                    "contentXpath":"xpath获取info_2",
+                    "require":false
+                },
+                {
+                    "name":"info_3",
+                    "contentXpath":"xpath获取info_3",
+                    "require":true
+                }
+            ]
+        };
+
+        // 分层采集
+        $scope.temp3 = {
+            "name":"模板名称",
+            "description":"描述",
+            "type":"user-multipage",
+            "domain":"",
+            "cookie":"",
+            "interval":3000,
+            "entryUrls":["入口链接1","入口链接2"],
+            "depth":3,
+            "contentUrlRegex":"详情页校验",
+            "fields":[
+                {
+                    "name":"info_1",
+                    "contentXpath":"xpath获取info_1",
+                    "require":true
+                },
+                {
+                    "name":"info_2",
+                    "contentXpath":"xpath获取info_2",
+                    "require":false
+                },
+                {
+                    "name":"info_3",
+                    "contentXpath":"xpath获取info_3",
+                    "require":true
+                }
+            ]
+        };
+
+        $scope.usertemplateStr = angular.toJson($scope.temp1);
+
+        $scope.createTemplate = function() {
+            //检测模板是否符合json规范
+            try {
+                angular.fromJson($scope.usertemplateStr);
+            } catch(exception) {
+                sweetAlert("不符合json规范，请重新填写！");
+                return;
             }
 
-            // The monitoring tab
-            case 3: {
-                $scope.side_index = 3;
-
-                break;
-            }
-
-            // Illegal input
-            default: {
-                console.log("changeTab_advancedTemplate: The parameter tabIndex cannot be " + tabIndex + "!");
-
-                break;
-            }
-        }
-    };
-
-    $scope.reset = function() {
-        //刷新页面，重新加载
-        $state.go('collect_listpage', {}, {reload: true});
-    };
-
-    $scope.ajaxType = false;
-    $scope.ajaxXpath = false;
-    $scope.changeifHide = function (x) {
-      if (x == 0) {
-          $scope.ajaxType = false;
-          $scope.ajaxXpath = false;
-      }
-      else if (x == 1) {
-          $scope.ajaxType = true;
-          $scope.ajaxXpath = true;
-      }
-    };
-
-    $scope.changeXpath = function (x) {
-        if (x == 0) {
-            $scope.ajaxXpath = false;
-        }
-        else if (x == 1) {
-            $scope.ajaxXpath = true;
-        }
-
-    };
-
-    $scope.testCrawler=function () {
-       /* var x = $('#crawlrule').serializeArray();
-        var m = [], idata;
-        $.each(x, function(i, field){
-            // 由于会出现"双引号字符会导致接下来的数据打包失败，故此对元素内容进行encodeURI编码
-            // 后台PHP采用urldecode()函数还原数据
-            m.push('"' + field.name + '":"' + field.value) + '"';
-        });
-        idata ='{' +  m.join(',') + '}';
-        idata = eval('(' +idata+ ')');*/
-        var params = $("#crawlrule").serializeArray();
-        var values = {};
-        for( x in params ){
-            values[params[x].name] = params[x].value;
-        }
-        var idata = JSON.stringify(values)
-        alert(idata.toString());
-        console.log(idata.toString());
-        CollectCusTempService.crawltest(idata);
-    }
-
-//单页采集模板
-    $scope.temp1 = {
-        "name":"模板名称",
-        "description":"描述",
-        "type":"user-singlepage",
-        "domain":"",
-        "cookie":"",
-        "interval":3000,
-        "entryUrls":["入口链接1","入口链接2"],
-        // "depth":1,
-        "contentUrlRegex":"详情页校验",
-        "fields":[
-            {
-                "name":"info_1",
-                "contentXpath":"xpath获取info_1",
-                "require":true
-            },
-            {
-                "name":"info_2",
-                "contentXpath":"xpath获取info_2",
-                "require":false
-            },
-            {
-                "name":"info_3",
-                "contentXpath":"xpath获取info_3",
-                "require":true
-            }
-        ]
-    };
-
-//分页采集模板
-    $scope.temp2 = {
-        "name":"模板名称",
-        "description":"描述",
-        "type":"user-listpage",
-        "domain":"",
-        "cookie":"",
-        "interval":3000,
-        "entryUrls":["入口链接1","入口链接2"],
-        // "depth":2,
-        "nextUrlXpath":"xpth获取下一页",
-        "contentUrlXpath":"xpth获取详情页",
-        "listUrlRegex":"列表页校验",
-        "contentUrlRegex":"详情页校验",
-        "fields":[
-            {
-                "name":"info_1",
-                "contentXpath":"xpath获取info_1",
-                "require":true
-            },
-            {
-                "name":"info_2",
-                "contentXpath":"xpath获取info_2",
-                "require":false
-            },
-            {
-                "name":"info_3",
-                "contentXpath":"xpath获取info_3",
-                "require":true
-            }
-        ]
-    };
-
-//分层采集
-    $scope.temp3 = {
-        "name":"模板名称",
-        "description":"描述",
-        "type":"user-multipage",
-        "domain":"",
-        "cookie":"",
-        "interval":3000,
-        "entryUrls":["入口链接1","入口链接2"],
-        "depth":3,
-        "contentUrlRegex":"详情页校验",
-        "fields":[
-            {
-                "name":"info_1",
-                "contentXpath":"xpath获取info_1",
-                "require":true
-            },
-            {
-                "name":"info_2",
-                "contentXpath":"xpath获取info_2",
-                "require":false
-            },
-            {
-                "name":"info_3",
-                "contentXpath":"xpath获取info_3",
-                "require":true
-            }
-        ]
-    };
-
-    $scope.usertemplateStr = angular.toJson($scope.temp1);
-
-    $scope.createTemplate = function() {
-        //检测模板是否符合json规范
-        try {
-            angular.fromJson($scope.usertemplateStr);
-        } catch(exception) {
-            sweetAlert("不符合json规范，请重新填写！");
-            return;
-        }
-
-        CollectCusTempService.createCusTemp($scope.usertemplateStr).then(function (resp) {
-            if (resp.error_code == 0) {
+            CollectCusTempService.createCusTemp($scope.usertemplateStr).then(function (resp) {
+                if (resp.error_code == 0) {
                     swal("success!", resp.rt_msg, "success");
 
+                } else {
+                    sweetAlert("error", resp.error_msg, "error");
+                }
+            }, function (resp) {
+            })
+        };
+
+        //初始化模板数据
+        var initTemplate = function() {
+            var content = $scope.usertemplateStr;
+            var result = '';
+            if (content!='') {
+
+                try {
+                    current_json = jsonlint.parse(content);
+                    current_json_str = JSON.stringify(current_json);
+                    //current_json = JSON.parse(content);
+                    result = new JSONFormat(content,4).toString();
+                } catch(e) {
+                    result = '<span style="color: #f1592a;font-weight:bold;">' + e + '</span>';
+                    current_json_str = result;
+                }
+
+                $('#json-target').html(result);
             } else {
-                sweetAlert("error", resp.error_msg, "error");
+                $('#json-target').html('');
             }
-        }, function (resp) {
-        })
-    }
+        };
 
-    //初始化模板数据
-    var initTemplate = function() {
-        var content = $scope.usertemplateStr;
-        var result = '';
-        if (content!='') {
+        // 解析json(等时间充裕改写成angularjs语法)
+        var current_json = '';
+        var current_json_str = '';
+        var xml_flag = false;
+        var zip_flag = false;
+        var shown_flag = false;
+        $('.tip').tooltip();
+        $('#json-src').keyup(function() {
+            initTemplate();
+        });
 
-            try {
-                current_json = jsonlint.parse(content);
-                current_json_str = JSON.stringify(current_json);
-                //current_json = JSON.parse(content);
-                result = new JSONFormat(content,4).toString();
-            } catch(e) {
-                result = '<span style="color: #f1592a;font-weight:bold;">' + e + '</span>';
-                current_json_str = result;
+        $('.shown').click(function() {
+            if (!shown_flag) {
+                readerLine();
+                $('#json-src').attr("style","height:553px;padding:0 10px 10px 40px;border:0;border-right:solid 1px #ddd;border-bottom:solid 1px #ddd;border-radius:0;resize: none; outline:none;");
+                $('#json-target').attr("style","padding:0px 50px;");
+                $('#line-num').show();
+                $('.numberedtextarea-line-numbers').show();
+                shown_flag = true;
+                $(this).attr('style','color:#15b374;');
+            } else {
+                $('#json-src').attr("style","height:553px;padding:0 10px 10px 20px;border:0;border-right:solid 1px #ddd;border-bottom:solid 1px #ddd;border-radius:0;resize: none; outline:none;");
+                $('#json-target').attr("style","padding:0px 20px;");
+                $('#line-num').hide();
+                $('.numberedtextarea-line-numbers').hide();
+                shown_flag = false;
+                $(this).attr('style','color:#999;');
             }
-
-            $('#json-target').html(result);
-        } else {
-            $('#json-target').html('');
+        });
+        function readerLine() {
+            var line_num = $('#json-target').height()/20;
+            $('#line-num').html("");
+            var line_num_html = "";
+            for (var i = 1; i < line_num+1; i++) {
+                line_num_html += "<div>"+i+"<div>";
+            }
+            $('#line-num').html(line_num_html);
         }
-    };
 
-//解析json(等时间充裕改写成angularjs语法)
-    var current_json = '';
-    var current_json_str = '';
-    var xml_flag = false;
-    var zip_flag = false;
-    var shown_flag = false;
-    $('.tip').tooltip();
-    $('#json-src').keyup(function() {
-        initTemplate();
+        $('#json-src').keyup();
+
+        $scope.$on('$viewContentLoaded', function() {
+            if ($stateParams.tabId > 0) {
+                //console.log("初始化方法")
+                $cookieStore.put('refreshPageParam', $stateParams);
+            }
+            //console.log("初始化获取tabId");
+            $scope.tabId = $cookieStore.get('refreshPageParam').tabId;
+            $scope.changeTemplate($scope.tabId);
+            //console.log("初始化完毕");
+            $scope.active = {
+                "tab1": $scope.tabId == 1,
+                "tab2": $scope.tabId == 2,
+                "tab3": $scope.tabId == 3,
+                "tab4": $scope.tabId == 4
+            };
+        });
+
     });
-
-    $('.shown').click(function() {
-        if (!shown_flag) {
-            readerLine();
-            $('#json-src').attr("style","height:553px;padding:0 10px 10px 40px;border:0;border-right:solid 1px #ddd;border-bottom:solid 1px #ddd;border-radius:0;resize: none; outline:none;");
-            $('#json-target').attr("style","padding:0px 50px;");
-            $('#line-num').show();
-            $('.numberedtextarea-line-numbers').show();
-            shown_flag = true;
-            $(this).attr('style','color:#15b374;');
-        } else {
-            $('#json-src').attr("style","height:553px;padding:0 10px 10px 20px;border:0;border-right:solid 1px #ddd;border-bottom:solid 1px #ddd;border-radius:0;resize: none; outline:none;");
-            $('#json-target').attr("style","padding:0px 20px;");
-            $('#line-num').hide();
-            $('.numberedtextarea-line-numbers').hide();
-            shown_flag = false;
-            $(this).attr('style','color:#999;');
-        }
-    });
-    function readerLine() {
-        var line_num = $('#json-target').height()/20;
-        $('#line-num').html("");
-        var line_num_html = "";
-        for (var i = 1; i < line_num+1; i++) {
-            line_num_html += "<div>"+i+"<div>";
-        }
-        $('#line-num').html(line_num_html);
-    }
-
-    $('#json-src').keyup();
-
-    $scope.$on('$viewContentLoaded', function() {
-
-        if ($stateParams.tabId > 0) {
-            //console.log("初始化方法")
-            $cookieStore.put('refreshPageParam',$stateParams);
-        }
-        //console.log("初始化获取tabId");
-        $scope.tabId = $cookieStore.get('refreshPageParam').tabId;
-        $scope.changeTemplate($scope.tabId);
-        //console.log("初始化完毕");
-        $scope.active = {
-            "tab1": $scope.tabId == 1,
-            "tab2": $scope.tabId == 2,
-            "tab3": $scope.tabId == 3,
-            "tab4": $scope.tabId == 4
-        }
-    });
-
-});
-
 
 var ModalDemoCtrl = function ($scope, $modal) {
     $scope.open = function (size) {
@@ -1250,7 +1356,7 @@ $shadow.xpathDom = function(xpath) {
     return $(xpath);
 };
 
-//获取xpath
+// 获取xpath
 function readXPath(element) {
     if (element.id !== "") { //判断id属性，如果这个元素有id，则显 示//*[@id="xPath"]  形式内容
         if (element.id == undefined) {
