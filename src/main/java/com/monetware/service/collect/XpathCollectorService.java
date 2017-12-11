@@ -5,6 +5,7 @@ import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.monetware.model.collect.CollectProgress;
 import com.monetware.model.collect.FilePipline;
 import com.monetware.model.collect.MysqlPipline;
 import com.monetware.util.Useragnets;
@@ -21,12 +22,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.jsoup.helper.StringUtil.isNumeric;
 
 public class XpathCollectorService {
     private String xpath;
-    private String url;
+    private List<String> urls;
     private String nameinDB;
     private String ifajax;
     private String ajaxtype;
@@ -50,10 +52,10 @@ public class XpathCollectorService {
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         propertySupport.removePropertyChangeListener(listener);
     }
-    public void crawlSingleData(String url,String xpath,String nameinDB,String ifajax,String ajaxtype,String ajaxXpath,String proxy_id,String starttime,String endtime,String header,String storetype,String extract_way)
+    public void crawlSingleData(List<String> urls,String xpath,String nameinDB,String ifajax,String ajaxtype,String ajaxXpath,String proxy_id,String starttime,String endtime,String header,String storetype,String extract_way)
     {
         this.xpath=xpath;
-        this.url=url;
+        this.urls=urls;
         this.nameinDB=nameinDB;
         this.ifajax=ifajax;
         this.ajaxtype=ajaxtype;
@@ -80,6 +82,7 @@ public class XpathCollectorService {
                     isCompleted = true;
                     System.out.println("onsuccess");
                     propertySupport.firePropertyChange("isCompleted", false, true);
+                    CollectProgress.crawledurls++;
 
                 }
 
@@ -92,10 +95,10 @@ public class XpathCollectorService {
                 }
             });
             if(ifajax.equals("false")) {
-                Spider.create(new SingleCrawler()).setSpiderListeners(spiderlisteners).addUrl(url).addPipeline(new FilePipline()).addPipeline(new ConsolePipeline()).thread(5).run();
+                Spider.create(new SingleCrawler()).setSpiderListeners(spiderlisteners).startUrls(urls).addPipeline(new FilePipline()).addPipeline(new ConsolePipeline()).thread(5).run();
             }
             else if(ifajax.equals("true")) {
-                Spider.create(new AjaxCrawler()).setSpiderListeners(spiderlisteners).addUrl(url).addPipeline(new FilePipline()).addPipeline(new ConsolePipeline()).thread(5).run();
+                Spider.create(new AjaxCrawler()).setSpiderListeners(spiderlisteners).startUrls(urls).addPipeline(new FilePipline()).addPipeline(new ConsolePipeline()).thread(5).run();
             }
 
 
@@ -108,6 +111,24 @@ public class XpathCollectorService {
 
         @Override
         public void process(Page page) {
+            if(proxy_id!=null && proxy_id.length() > 0)
+            {
+                getSite().setHttpProxy(new HttpHost(proxy_id));
+            }
+            if(starttime!=null && starttime!=""&&endtime!=null&&endtime!="")
+            {
+                double startT=Double.parseDouble(starttime);
+                double endT=Double.parseDouble(endtime);
+                double randomT=startT+new Random().nextDouble()*(endT-startT);
+                System.out.println(randomT);
+                try {
+                    Thread.sleep((long)randomT * 1000);
+                }catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
             String value=page.getHtml().xpath(xpath).toString();
             page.putField(nameinDB,value);
 
@@ -143,66 +164,45 @@ public class XpathCollectorService {
         @SuppressWarnings("deprecation")
         @Override
         public void process(Page page) {
-            if(ajaxtype.equals("点击")) {
+            /*if(proxy_id!=null || proxy_id!="[]")
+            {
+                getSite().setHttpProxy(new HttpHost(proxy_id));
+            }*/
+            if(starttime!=null && starttime!=""&&endtime!=null&&endtime!="")
+            {
+                double startT=Double.parseDouble(starttime);
+                double endT=Double.parseDouble(endtime);
+                double randomT=startT+new Random().nextDouble()*(endT-startT);
+                System.out.println(randomT);
                 try {
-                    WebClient webClient = new WebClient(BrowserVersion.CHROME);
-                    webClient.getOptions().setCssEnabled(false);
-                    webClient.getOptions().setUseInsecureSSL(true);
-                    webClient.getOptions().setJavaScriptEnabled(true);
-                    webClient.setAjaxController(new NicelyResynchronizingAjaxController());
-                    HtmlPage htmlPage = webClient.getPage(url);
-                    webClient.waitForBackgroundJavaScript(10000);
-                    List<HtmlAnchor> htmlListItems = htmlPage.getByXPath(ajaxXpath);
-                    int i = 0;
-                    for (HtmlAnchor htmlAnchor : htmlListItems) {
-                        System.out.println("afbkasbdk");
-                        htmlPage = (HtmlPage) htmlAnchor.click();
-                        webClient.waitForBackgroundJavaScript(10000);
-                        i++;
-                        if (i == 3) {
-                            break;
-                        }
-                    }
-                    page.setRawText(htmlPage.asXml());
-                    page.setHtml(new Html(htmlPage.asXml()));
-                    String value = page.getHtml().xpath(xpath).toString();
-                    if (extract_way.equals("链接")) {
-                        if (!value.contains("://")) {
-                            String root_path = null;
-                            try {
-                                URL tempurl = new URL(url);
-                                root_path = tempurl.getProtocol() + "://" + tempurl.getHost();
-                                System.out.println(root_path);
-                            } catch (MalformedURLException e) {
-                                e.printStackTrace();
-                            }
-                            value = root_path + value;
-                        }
-                    }
-                    page.putField(nameinDB, value);
-                    webClient.close();
-                } catch (Exception e) {
+                    Thread.sleep((long)randomT * 1000);
+                }catch(Exception e)
+                {
                     e.printStackTrace();
                 }
-            }
-            else if(ajaxtype.equals("翻页"))
-            {
-                try {
-                    WebClient webClient = new WebClient(BrowserVersion.CHROME);
-                    webClient.getOptions().setCssEnabled(false);
-                    webClient.getOptions().setUseInsecureSSL(true);
-                    webClient.getOptions().setJavaScriptEnabled(true);
-                    webClient.setAjaxController(new NicelyResynchronizingAjaxController());
-                    HtmlPage htmlPage = webClient.getPage(url);
-                    webClient.waitForBackgroundJavaScript(10000);
 
-                    int pages = 0;
-                    String result="";
-                    while (pages<10) {
+            }
+            for(String url:urls) {
+                if (ajaxtype.equals("点击")) {
+                    try {
+                        WebClient webClient = new WebClient(BrowserVersion.CHROME);
+                        webClient.getOptions().setCssEnabled(false);
+                        webClient.getOptions().setUseInsecureSSL(true);
+                        webClient.getOptions().setJavaScriptEnabled(true);
+                        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+                        HtmlPage htmlPage = webClient.getPage(url);
+                        webClient.waitForBackgroundJavaScript(10000);
                         List<HtmlAnchor> htmlListItems = htmlPage.getByXPath(ajaxXpath);
-                        System.out.println("afbkasbdk");
-                        htmlPage = (HtmlPage) htmlListItems.get(7).click();
-                        webClient.waitForBackgroundJavaScript(1000);
+                        int i = 0;
+                        for (HtmlAnchor htmlAnchor : htmlListItems) {
+                            System.out.println("afbkasbdk");
+                            htmlPage = (HtmlPage) htmlAnchor.click();
+                            webClient.waitForBackgroundJavaScript(1000);
+                            i++;
+                            if (i == 3) {
+                                break;
+                            }
+                        }
                         page.setRawText(htmlPage.asXml());
                         page.setHtml(new Html(htmlPage.asXml()));
                         String value = page.getHtml().xpath(xpath).toString();
@@ -219,13 +219,64 @@ public class XpathCollectorService {
                                 value = root_path + value;
                             }
                         }
-                        result=result+value;
-                        pages++;
+                        page.putField(nameinDB, value);
+                        webClient.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    page.putField(nameinDB, result);
-                    webClient.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } else if (ajaxtype.equals("翻页")) {
+                    try {
+                        WebClient webClient = new WebClient(BrowserVersion.CHROME);
+                        webClient.getOptions().setCssEnabled(false);
+                        webClient.getOptions().setUseInsecureSSL(true);
+                        webClient.getOptions().setJavaScriptEnabled(true);
+                        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+                        HtmlPage htmlPage = webClient.getPage(url);
+                        webClient.waitForBackgroundJavaScript(10000);
+
+                        int pages = 0;
+                        String result = "";
+                        while (pages < 10) {
+                            if (starttime != null && starttime != "" && endtime != null && endtime != "") {
+                                double startT = Double.parseDouble(starttime);
+                                double endT = Double.parseDouble(endtime);
+                                double randomT = startT + new Random().nextDouble() * (endT - startT);
+                                System.out.println(randomT);
+                                try {
+                                    Thread.sleep((long) randomT * 1000);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                            List<HtmlAnchor> htmlListItems = htmlPage.getByXPath(ajaxXpath);
+                            System.out.println("afbkasbdk");
+                            htmlPage = (HtmlPage) htmlListItems.get(htmlListItems.size() - 1).click();
+                            webClient.waitForBackgroundJavaScript(1000);
+                            page.setRawText(htmlPage.asXml());
+                            page.setHtml(new Html(htmlPage.asXml()));
+                            String value = page.getHtml().xpath(xpath).toString();
+                            if (extract_way.equals("链接")) {
+                                if (!value.contains("://")) {
+                                    String root_path = null;
+                                    try {
+                                        URL tempurl = new URL(url);
+                                        root_path = tempurl.getProtocol() + "://" + tempurl.getHost();
+                                        System.out.println(root_path);
+                                    } catch (MalformedURLException e) {
+                                        e.printStackTrace();
+                                    }
+                                    value = root_path + value;
+                                }
+                            }
+                            result = result + value;
+                            pages++;
+                        }
+                        page.putField(nameinDB, result);
+                        webClient.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 

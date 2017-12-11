@@ -3,6 +3,7 @@ package com.monetware.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.monetware.mapper.collect.SpiderTaskInfoMapper;
+import com.monetware.model.collect.CollectProgress;
 import com.monetware.model.collect.SpiderTaskInfo;
 import com.monetware.service.collect.CollectService;
 import com.monetware.service.collect.XpathCollectorService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -63,18 +65,33 @@ public class CrawlPlanController {
         {
             //不配置登录
             String urltype=url_pattern.getString("current_selected");
+            List<String> urls=new ArrayList<>();
+            String url=url_pattern.getJSONObject("single").getString("url_path");
             if(urltype.equals("单页"))
             {
-                String url=url_pattern.getJSONObject("single").getString("url_path");
-                String store_pattern=store_rule.getString("store_pattern");
-                String proxy_id=run_rule.getString("proxy_id");
-                JSONObject time=run_rule.getJSONObject("time");
-                String header=run_rule.getString("headers");
-                String custom_config=run_rule.getString("custom_config");
-
-
-                for(final Object eachtask : creep_rule)
-                {
+                url=url_pattern.getJSONObject("single").getString("url_path");
+                urls.add(url);
+            }
+            else if(urltype.equals("列表"))
+            {
+                //add later
+            }
+            else if(urltype.equals("翻页"))
+            {
+                //add later
+            }
+            else if(urltype.equals("导入"))
+            {
+                //add later
+            }
+            CollectProgress.totalurls=urls.size();
+            String store_pattern=store_rule.getString("store_pattern");
+            String proxy_id=run_rule.getString("proxy_id");
+            JSONObject time=run_rule.getJSONObject("time");
+            String header=run_rule.getString("headers");
+            String custom_config=run_rule.getString("custom_config");
+            for(final Object eachtask : creep_rule)
+            {
                     JSONObject eachtaskJSON=(JSONObject)eachtask;
                     String creep_pattern=eachtaskJSON.getString("creep_pattern");
                     // extract_way
@@ -95,10 +112,25 @@ public class CrawlPlanController {
                                     xpath1=xpath1+"/@href";
                                 }
                                 String attribute_name=eachtaskJSON.getString("attribute_name");
-                                service.crawlSingleData(url,xpath1,attribute_name,ajax.getBoolean("open").toString(),ajax_pattern,button_xpath,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
+                                service.crawlSingleData(urls,xpath1,attribute_name,ajax.getBoolean("open").toString(),ajax_pattern,button_xpath,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
 
 
                             }
+                            else if(ajax_pattern.equals("翻页"))
+                            {
+                                String button_xpath=ajax.getString("button_xpath");
+                                String xpath1=((JSONObject) eachtask).getString("attribute_xpath");
+                                if(extract_way.equals("链接"))
+                                {
+                                    System.out.println("lianjie here");
+                                    xpath1=xpath1+"/@href";
+                                }
+                                String attribute_name=eachtaskJSON.getString("attribute_name");
+                                service.crawlSingleData(urls,xpath1,attribute_name,ajax.getBoolean("open").toString(),ajax_pattern,button_xpath,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
+
+
+                            }
+
                         }
                         else
                         {
@@ -110,7 +142,7 @@ public class CrawlPlanController {
                                 xpath1=xpath1+"/@href";
                             }
                             String attribute_name=eachtaskJSON.getString("attribute_name");
-                            service.crawlSingleData(url,xpath1,attribute_name,ajax.getBoolean("open").toString(),null,null,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
+                            service.crawlSingleData(urls,xpath1,attribute_name,ajax.getBoolean("open").toString(),null,null,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
                         }
                     }
                     else if(creep_pattern.equals("线索"))
@@ -166,25 +198,13 @@ public class CrawlPlanController {
                                             System.out.println(error);
                                         }
                                     };
-                            collectService.crawl(onCrawleLinstener, url, extract_way, xpath1, xpath2);
+                            collectService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES, extract_way, "", xpath1, xpath2);
                         }
                     }
 
-                }
-
             }
-            else if(urltype.equals("列表"))
-            {
 
-            }
-            else if(urltype.equals("翻页"))
-            {
 
-            }
-            else if(urltype.equals("导入"))
-            {
-
-            }
         }
 
 

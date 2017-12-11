@@ -31,7 +31,7 @@ public class CollectByFlipController {
     public List<String> crawlByClues(@RequestParam("url_path") String url_path,
                                @RequestParam("xpath1") String xpath1,
                                @RequestParam("xpath2") String xpath2,
-                                     @RequestParam("ajax_xpath") String ajax_xpath) {
+                               @RequestParam("ajax_xpath") String ajax_xpath) {
         success = 0;
         results = new ArrayList<>();
         System.out.println(url_path + " " + xpath1 + " " + ajax_xpath + " " + xpath2);
