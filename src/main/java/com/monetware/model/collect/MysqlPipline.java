@@ -22,10 +22,9 @@ public class MysqlPipline implements Pipeline {
         }
         else {
             for (Map.Entry<String, Object> info : infos.entrySet()) {
-                tempResult += info.getKey() + ":" + info.getValue()==null?"no data crawled":info.getValue();
+                tempResult += info.getKey() + ":" + info.getValue() == null ? "no data crawled" : info.getValue();
             }
         }
-
         /*if(news!=null) {
             System.out.println("insert in news");
             Dao.getInstance().inertNews(news.getTitle(),news.getBody(),news.getPublish_time(),news.getWriter(),news.getDatasource(),news.getUrl(),news.isYangzhou(),news.isZhenjiang(),news.isBeijing(),news.isShanghai(),news.isHangzhou(),news.isChengdu(),news.isChangsha(),news.isZhangbei(),news.isZhoushan(),news.isCaomei(),news.isMidi(),news.isNanjing());
