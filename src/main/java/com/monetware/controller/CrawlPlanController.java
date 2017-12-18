@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -85,6 +86,8 @@ public class CrawlPlanController {
                 //add later
             }
             CollectProgress.totalurls.put(task_id,urls.size());
+            Date date=new Date(System.currentTimeMillis());
+            CollectProgress.starttime.put(task_id,date);
             String store_pattern=store_rule.getString("store_pattern");
             String proxy_id=run_rule.getString("proxy_id");
             JSONObject time=run_rule.getJSONObject("time");

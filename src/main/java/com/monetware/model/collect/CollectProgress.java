@@ -1,5 +1,7 @@
 package com.monetware.model.collect;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
 //temp implemention
@@ -7,4 +9,6 @@ import java.util.HashMap;
 public class CollectProgress {
     public static HashMap<Integer,Integer> totalurls=new HashMap<>();
     public static HashMap<Integer,Integer> crawledurls=new HashMap<>();
+    public static HashMap<Integer,Date> starttime=new HashMap<>();
+    
 }
