@@ -22,6 +22,57 @@ angular.module('MetronicApp')
 // })
 
     .controller('CollectListPageController', function($rootScope, $scope, $http, $state, $timeout, CollectNewsService, anchorScroll, CollectCusTempService, $stateParams, $cookieStore, $q) {
+
+        $scope.chartSeries = [
+            {"name": "Some data", "data": [1, 2, 4, 7, 3], id: 's1'},
+        ];
+
+
+        $scope.chartConfig = {
+
+            chart: {
+                height: 500,
+                width: 500,
+                type: 'line'
+            },
+            plotOptions: {
+                series: {
+                    stacking: ''
+                }
+            },
+            series: $scope.chartSeries,
+            title: {
+                text: '时间分布图'
+            }
+        }
+
+        // monitor
+        $scope.RunningTasks = [
+            {name:"项目1",age:"任务1"},
+            {name:"项目1",age:"任务2"},
+            {name:"项目2",age:"任务2"},
+            {name:"项目2",age:"任务1"},
+            {name:"项目3",age:"任务2"},
+            {name:"项目4",age:"任务2"},
+            {name:"项目5",age:"任务1"}
+        ];
+        // 显示 monitor 详情
+        $scope.showDetails = function($index){
+            $('#monitor_detail').modal('show');
+        };
+        // 暂停
+        $scope.isSuspend = function($index){
+            if(confirm('确定暂停吗？')){
+                alert('已暂停')
+            }
+        };
+        $scope.isStop = function($index){
+            if(confirm('确定结束吗？')){
+                alert('已结束')
+            }
+        };
+
+
         $scope.mycheck = "Y";
 
         $scope.onInputChange = function () {
