@@ -62,7 +62,7 @@ public class CollectPageController {
             }
             final JSONObject result = new JSONObject();
             try {
-                service.crawlSingleData(urls, xpath, nameindb,ifajax,ajaxtype,ajaxxpath,null,null,null,null,null,extract_way);
+                service.crawlSingleData(-1,true,urls, xpath, nameindb,ifajax,ajaxtype,ajaxxpath,null,null,null,null,null,extract_way);
                 while (!service.getiscompleted()) {
                     try {
                         Thread.sleep(10);

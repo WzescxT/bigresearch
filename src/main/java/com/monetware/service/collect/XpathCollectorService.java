@@ -40,6 +40,8 @@ public class XpathCollectorService {
     private String endtime;
     private String header;
     private String extract_way;
+    private int task_id;
+    private boolean iftest;
     public XpathCollectorService()
     {
         propertySupport = new PropertyChangeSupport(this);
@@ -52,8 +54,10 @@ public class XpathCollectorService {
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         propertySupport.removePropertyChangeListener(listener);
     }
-    public void crawlSingleData(List<String> urls,String xpath,String nameinDB,String ifajax,String ajaxtype,String ajaxXpath,String proxy_id,String starttime,String endtime,String header,String storetype,String extract_way)
+    public void crawlSingleData(final int task_id, final boolean iftest, List<String> urls, String xpath, String nameinDB, String ifajax, String ajaxtype, String ajaxXpath, String proxy_id, String starttime, String endtime, String header, String storetype, String extract_way)
     {
+        this.task_id=task_id;
+        this.iftest=iftest;
         this.xpath=xpath;
         this.urls=urls;
         this.nameinDB=nameinDB;
@@ -82,7 +86,10 @@ public class XpathCollectorService {
                     isCompleted = true;
                     System.out.println("onsuccess");
                     propertySupport.firePropertyChange("isCompleted", false, true);
-                    CollectProgress.crawledurls++;
+                    if(!iftest) {
+                        int tasknow= CollectProgress.crawledurls.get(task_id)+1;
+                        CollectProgress.crawledurls.put(task_id,tasknow);
+                    }
 
                 }
 
