@@ -86,6 +86,7 @@ public class CrawlPlanController {
                 //add later
             }
             CollectProgress.totalurls.put(task_id,urls.size());
+            CollectProgress.crawledurls.put(task_id,0);
             Date date=new Date(System.currentTimeMillis());
             CollectProgress.starttime.put(task_id,date);
             String store_pattern=store_rule.getString("store_pattern");
