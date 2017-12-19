@@ -14,7 +14,7 @@ import java.util.Map;
 @RestController
 public class CrawlProgressController {
 
-    @RequestMapping(value="/status",method = RequestMethod.POST)
+    @RequestMapping(value="/status",method = RequestMethod.GET)
     public String getProgress(@RequestBody final JSONObject request)
     {
         JSONArray result=new JSONArray();
