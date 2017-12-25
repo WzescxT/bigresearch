@@ -122,7 +122,7 @@ public class XpathCollectorService {
             {
                 getSite().setHttpProxy(new HttpHost(proxy_id));
             }
-            if(starttime!=null && starttime!=""&&endtime!=null&&endtime!="")
+            if(starttime!=null && !starttime.equals("")&&endtime!=null&& !endtime.equals(""))
             {
                 double startT=Double.parseDouble(starttime);
                 double endT=Double.parseDouble(endtime);
