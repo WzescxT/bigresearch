@@ -226,9 +226,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="taskdescription" class="col-sm-2 control-label">任务描述</label>
+                        <label for="taskdescription" class="col-sm-2 control-label" >任务描述</label>
                         <div class="col-xs-4">
-                            <textarea class="form-control" rows="3" id="taskdescription" ng-model="task_description" ng-init="task_description=''"></textarea>
+                            <textarea class="form-control" rows="3" id="taskdescription" ng-model="task_description" ng-init="task_description=''" placeholder="请输入任务描述"></textarea>
                         </div>
                     </div>
 
@@ -383,7 +383,7 @@
                             <label for="url_wildcard" class="col-sm-2 control-label">URL模式</label>
                             <div class="col-xs-4">
                                 <input type="text" class="form-control" id="url_wildcard"
-                                       ng-model="url_wildcard" ng-init="url_wildcard=''">
+                                       ng-model="url_wildcard" ng-init="url_wildcard=''" placeholder="如：http://example.com/?page={pageNum}">
                             </div>
                         </div>
 
@@ -391,7 +391,7 @@
                             <label for="init_value" class="col-sm-2 control-label">初始值</label>
                             <div class="col-xs-4">
                                 <input type="text" class="form-control" id="init_value"
-                                       ng-model="init_value" ng-init="init_value=''">
+                                       ng-model="init_value" ng-init="init_value=''" placeholder="如：1">
                             </div>
                         </div>
 
@@ -399,7 +399,7 @@
                             <label for="gap" class="col-sm-2 control-label">间隔</label>
                             <div class="col-xs-4">
                                 <input type="text" class="form-control" id="gap"
-                                       ng-model="gap" ng-init="gap=''">
+                                       ng-model="gap" ng-init="gap=''" placeholder="如：1">
                             </div>
                         </div>
 
@@ -407,7 +407,7 @@
                             <label for="pages_num" class="col-sm-2 control-label">页数</label>
                             <div class="col-xs-4">
                                 <input type="text" class="form-control" id="pages_num"
-                                       ng-model="pages_num" ng-init="pages_num=''">
+                                       ng-model="pages_num" ng-init="pages_num=''" placeholder="如：5">
                             </div>
                         </div>
 
@@ -556,11 +556,11 @@
                     <div class="form-group">
                         <label for="intervaltime1" class="col-sm-2 control-label">间隔时间</label>
                         <div class="col-xs-2">
-                            <input type="text" class="form-control" id="intervaltime1" placeholder="起始时间"
+                            <input type="text" class="form-control" id="intervaltime1" placeholder="起始时间，如1.0"
                                    ng-model="start_time" ng-init="start_time=''">
                         </div>
                         <div class="col-xs-2">
-                            <input type="text" class="form-control" id="intervaltime2" placeholder="终止时间"
+                            <input type="text" class="form-control" id="intervaltime2" placeholder="终止时间，如1.1"
                                    ng-model="end_time" ng-init="end_time=''">
                         </div>
                     </div>

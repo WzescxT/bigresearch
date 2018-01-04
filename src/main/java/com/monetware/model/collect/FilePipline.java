@@ -27,11 +27,11 @@ public class FilePipline implements us.codecraft.webmagic.pipeline.Pipeline {
         }
         tempResult=result;
         try {
-            File direc = new File("F:\\datas");
+            File direc = new File("C:\\datas");
             if (direc.isDirectory()) {
                 File[] files = direc.listFiles();
                 if (files.length == 0) {
-                    File file = new File("F:\\datas\\1.txt");
+                    File file = new File("C:\\datas\\1.txt");
                     file.createNewFile();
                     FileWriter writer=new FileWriter(file,true);
                     writer.write(result);
@@ -53,7 +53,7 @@ public class FilePipline implements us.codecraft.webmagic.pipeline.Pipeline {
                     if(lastfile.length()>52428800)
                     {
                         int num=Maxnumber+1;
-                        File newfile=new File("F:\\datas\\"+num+".txt");
+                        File newfile=new File("C:\\datas\\"+num+".txt");
                         newfile.createNewFile();
                         FileWriter writer=new FileWriter(newfile,true);
                         writer.write(result);
