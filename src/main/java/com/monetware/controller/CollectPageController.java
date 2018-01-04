@@ -103,10 +103,14 @@ public class CollectPageController {
                             }
                         };
                 if(ajaxPattern.equals("点击")) {
-                    collectService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES_AJAX_CLICK,
+                    List<String> mUrls = new ArrayList<>();
+                    urls.add(url);
+                    collectService.crawl(onCrawleLinstener, mUrls, CollectService.TYPE_CLUES_AJAX_CLICK,
                             extract_way, ajaxXpath, xpath, xpath2);
                 } else if(ajaxPattern.equals("翻页")) {
-                    collectService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES_AJAX_FLIP,
+                    List<String> mUrls = new ArrayList<>();
+                    urls.add(url);
+                    collectService.crawl(onCrawleLinstener, mUrls, CollectService.TYPE_CLUES_AJAX_FLIP,
                             extract_way, ajaxXpath, xpath, xpath2);
                 }
             }
@@ -130,7 +134,9 @@ public class CollectPageController {
                                 success = 2;
                             }
                         };
-                collectService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES, extract_way, "", xpath, xpath2);
+                List<String> mUrls = new ArrayList<>();
+                urls.add(url);
+                collectService.crawl(onCrawleLinstener, mUrls, CollectService.TYPE_CLUES, extract_way, "", xpath, xpath2);
             }
             while (success == 0) {
 

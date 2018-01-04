@@ -36,7 +36,7 @@ public class CollectService {
 		private OnCrawleLinstener onCrawleLinstener;
 		private String ajaxXpath;
 		private List<String> xpaths;
-		private String url;
+		private List<String> urls;
 		private String extract_way;
 
 
@@ -63,9 +63,9 @@ public class CollectService {
 			this.onCrawleLinstener = onCrawleLinstener;
 		}
 
-		CollectProcessor(String url, int collectType, String extract_way) {
+		CollectProcessor(List<String> urls, int collectType, String extract_way) {
 			this.collectType = collectType;
-			this.url = url;
+			this.urls = urls;
 			this.extract_way = extract_way;
 		}
 
@@ -87,7 +87,7 @@ public class CollectService {
 					//　get page
 					webClient.setAjaxController(new NicelyResynchronizingAjaxController());
 					webClient.getOptions().setJavaScriptEnabled(true);
-					HtmlPage page = webClient.getPage(url);
+					HtmlPage page = webClient.getPage(urls.get(0));
 					webClient.waitForBackgroundJavaScript(10000);
 
 					// note the page for share page
@@ -138,52 +138,53 @@ public class CollectService {
 					}
 				}
 				else if(collectType == CollectService.TYPE_CLUES) {
-					webClient.getOptions().setJavaScriptEnabled(false);
-					HtmlPage page = webClient.getPage(url);
-
-					// the page is ajax page
-					if (isAjaxHtml(page, xpaths.get(0))) {
-						webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+					List<String> results = new ArrayList<>();
+					boolean isAjax = false;
+					for (String url : urls) {
 						webClient.getOptions().setJavaScriptEnabled(false);
-						page = webClient.getPage(url);
-						webClient.waitForBackgroundJavaScript(10000);
-					}
-
-					List<String> mXpaths = produceXpaths(page, xpaths);
-					if(mXpaths == null || mXpaths.size() == 0) {
-						onCrawleLinstener.onFail("xpath is error");
-						return;
-					}
-					// extract content
-					List<String> results = getContent(page, mXpaths, extract_way);
-					if(results == null || results.size() == 0) {
-						onCrawleLinstener.onFail("results is null");
-						return;
+						HtmlPage page = webClient.getPage(url);
+						// the page is ajax page
+						if (!isAjax && isAjaxHtml(page, xpaths.get(0))) {
+							webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+							webClient.getOptions().setJavaScriptEnabled(false);
+							page = webClient.getPage(url);
+							webClient.waitForBackgroundJavaScript(10000);
+							isAjax = true;
+						}
+						// extract content
+						try {
+							List<String> mXpaths = produceXpaths(page, xpaths);
+							results.addAll(getContent(page, mXpaths, extract_way));
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 					onCrawleLinstener.onSuccess(results);
 				}
 				else if(collectType == CollectService.TYPE_CLUES_AJAX_CLICK) {
-					//　get page
-					webClient.setAjaxController(new NicelyResynchronizingAjaxController());
-					webClient.getOptions().setJavaScriptEnabled(true);
-					HtmlPage page = webClient.getPage(url);
-					webClient.waitForBackgroundJavaScript(10000);
-
 					List<String> results = new ArrayList<>();
-					// click
-					List<HtmlAnchor> htmlListItems = page.getByXPath(ajaxXpath);
+					boolean isAjax = false;
+					for (String url : urls) {
+						//　get page
+						webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+						webClient.getOptions().setJavaScriptEnabled(true);
+						HtmlPage page = webClient.getPage(url);
+						webClient.waitForBackgroundJavaScript(10000);
+						// click
+						List<HtmlAnchor> htmlListItems = page.getByXPath(ajaxXpath);
 
-					for(HtmlAnchor htmlAnchor : htmlListItems){
-						htmlAnchor.click();
-						// get absolute xpath
-						List<String> mXpaths = produceXpaths(page, xpaths);
-						// extract content
-						results.addAll(getContent(page, mXpaths, extract_way));
-					}
-					// Crawler is over
-					if(results.size() == 0) {
-						onCrawleLinstener.onFail("results is null");
-						return;
+						for(HtmlAnchor htmlAnchor : htmlListItems){
+							htmlAnchor.click();
+							// get absolute xpath
+							List<String> mXpaths = produceXpaths(page, xpaths);
+							// extract content
+							results.addAll(getContent(page, mXpaths, extract_way));
+						}
+						// Crawler is over
+						if(results.size() == 0) {
+							onCrawleLinstener.onFail("results is null");
+							return;
+						}
 					}
 					onCrawleLinstener.onSuccess(results);
 				}
@@ -306,30 +307,30 @@ public class CollectService {
 	 * 测试　只需要两个xpath和一个url
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		// share crawler
-		String xpath1 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[2]/td[6]";
-		String xpath2 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[3]/td[6]";
-		String url = "http://www.sse.com.cn/assortment/stock/list/share/";
-		CollectService collectByCluesService = new CollectService();
-
-		OnCrawleLinstener onCrawleLinstener = new OnCrawleLinstener() {
-			@Override
-			public void onSuccess(List<String> result) {
-				for (String string : result) {
-					System.out.println(string);
-				}
- 				System.out.println(result.size());
-			}
-
-			@Override
-			public void onFail(String error) {
-
-			}
-		};
-		String ajaxXpath = "//*[@id=\"idStr\"]";
-		collectByCluesService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES_AJAX_FLIP, "文本",
-				ajaxXpath, xpath1, xpath2);
+//	public static void main(String[] args) {
+//		// share crawler
+//		String xpath1 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[2]/td[6]";
+//		String xpath2 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[3]/td[6]";
+//		String url = "http://www.sse.com.cn/assortment/stock/list/share/";
+//		CollectService collectByCluesService = new CollectService();
+//
+//		OnCrawleLinstener onCrawleLinstener = new OnCrawleLinstener() {
+//			@Override
+//			public void onSuccess(List<String> result) {
+//				for (String string : result) {
+//					System.out.println(string);
+//				}
+// 				System.out.println(result.size());
+//			}
+//
+//			@Override
+//			public void onFail(String error) {
+//
+//			}
+//		};
+//		String ajaxXpath = "//*[@id=\"idStr\"]";
+//		collectByCluesService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES_AJAX_FLIP, "文本",
+//				ajaxXpath, xpath1, xpath2);
 		// tongji crawler
 //		String xpath1 = "/html/body/div[3]/div/div[3]/div/ul/li[1]/a[1]";
 //		String xpath2 = "/html/body/div[3]/div/div[3]/div/ul/li[2]/a[1]";
@@ -352,7 +353,7 @@ public class CollectService {
 //		collectByCluesService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES, "链接",
 //				ajaxXpath, xpath1, xpath2);
 
-	}
+//	}
 
 	/**
 	 * 线索 ＋ ajax翻页/点击
@@ -362,29 +363,32 @@ public class CollectService {
 	 * @param xpath1
 	 * @param xpath2
 	 */
-	public void crawl(OnCrawleLinstener onCrawleLinstener, String url, int type, String extract_way, String ajaxXpath, String xpath1, String xpath2) {
+	public void crawl(OnCrawleLinstener onCrawleLinstener, List<String> urls, int type, String extract_way, String ajaxXpath, String xpath1, String xpath2) {
 		this.onCrawleLinstener = onCrawleLinstener;
 		List<String> clues = new ArrayList<>();
 		clues.add(xpath1);
 		clues.add(xpath2);
-		CollectProcessor clueProcessor = new CollectProcessor(url, type, extract_way);
+		CollectProcessor clueProcessor = new CollectProcessor(urls, type, extract_way);
 		clueProcessor.setXpaths(clues);
 		clueProcessor.setAjaxXpath(ajaxXpath);
 		clueProcessor.setOnCrawleLinstener(this.onCrawleLinstener);
 		clueProcessor.start();
 	}
+
 	/**
-	 * 单
+	 *
 	 * @param onCrawleLinstener
 	 * @param url
-	 * @param xpath1
-	 * @param xpath2
+	 * @param type
+	 * @param extract_way
+	 * @param ajaxXpath
+	 * @param xpath
 	 */
-	public void crawl(OnCrawleLinstener onCrawleLinstener, String url, int type, String extract_way, String ajaxXpath, String xpath) {
+	public void crawl(OnCrawleLinstener onCrawleLinstener, List<String> urls, int type, String extract_way, String ajaxXpath, String xpath) {
 		this.onCrawleLinstener = onCrawleLinstener;
 		List<String> clues = new ArrayList<>();
 		clues.add(xpath);
-		CollectProcessor clueProcessor = new CollectProcessor(url, type, extract_way);
+		CollectProcessor clueProcessor = new CollectProcessor(urls, type, extract_way);
 		clueProcessor.setXpaths(clues);
 		clueProcessor.setAjaxXpath(ajaxXpath);
 		clueProcessor.setOnCrawleLinstener(this.onCrawleLinstener);

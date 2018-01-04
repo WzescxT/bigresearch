@@ -146,26 +146,26 @@ public class CollectByCluesService {
 	}
 
 	// 测试　只需要两个xpath和一个url
-	public static void main(String[] args) {
-		String xpath1 = "/html/body/div[3]/div/div[3]/div/ul/li[1]";
-		String xpath2 = "/html/body/div[3]/div/div[3]/div/ul/li[2]";
-		String url = "http://sse.tongji.edu.cn/data/list/xyxw";
-		CollectByCluesService collectByCluesService = new CollectByCluesService();
-
-		OnCrawleLinstener onCrawleLinstener = new OnCrawleLinstener() {
-			@Override
-			public void onSuccess(List<String> result) {
-				System.out.println(result.size());
-			}
-
-			@Override
-			public void onFail(String error) {
-
-			}
-		};
-		collectByCluesService.crawl(onCrawleLinstener, url, xpath1, xpath2);
-
-	}
+//	public static void main(String[] args) {
+//		String xpath1 = "/html/body/div[3]/div/div[3]/div/ul/li[1]";
+//		String xpath2 = "/html/body/div[3]/div/div[3]/div/ul/li[2]";
+//		String url = "http://sse.tongji.edu.cn/data/list/xyxw";
+//		CollectByCluesService collectByCluesService = new CollectByCluesService();
+//
+//		OnCrawleLinstener onCrawleLinstener = new OnCrawleLinstener() {
+//			@Override
+//			public void onSuccess(List<String> result) {
+//				System.out.println(result.size());
+//			}
+//
+//			@Override
+//			public void onFail(String error) {
+//
+//			}
+//		};
+//		collectByCluesService.crawl(onCrawleLinstener, url, xpath1, xpath2);
+//
+//	}
 
 	public void crawl(OnCrawleLinstener onCrawleLinstener, String url, String... xpath) {
 		List<String> clues = new ArrayList<>();

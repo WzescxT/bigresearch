@@ -77,13 +77,7 @@ public class DownloadPageService {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            //e.printStackTrace();
         }
-        //DownloadProcessor downloadProcessor = new DownloadProcessor(onCrawleLinstener);
-
-        //Spider.create(downloadProcessor)
-        //        .addUrl(url)
-        //        .run();
     }
     /**
      * 使用回调获取结果

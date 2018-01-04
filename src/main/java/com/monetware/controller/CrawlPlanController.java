@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.*;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class CrawlPlanController {
     @RequestMapping(value="/Plan",method = RequestMethod.POST)
     @ResponseBody
     public String getProject(@RequestBody JSONObject request) {
-        int task_id = (int) request.get("task_id");
+        final int task_id = (int) request.get("task_id");
         SpiderTaskInfo task= spiderTaskInfoMapper.findSpiderTaskInfoById(String.valueOf(task_id));
         String path=task.getTask_config_location();
         File configjson=new File(path);
@@ -51,7 +50,7 @@ public class CrawlPlanController {
         {
             e.printStackTrace();
         }
-        System.out.println(configdata.toString());
+        //System.out.println(configdata.toString());
         JSONObject assistant_rule=configdata.getJSONObject("assistant_rule");
         JSONObject url_pattern=configdata.getJSONObject("url_pattern");
         JSONObject store_rule=configdata.getJSONObject("store_rule");
@@ -67,7 +66,7 @@ public class CrawlPlanController {
             //不配置登录
             String urltype=url_pattern.getString("current_selected");
             List<String> urls=new ArrayList<>();
-            String url=url_pattern.getJSONObject("single").getString("url_path");
+            String url;
             if(urltype.equals("单页"))
             {
                 url=url_pattern.getJSONObject("single").getString("url_path");
@@ -75,6 +74,8 @@ public class CrawlPlanController {
             }
             else if(urltype.equals("列表"))
             {
+                List<String> tmp = generateUrls(url_pattern.getJSONObject("list"));
+                urls.addAll(tmp);
                 //add later
             }
             else if(urltype.equals("翻页"))
@@ -94,6 +95,7 @@ public class CrawlPlanController {
             JSONObject time=run_rule.getJSONObject("time");
             String header=run_rule.getString("headers");
             String custom_config=run_rule.getString("custom_config");
+            System.out.println();
             for(final Object eachtask : creep_rule)
             {
                     JSONObject eachtaskJSON=(JSONObject)eachtask;
@@ -164,9 +166,12 @@ public class CrawlPlanController {
                                     CollectService.OnCrawleLinstener() {
                                         @Override
                                         public void onSuccess(List<String> result) {
+                                            StringBuilder sb = new StringBuilder();
                                             for (String s : result) {
-                                                System.out.println(attributeName + " " + s);
+                                                sb.append(attributeName).append("\n");
+                                                //System.out.println(attributeName + " " + s);
                                             }
+                                            saveToFile(task_id + ".txt", sb.toString(), false);
                                         }
 
                                         @Override
@@ -175,10 +180,10 @@ public class CrawlPlanController {
                                         }
                                     };
                             if(ajaxPattern.equals("点击")) {
-                                collectService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES_AJAX_CLICK,
+                                collectService.crawl(onCrawleLinstener, urls, CollectService.TYPE_CLUES_AJAX_CLICK,
                                         extract_way, ajaxXpath, xpath1, xpath2);
                             } else if(ajaxPattern.equals("翻页")) {
-                                collectService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES_AJAX_FLIP,
+                                collectService.crawl(onCrawleLinstener, urls, CollectService.TYPE_CLUES_AJAX_FLIP,
                                         extract_way, ajaxXpath, xpath1, xpath2);
                             }
                         }
@@ -192,9 +197,12 @@ public class CrawlPlanController {
                                     CollectService.OnCrawleLinstener() {
                                         @Override
                                         public void onSuccess(List<String> result) {
+                                            StringBuilder sb = new StringBuilder();
                                             for (String s : result) {
-                                                System.out.println(attributeName + " " + s);
+                                                sb.append(attributeName).append("\n");
+                                                //System.out.println(attributeName + " " + s);
                                             }
+                                            saveToFile(task_id + ".txt", sb.toString(), false);
                                         }
 
                                         @Override
@@ -202,18 +210,51 @@ public class CrawlPlanController {
                                             System.out.println(error);
                                         }
                                     };
-                            collectService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES, extract_way, "", xpath1, xpath2);
+                            collectService.crawl(onCrawleLinstener, urls, CollectService.TYPE_CLUES, extract_way, "", xpath1, xpath2);
                         }
                     }
-
             }
+        }
+        return "";
+    }
 
+    /**
+     * Generate Urls
+     * @param jsonObject
+     * @return
+     */
 
+    private List<String> generateUrls(JSONObject jsonObject) {
+        String template = jsonObject.get("url_wildcard").toString();
+        int start = Integer.valueOf(jsonObject.get("init_value").toString());
+        int interval = Integer.valueOf(jsonObject.get("gap").toString());
+        int num = Integer.valueOf(jsonObject.get("pages_num").toString());
+
+        List<String> urls = new ArrayList<>();
+        // Generate the urls
+        for (int i = 0; i < num; i++) {
+            urls.add(template.replaceAll("\\{[^}]*\\}",
+                    String.valueOf(start + i * interval)));
+        }
+        return urls;
+    }
+
+    /**
+     *
+     * @param filename
+     * @param content
+     * @param append
+     */
+    private void saveToFile(String filename, String content, boolean append) {
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(
+                    new FileWriter(filename, append));
+            bufferedWriter.write(content + "\n");
+            bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-
-
-        return "";
 
     }
 }

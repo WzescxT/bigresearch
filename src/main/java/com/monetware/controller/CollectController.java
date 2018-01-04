@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,7 +67,6 @@ public class CollectController {
                     public void onSuccess(List<String> result) {
                         for (String str : result) {
                             res.append(attribute_name).append("\t").append(str).append("\n");
-                            // System.out.println(attribute_name + " " + str);
                         }
                         success = 1;
                     }
@@ -89,7 +89,9 @@ public class CollectController {
             collectType = CollectService.TYPE_CLUES;
         }
         // start crawler
-        collectService.crawl(onCrawleLinstener, url_path, collectType, extract_way, button_xpath, xpath1, xpath2);
+        List<String> urls = new ArrayList<>();
+        urls.add(url_path);
+        collectService.crawl(onCrawleLinstener, urls, collectType, extract_way, button_xpath, xpath1, xpath2);
         // start crawler
 
         while (success == 0) {

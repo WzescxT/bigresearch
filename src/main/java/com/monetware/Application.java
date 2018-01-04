@@ -6,7 +6,9 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -19,14 +21,15 @@ import javax.sql.DataSource;
 @SpringBootApplication
 @EnableTransactionManagement//开启事务管理
 @MapperScan("com.monetware.mapper")
-public class Application {
+public class Application extends SpringBootServletInitializer {
     private static Logger logger = Logger.getLogger(Application.class);
-  //DataSource配置
+    //DataSource配置
     @Bean
     @ConfigurationProperties(prefix="spring.datasource")
     public DataSource dataSource() {
         return new org.apache.tomcat.jdbc.pool.DataSource();
     }
+
     //提供SqlSeesion
     @Bean
     public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
@@ -40,15 +43,21 @@ public class Application {
 
         return sqlSessionFactoryBean.getObject();
     }
-    
-    
+
     // 其中 dataSource 框架会自动为我们注入
     @Bean
     public PlatformTransactionManager txManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
-    
-    
+
+    /**
+     * 添加对程序打war包的支持
+     */
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(Application.class);
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class,args);
 

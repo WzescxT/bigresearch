@@ -253,33 +253,10 @@ angular.module('MetronicApp')
                 },
 
                 "url_pattern": {
-// <<<<<<< HEAD
                     "current_selected": "",
 
                     "single": {
-
-                        // "single_url_pattern_name": "abc",
                         "url_path": ""
-// =======
-//                 "import": {
-//                     // "import_url_pattern_name": "abc",
-//                     "import_urls": [],
-//                     "file_upload_path": "",
-//                     "import_url_file_path": ""
-//                 }
-//             },
-//
-                        // "creep_rule":
-                        //     [
-                        //         {
-                        //             "creep_pattern_name": "",
-                        //             "ajax": {
-                        //                 "open": false,
-                        //                 "ajax_pattern": "",
-                        //                 "button_xpath": ""
-                        //             },
-// >>>>>>> 2cde4aed88a0a8771484e15d23262063d4e74028
-
                     },
 
                     "list": {
@@ -442,14 +419,31 @@ angular.module('MetronicApp')
             });
 
             if (id === "miningrule") {
-                // same as last
-                if (downloadPageLink === $scope.url_path && isFinishDownloadPage === true) {
-                    isFinishDownloadPage = true;
-                } else {
-                    downloadPageLink = $scope.url_path;
-                    isFinishDownloadPage = false;
+                // 单页面
+                var http_url;
+                if ($scope.crawl_pattern === null ||
+                    $scope.crawl_pattern === "单页") {
+                    // same as last
+                    http_url = $scope.url_path;
+                    if (downloadPageLink === $scope.url_path && isFinishDownloadPage === true) {
+                        isFinishDownloadPage = true;
+                        return;
+                    } else {
+                        downloadPageLink = $scope.url_path;
+                        isFinishDownloadPage = false;
+                    }
+                } else if ($scope.crawl_pattern === "列表") {
+                    http_url = getPage($scope.url_wildcard, $scope.init_value);
+                    if (downloadPageLink === getPage($scope.url_wildcard, $scope.init_value) && isFinishDownloadPage === true) {
+                        isFinishDownloadPage = true;
+                        return;
+                    } else {
+                        downloadPageLink = getPage($scope.url_wildcard, $scope.init_value);
+                        isFinishDownloadPage = false;
+                    }
                 }
-                var url_data = {url_path: $scope.url_path};
+                console.log(http_url)
+                const url_data = {url_path: http_url};
                 $http({
                     method: 'POST',
                     url: '/collect/download',
@@ -506,7 +500,9 @@ angular.module('MetronicApp')
         // 选择xpath
         $scope.select_xpath = function () {
             // check if download page is exist
-            var filename = getHost($scope.url_path) + ".html";
+            var select_url_path = downloadPageLink;
+
+            var filename = hashCode(select_url_path) + ".html";
             $.post("/collect/file/exist", {filename: filename}, function (result) {
                 // exits
                 if (result) {
@@ -514,7 +510,7 @@ angular.module('MetronicApp')
 
                     index = 0;
                     $('#xpath').val("");
-                    $("#iframe").attr("src", getHost($scope.url_path) + ".html");
+                    $("#iframe").attr("src", hashCode(select_url_path) + ".html");
                     $('#modal-select-xpath').on('shown.bs.modal', function (e) {
                         $(this).click(function (event) {
                             event.preventDefault();
@@ -554,14 +550,15 @@ angular.module('MetronicApp')
         // xpath2
         $scope.select_xpath2 = function () {
             // check if download page is exist
-            var filename = getHost($scope.url_path) + ".html";
+            var select_url_path = downloadPageLink;
+            var filename = hashCode(select_url_path) + ".html";
             $.post("/collect/file/exist", {filename: filename}, function (result) {
                 // exits
                 if (result) {
                     $('#modal-select-xpath2').modal('show');
                     // console.log("-------------------------------\n" + $type  + "-------------------------------\n");
                     $('#xpath2').val("");
-                    $("#iframe2").attr("src", getHost($scope.url_path) + ".html");
+                    $("#iframe2").attr("src", hashCode(select_url_path) + ".html");
                     index = 0;
                     $('#modal-select-xpath2').on('shown.bs.modal', function (e) {
                         $(this).click(function (event) {
@@ -609,14 +606,15 @@ angular.module('MetronicApp')
         // 选择ajax_xpath
         $scope.select_ajax_xpath = function () {
             // check if download page is exist
-            var filename = getHost($scope.url_path) + ".html";
+            var select_url_path = downloadPageLink;
+            var filename = hashCode(select_url_path) + ".html";
             $.post("/collect/file/exist", {filename: filename}, function (result) {
                 // exits
                 if (result) {
                     $('#modal-select-ajax-xpath').modal('show');
                     //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
                     $('#ajax_xpath').val("");
-                    $("#iframe3").attr("src", getHost($scope.url_path) + ".html");
+                    $("#iframe3").attr("src", hashCode(select_url_path) + ".html");
                     $('#modal-select-ajax-xpath').on('shown.bs.modal', function (e) {
                         $(this).click(function (event) {
                             event.preventDefault();
@@ -733,7 +731,7 @@ angular.module('MetronicApp')
 
             var url_path = $scope.url_path;
             var data = $scope.creep_rule[$index];
-            data['url_path'] = $scope.url_path;
+            data['url_path'] = downloadPageLink;
             var req = JSON.stringify(data);
             //alert(req.toString());
             // cun
@@ -750,65 +748,15 @@ angular.module('MetronicApp')
                 var values = {};
                 for (x in params) {
                     values[params[x].name] = params[x].value;
-// >>>>>>> 2cde4aed88a0a8771484e15d23262063d4e74028
                 }
                 values['currenturl'] = url_path;
                 var idata = JSON.stringify(values);
                 // alert(idata);
                 console.log(idata.toString());
-// <<<<<<< HEAD
                 CollectCusTempService.crawltest(idata, function (data) {
                     $('#testarea').val(data);
                     $('#loading').modal('hide');
                 });
-                // 寸
-                // else if($scope.creep_rule[$index].creep_pattern === "线索") {
-                //     var params = $("#crawlrule").serializeArray();
-                //     var values = {};
-                //     for( x in params ){
-                //         values[params[x].name] = params[x].value;
-                //     }
-                //     values['currenturl'] = url_path;
-                //     var idata = JSON.stringify(values);
-                //     $.post("/collect/myclues", idata, function(result){
-                //         console.log(result.toString());
-                //         var arr = result.toString().replace(",", "\n");
-                //         $('#testarea').val($scope.creep_rule[$index].attribute_name + ":\n" + arr);
-                //         $('#loading').modal('hide');
-                //     });
-
-                // if($scope.creep_rule[$index].x === true) {
-                //     if($scope.creep_rule[$index].ajax_pattern === "翻页") {
-                //         $.post("/collect/flip", {url_path: url_path, ajax_xpath: ajaxxpath, xpath1: xpath1, xpath2: xpath2}, function(result){
-                //             console.log(result.toString());
-                //             var arr = result.toString().replace(",", "\n");
-                //             $('#testarea').val($scope.creep_rule[$index].attribute_name + ":\n" + arr);
-                //             $('#loading').modal('hide');
-                //         });
-                //     }
-                // }
-                // else {
-                //     $.post("/collect/clues", {url_path: url_path, xpath1: xpath1, xpath2: xpath2}, function(result){
-                //         console.log(result.toString());
-                //         var arr = result.toString().replace(",", "\n");
-                //         $('#testarea').val($scope.creep_rule[$index].attribute_name + ":\n" + arr);
-                //         $('#loading').modal('hide');
-                //     });
-                // }
-
-                // $http({
-                //     method: 'POST',
-                //     url: '/collect/clues',
-                //     data: {url_path: url_path, xpath1: xpath1, xpath2: xpath2},
-                //     headers:{'Content-Type': 'application/x-www-form-urlencoded'}
-                // }).then(function successCallback(response) {
-                //     $('#testarea').val(response.toString());
-                //     console.log(response.toString())
-                // }, function errorCallback(response) {
-                //     // 请求失败执行代码
-                //     console.log("get projects bad")
-                // });
-                //}
             }
         };
 
@@ -1493,9 +1441,42 @@ function getHost(sUrl) {
     return sDomain;
 }
 
+/**
+ * Check file is exist
+ * @param filename
+ */
 function exist(filename) {
     $.post("/collect/file/exist", { filename:　filename}, function(result){
         console.log(result.toString());
         return result;
     });
+}
+
+/**
+ * Get hashCode
+ * @param str
+ * @returns {number}
+ */
+hashCode = function(str){
+    var hash = 0;
+    if (str.length === 0) return hash;
+    for (let i = 0; i < str.length; i++) {
+        var char2 = str.charCodeAt(i);
+        hash = ((hash<<5) - hash) + char2;
+        hash = hash & hash;  // Convert to 32bit integer
+    }
+    console.log(hash);
+    return hash;
+}
+
+/**
+ * Get page from list pages
+ * @param page
+ * @param intiValue
+ * @returns {string}
+ */
+getPage = function(page, intiValue) {
+    var html = page.substring(0, page.indexOf("{"))
+    html = html + intiValue
+    return html
 }

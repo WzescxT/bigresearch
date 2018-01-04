@@ -56,13 +56,14 @@ public class DownloadPageController {
         // download page to local
         String host = null;
         String filename;
-        String s = "([a-zA-Z0-9-]+)(.com\\b|.net\\b|.edu\\b|.miz\\b|.biz\\b|.cn\\b|.cc\\b|.org\\b){1,}";
-        Pattern pattern1 = Pattern.compile(s);
-        Matcher matcher1 = pattern1.matcher(url_path);
-
-        if(matcher1.find()) {
-            host = matcher1.group();
-        }
+//        String s = "([a-zA-Z0-9-]+)(.com\\b|.net\\b|.edu\\b|.miz\\b|.biz\\b|.cn\\b|.cc\\b|.org\\b){1,}";
+//        Pattern pattern1 = Pattern.compile(s);
+//        Matcher matcher1 = pattern1.matcher(url_path);
+//
+//        if(matcher1.find()) {
+//            host = matcher1.group();
+//        }
+        host = hashCode(url_path);
         filename = "src/main/webapp/view/" + host + ".html";
         File file = new File(filename);
         if(!file.exists()) {
@@ -94,5 +95,9 @@ public class DownloadPageController {
             return true;
         }
         return false;
+    }
+
+    private String hashCode(String str) {
+        return String.valueOf(str.hashCode());
     }
 }
