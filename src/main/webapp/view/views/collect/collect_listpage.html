@@ -35,12 +35,11 @@
                     <i class="icon-link"></i>
                 </tab-heading>
             </tab>
-
         </tabset>
     </div>
 </div>
 
-<div class="row" ng-model="isadvanced" ng-init="isadvanced=false" ng-show="isadvanced==false">
+<div class="row" ng-model="isadvanced" ng-init="isadvanced=false" ng-show="isadvanced == false">
     <div class="col-md-12">
         <!-- BEGIN PORTLET-->
         <div class="portlet box green-meadow">
@@ -95,55 +94,53 @@
 
 <div class="col-lg-12" ng-show="isadvanced==true">
 
-    <!-- The side tabs on the left -->
     <div class="col-lg-1" style="padding-top: 60px">
-        <tabset vertical="true">
-                <!-- The editing tab -->
-                <tab ng-click="changeTab_advancedTemplate(0)">
-                    <tab-heading>
-                        <div class="row">
-                            编辑
-                            <i class="glyphicon glyphicon-edit"></i>
-                        </div>
-                    </tab-heading>
-                </tab>
+        <!-- The side tabset on the left -->
+        <tabset id="side_tabset" vertical="true" type="pills">
+            <!-- The editing tab -->
+            <tab ng-click="changeTab_advancedTemplate(0)" active="side_index == 0">
+                <tab-heading>
+                    <div class="row">
+                        编辑
+                        <i class="glyphicon glyphicon-edit"></i>
+                    </div>
+                </tab-heading>
+            </tab>
 
-                <!-- The importing tab -->
-                <tab ng-click="changeTab_advancedTemplate(1)">
-                    <tab-heading>
-                        <div class="row">
-                            导入
-                            <i class="glyphicon glyphicon-floppy-open"></i>
-                        </div>
-                    </tab-heading>
-                </tab>
+            <!-- The importing tab -->
+            <tab ng-click="changeTab_advancedTemplate(1)" active="side_index == 1">
+                <tab-heading>
+                    <div class="row">
+                        导入
+                        <i class="glyphicon glyphicon-floppy-open"></i>
+                    </div>
+                </tab-heading>
+            </tab>
 
-                <!-- The exporting tab -->
-                <tab ng-click="changeTab_advancedTemplate(2)">
-                    <tab-heading>
-                        <div class="row">
-                            导出
-                            <i class="glyphicon glyphicon-floppy-save"></i>
-                        </div>
-                    </tab-heading>
-                </tab>
+            <!-- The exporting tab -->
+            <tab ng-click="changeTab_advancedTemplate(2)" active="side_index == 2">
+                <tab-heading>
+                    <div class="row">
+                        导出
+                        <i class="glyphicon glyphicon-floppy-save"></i>
+                    </div>
+                </tab-heading>
+            </tab>
 
-                <!-- The monitoring tab -->
-                <tab ng-click="changeTab_advancedTemplate(3)">
-                    <tab-heading>
-                        <div class="row">
-                            监控
-                            <i class="glyphicon glyphicon-time"></i>
-                        </div>
-                    </tab-heading>
-                </tab>
-
+            <!-- The monitoring tab -->
+            <tab ng-click="changeTab_advancedTemplate(3)" active="side_index == 3">
+                <tab-heading>
+                    <div class="row">
+                        监控
+                        <i class="glyphicon glyphicon-time"></i>
+                    </div>
+                </tab-heading>
+            </tab>
         </tabset>
     </div>
-    
-    <!-- 采集区域 -->
-    <!-- “编辑” -->
-    <div class="col-lg-11" ng-show="side_index==0">
+
+    <!-- “编辑” The editing area -->
+    <div class="col-lg-11" ng-show="side_index == 0">
         <!-- 标签 -->
         <ul id="myTab" class="nav nav-tabs">
 
@@ -211,7 +208,7 @@
                         <label for="taskname" class="col-sm-2 control-label">任务名称</label>
                         <div class="col-xs-4">
                             <!--<input type="text" class="form-control" id="taskname"-->
-                                   <!--placeholder="请输入任务名称">-->
+                            <!--placeholder="请输入任务名称">-->
                             <select  class="form-control" id = "taskname" ng-init="selected_task = selected_project.advanceTaskEntities[0]" ng-model="selected_task" ng-options="x.task_name for x in selected_project.advanceTaskEntities" ng-change="changeTask()">
                             </select>
                         </div>
@@ -444,7 +441,7 @@
                                 <input type="file"
                                        onchange="angular.element(this).scope().setUrls(this)">
                                 <!--<input type="file"  id="file_upload_path"-->
-                                       <!--ng-model="file_upload_path" ng-init="file_upload_path=''">-->
+                                <!--ng-model="file_upload_path" ng-init="file_upload_path=''">-->
                             </div>
                         </div>
 
@@ -467,47 +464,47 @@
             <div class="tab-pane fade" id="miningrule">
                 <div class="col-lg-7">
                     <form class="form-horizontal" role="form">
-                    <div class="form-group">
-                        <div class="col-xs-11">
-                            <button type="button" class="btn btn-primary" ng-click="add()">添加</button>
-                            <table class="table table-bordered" style="text-align: center">
-                                <thead>
-                                <tr>
-                                    <td>序号</td>
-                                    <td>模式名称</td>
-                                    <td>类型</td>
-                                    <td>Ajax</td>
-                                    <td>操作</td>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="x in creep_rule">
-                                    <td>{{$index + 1}}</td>
-                                    <td>{{x.creep_name}}</td>
-                                    <td>{{x.creep_pattern}}</td>
-                                    <td>{{x.ajax.open}}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-warning" ng-click="update($index)">修改</button>
-                                        <button type="button" class="btn btn-danger" ng-click="del($index)">删除</button>
-                                        <button type="button" class="btn btn-default" ng-click="test($index)">测试</button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <div class="form-group">
+                            <div class="col-xs-11">
+                                <button type="button" class="btn btn-primary" ng-click="add()">添加</button>
+                                <table class="table table-bordered" style="text-align: center">
+                                    <thead>
+                                    <tr>
+                                        <td>序号</td>
+                                        <td>模式名称</td>
+                                        <td>类型</td>
+                                        <td>Ajax</td>
+                                        <td>操作</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="x in creep_rule">
+                                        <td>{{$index + 1}}</td>
+                                        <td>{{x.creep_name}}</td>
+                                        <td>{{x.creep_pattern}}</td>
+                                        <td>{{x.ajax.open}}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-warning" ng-click="update($index)">修改</button>
+                                            <button type="button" class="btn btn-danger" ng-click="del($index)">删除</button>
+                                            <button type="button" class="btn btn-default" ng-click="test($index)">测试</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <span class="col-xs-2"></span>
-                        <div class="col-xs-2">
-                            <button type="button" class="btn btn-primary" ng-click="changeTabs('urlrule',false)">上一步</button>
+                        <div class="form-group">
+                            <span class="col-xs-2"></span>
+                            <div class="col-xs-2">
+                                <button type="button" class="btn btn-primary" ng-click="changeTabs('urlrule',false)">上一步</button>
+                            </div>
+                            <div class="col-xs-2">
+                                <button type="button" class="btn btn-primary" ng-click="changeTabs('storerule',true)">下一步</button>
+                            </div>
                         </div>
-                        <div class="col-xs-2">
-                            <button type="button" class="btn btn-primary" ng-click="changeTabs('storerule',true)">下一步</button>
-                        </div>
-                    </div>
 
-                </form>
+                    </form>
                 </div>
 
                 <div class="col-lg-4">
@@ -605,33 +602,167 @@
     </div>
 
     <!-- “导入” The importing area -->
-    <div class="col-lg-11" ng-show="side_index==1">
-        importing area
+    <div class="col-lg-11" ng-show="side_index == 1">
+        <!-- The form to import the file -->
+        <form enctype="multipart/form-data" method="post" name="fileinfo">
+            <label>请选择需要导入的配置文件：</label>
+            <input type="file" name="configJsonFile" id="config_json_file" required />
+            <input type="submit" value="上传文件" class="btn btn-primary" />
+        </form>
+
+        <p>上传文件内容预览</p>
+
+        <!-- The textarea to show the content of the imported file -->
+        <textarea id="import_result" rows="5" cols="60" readonly="readonly">尚未上传文件</textarea>
+
+        <!-- The button to import the configuration into the editing tab -->
+        <button class="btn btn-primary" ng-click="importIntoEditingTab()">导入编辑模块</button>
     </div>
 
     <!-- “导出” The exporting area -->
-    <div class="col-lg-11" ng-show="side_index==2">
-        exporting area
+    <div class="col-lg-11" ng-show="side_index == 2">
+        <form>
+            <br/>
+            <label for="projectName_exporting" class="col-sm-2 control-label">项目名称</label>
+            <div class="col-xs-4">
+                <select id="projectName_exporting"
+                        class="form-control"
+                        ng-init="selected_project_exporting = projects[0]"
+                        ng-model="selected_project_exporting"
+                        ng-change="changeProject_exporting()">
+                    <option
+                            ng-repeat="option in projects"
+                            ng-value="{{option.advanceProjectEntity.project_id}}">
+                        {{option.advanceProjectEntity.project_name}}
+                    </option>
+                </select>
+            </div>
+        </form>
+
+        <form>
+            <label for="taskName_exporting" class="col-sm-2 control-label">任务名称</label>
+            <div class="col-xs-4">
+                <select id="taskName_exporting"
+                        class="form-control"
+                        ng-init="selected_task_exporting = selected_project.advanceTaskEntities[0]"
+                        ng-model="selected_task_exporting"
+                        ng-change="changeTask_exporting()">
+                    <option
+                            ng-repeat="option in selected_project.advanceTaskEntities"
+                            ng-value="{{option.task_id}}">
+                        {{option.task_name}}
+                    </option>
+                </select>
+            </div>
+        </form>
+
+        <button class="btn btn-primary" ng-click="exportConfigJson_advancedTemplate()">导出</button>
     </div>
 
     <!-- “监控” The monitoring area -->
-    <div class="col-lg-11" ng-show="side_index==3">
-        monitoring area
-    </div>
+    <div class="col-lg-11" ng-show="side_index == 3">
+        <div class="col-lg-12">
+            <table class="table table-bordered" style="text-align: center">
+                <thead>
+                <tr>
+                    <td class="col-lg-2" style="vertical-align: middle !important;text-align: center;">项目名称</td>
+                    <td class="col-lg-2" style="vertical-align: middle !important;text-align: center;">任务名称</td>
+                    <td class="col-lg-5" style="vertical-align: middle !important;text-align: center;">执行情况</td>
+                    <td class="col-lg-3" style="vertical-align: middle !important;text-align: center;">控制操作</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="x in RunningTasks">
+                    <td style="vertical-align: middle !important;text-align: center;">{{x.name}}</td>
+                    <td style="vertical-align: middle !important;text-align: center;">{{x.age}}</td>
+                    <td style="vertical-align: middle !important;text-align: center;">
+                        <div>
+                            <p>开始时间：2017-12-06</p>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                                 aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
+                                <span>40%</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p>预计结束时间：2017-12-06</p>
+                        </div>
+                    </td>
+                    <td style="vertical-align: middle !important;text-align: center;">
+                        <button class="btn btn-info" ng-click="showDetails($index)">详情</button>
+                        <button class="btn btn-warning" ng-click="isSuspend($index)">暂停</button>
+                        <button class="btn btn-danger" ng-click="isStop($index)">结束</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <!--&lt;!&ndash; 测试模块 &ndash;&gt;-->
-    <!--<div class="col-lg-4">-->
-        <!--<textarea class="form-control" id="testarea" rows="3" placeholder="测试模块占位" style="height: 400px"></textarea>-->
-    <!--</div>-->
+    </div>
 
 </div>
 
-<!-- 按钮触发模态框 -->
-<!--<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">-->
-    <!--模拟浏览器-->
-<!--</button>-->
+<!--监控模块-->
+<div class="modal" id="monitor_detail">
 
-<!-- 模态框（Modal） -->
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+                <h3 class="modal-title">详细信息</h3>
+            </div>
+
+            <div class="modal-body">
+
+                <ul id="detailsTab" class="nav nav-tabs">
+                    <li class="active">
+                        <a href="/#logInfo" data-toggle="tab">
+                            日志信息
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/#chartInfo" data-toggle="tab">
+                            监控图表
+                        </a>
+                    </li>
+                </ul>
+                <div id="detailsTabContent" class="tab-content">
+                    <div class="tab-pane fade in active" id="logInfo">
+                        <form role="form">
+                            <div class="form-group">
+                                <textarea class="form-control" rows="10" placeholder='这里是一些日志信息'></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade in" id="chartInfo">
+                        <form role="form">
+                            <div class="form-group">
+                                <highchart id="chart1" config="chartConfig" class="span9" ></highchart>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">关闭</button>
+                <!--<button class="btn btn-success" ng-click="ensure()">确定</button>-->
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 新建项目 -->
 <div class="modal fade" id="modal_create_project" tabindex="-1" role="dialog" aria-labelledby="modal_create_project_title" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -664,7 +795,7 @@
     </div><!-- /.modal -->
 </div>
 
-<!-- 模态框（Modal） -->
+<!-- 新建任务 -->
 <div class="modal fade" id="modal_create_task" tabindex="-1" role="dialog" aria-labelledby="modal_create_task_title" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -806,11 +937,11 @@
                     </div>
 
                     <!--<div class="form-group">-->
-                        <!--<div style="text-align:center">-->
-                            <!--<div class="col-xs-8">-->
-                                <!--<button  ng-click="testCrawler()">测试</button>-->
-                            <!--</div>-->
-                        <!--</div>-->
+                    <!--<div style="text-align:center">-->
+                    <!--<div class="col-xs-8">-->
+                    <!--<button  ng-click="testCrawler()">测试</button>-->
+                    <!--</div>-->
+                    <!--</div>-->
                     <!--</div>-->
                 </form>
             </div>
@@ -918,6 +1049,7 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+
 <!-- 修改信息 -->
 <div class="modal" id="modal-update">
 
@@ -1026,11 +1158,11 @@
                         </div>
                     </div>
                     <!--<div class="form-group">-->
-                        <!--<div style="text-align:center">-->
-                            <!--<div class="col-xs-8">-->
-                                <!--<button  ng-click="testCrawler()">测试</button>-->
-                            <!--</div>-->
-                        <!--</div>-->
+                    <!--<div style="text-align:center">-->
+                    <!--<div class="col-xs-8">-->
+                    <!--<button  ng-click="testCrawler()">测试</button>-->
+                    <!--</div>-->
+                    <!--</div>-->
                     <!--</div>-->
                 </form>
             </div>

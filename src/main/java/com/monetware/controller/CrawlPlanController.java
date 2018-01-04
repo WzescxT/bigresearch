@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -84,7 +85,10 @@ public class CrawlPlanController {
             {
                 //add later
             }
-            CollectProgress.totalurls=urls.size();
+            CollectProgress.totalurls.put(task_id,urls.size());
+            CollectProgress.crawledurls.put(task_id,0);
+            Date date=new Date(System.currentTimeMillis());
+            CollectProgress.starttime.put(task_id,date);
             String store_pattern=store_rule.getString("store_pattern");
             String proxy_id=run_rule.getString("proxy_id");
             JSONObject time=run_rule.getJSONObject("time");
@@ -112,7 +116,7 @@ public class CrawlPlanController {
                                     xpath1=xpath1+"/@href";
                                 }
                                 String attribute_name=eachtaskJSON.getString("attribute_name");
-                                service.crawlSingleData(urls,xpath1,attribute_name,ajax.getBoolean("open").toString(),ajax_pattern,button_xpath,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
+                                service.crawlSingleData(task_id,false,urls,xpath1,attribute_name,ajax.getBoolean("open").toString(),ajax_pattern,button_xpath,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
 
 
                             }
@@ -126,7 +130,7 @@ public class CrawlPlanController {
                                     xpath1=xpath1+"/@href";
                                 }
                                 String attribute_name=eachtaskJSON.getString("attribute_name");
-                                service.crawlSingleData(urls,xpath1,attribute_name,ajax.getBoolean("open").toString(),ajax_pattern,button_xpath,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
+                                service.crawlSingleData(task_id,false,urls,xpath1,attribute_name,ajax.getBoolean("open").toString(),ajax_pattern,button_xpath,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
 
 
                             }
@@ -142,7 +146,7 @@ public class CrawlPlanController {
                                 xpath1=xpath1+"/@href";
                             }
                             String attribute_name=eachtaskJSON.getString("attribute_name");
-                            service.crawlSingleData(urls,xpath1,attribute_name,ajax.getBoolean("open").toString(),null,null,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
+                            service.crawlSingleData(task_id,false,urls,xpath1,attribute_name,ajax.getBoolean("open").toString(),null,null,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
                         }
                     }
                     else if(creep_pattern.equals("线索"))

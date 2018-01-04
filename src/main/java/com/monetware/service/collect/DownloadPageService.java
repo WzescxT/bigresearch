@@ -63,10 +63,21 @@ public class DownloadPageService {
             HtmlPage page = webClient.getPage(url);
             webClient.waitForBackgroundJavaScript(10000);
             String xml = page.asXml();
-            // System.out.println(xml);
             onCrawleLinstener.onSuccess(replaceAll(url, xml));
         } catch (IOException e) {
-            e.printStackTrace();
+            WebClient webClientT = new WebClient(BrowserVersion.FIREFOX_52);
+            webClientT.getOptions().setJavaScriptEnabled(true);
+            webClientT.getOptions().setTimeout(35000);
+            webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+            try {
+                HtmlPage page = webClient.getPage(url);
+                webClient.waitForBackgroundJavaScript(10000);
+                String xml = page.asXml();
+                onCrawleLinstener.onSuccess(replaceAll(url, xml));
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            //e.printStackTrace();
         }
         //DownloadProcessor downloadProcessor = new DownloadProcessor(onCrawleLinstener);
 

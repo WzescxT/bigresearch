@@ -9,6 +9,7 @@ var MetronicApp = angular.module("MetronicApp", [
     "ui.bootstrap",
     "oc.lazyLoad",
     "ngSanitize",
+    "highcharts-ng",
     "ui.bootstrap"
 ]);
 
@@ -60,6 +61,35 @@ MetronicApp.controller('AppController', ['$scope', '$rootScope', function($scope
         App.initComponents(); // init core components
         //Layout.init(); //  Init entire layout(header, footer, sidebar, etc) on page load if the partials included in server side instead of loading with ng-include directive 
     });
+
+
+    $scope.myname = 'xiaojin'
+    $scope.chartSeries = [
+        {"name": "Some data", "data": [1, 2, 4, 7, 3], id: 's1'},
+        {"name": "Some data 3", "data": [3, 1, null, 5, 2], connectNulls: true, id: 's2'},
+        {"name": "Some data 2", "data": [5, 2, 2, 3, 5], type: "column", id: 's3'},
+        {"name": "My Super Column", "data": [1, 1, 2, 3, 2], type: "column", id: 's4'}
+    ];
+
+
+    $scope.chartConfig = {
+
+        chart: {
+            height: 500,
+            width: 500,
+            type: 'line'
+        },
+        plotOptions: {
+            series: {
+                stacking: ''
+            }
+        },
+        series: $scope.chartSeries,
+        title: {
+            text: 'Hello'
+        }
+    }
+
 }]);
 
 /***
@@ -402,7 +432,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvid
                             '../assets/global/plugins/font-awesome/css/font-awesome.min.css',
                             '../assets/global/plugins/jquery-json/jquery.json.js',
                             '../assets/global/plugins/jquery-json/json2.js',
-                            '../assets/global/plugins/jquery-json/jsonlint.js'
+                            '../assets/global/plugins/jquery-json/jsonlint.js',
                         ]
                     }]);
                 }]
