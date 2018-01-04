@@ -220,27 +220,27 @@ public class CollectByFlipService {
 	}
 
 	// 测试　只需要两个xpath和一个url
-	public static void main(String[] args) {
-		String xpath1 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[2]/td[2]";
-		String xpath2 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[3]/td[2]";
-		String url = "http://www.sse.com.cn/assortment/stock/list/share/";
-		CollectByFlipService collectByCluesService = new CollectByFlipService();
-
-		OnCrawleLinstener onCrawleLinstener = new OnCrawleLinstener() {
-			@Override
-			public void onSuccess(List<String> result) {
-				System.out.println(result.size());
-			}
-
-			@Override
-			public void onFail(String error) {
-
-			}
-		};
-		String ajaxXpath = "//*[@id=\"idStr\"]";
-		collectByCluesService.crawl(onCrawleLinstener, url, ajaxXpath, xpath1, xpath2);
-
-	}
+//	public static void main(String[] args) {
+//		String xpath1 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[2]/td[2]";
+//		String xpath2 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[3]/td[2]";
+//		String url = "http://www.sse.com.cn/assortment/stock/list/share/";
+//		CollectByFlipService collectByCluesService = new CollectByFlipService();
+//
+//		OnCrawleLinstener onCrawleLinstener = new OnCrawleLinstener() {
+//			@Override
+//			public void onSuccess(List<String> result) {
+//				System.out.println(result.size());
+//			}
+//
+//			@Override
+//			public void onFail(String error) {
+//
+//			}
+//		};
+//		String ajaxXpath = "//*[@id=\"idStr\"]";
+//		collectByCluesService.crawl(onCrawleLinstener, url, ajaxXpath, xpath1, xpath2);
+//
+//	}
 
 	public void crawl(OnCrawleLinstener onCrawleLinstener, String url, String ajaxXpath, String... xpath) {
 		List<String> clues = new ArrayList<>();
