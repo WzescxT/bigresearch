@@ -255,6 +255,8 @@ public class CollectService {
 							results.add(((HtmlArticle) o).getTextContent().trim());
 						}else if( o instanceof HtmlLink) {
 							results.add(((HtmlLink) o).getTextContent().trim());
+						}else if( o instanceof HtmlSpan) {
+							results.add(((HtmlSpan) o).getTextContent().trim());
 						}
 					}else if ("链接".equals(extract_way)) {
 						results.add(getAbsUrl(((HtmlAnchor) o).getBaseURI(),
@@ -322,11 +324,11 @@ public class CollectService {
 	 * 测试　只需要两个xpath和一个url
 	 * @param args
 	 */
-//	public static void main(String[] args) {
-//		// share crawler
-//		String xpath1 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[2]/td[6]";
-//		String xpath2 = "//*[@id=\"tableData_\"]/div[2]/table/tbody/tr[3]/td[6]";
-//		String url = "http://www.sse.com.cn/assortment/stock/list/share/";
+	public static void main(String[] args) {
+		// share crawler
+//		String xpath1 = "/html/body/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/a[1]/span[1]";
+//		String xpath2 = "/html/body/div[3]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/a[1]/span[1]";
+//		String url = "http://daily.zhihu.com/";
 //		CollectService collectByCluesService = new CollectService();
 //
 //		OnCrawlListener onCrawlListener = new OnCrawlListener() {
@@ -343,8 +345,10 @@ public class CollectService {
 //
 //			}
 //		};
+//		List<String> urls = new ArrayList<>();
+//		urls.add(url);
 //		String ajaxXpath = "//*[@id=\"idStr\"]";
-//		collectByCluesService.crawl(onCrawlListener, url, CollectService.TYPE_CLUES_AJAX_FLIP, "文本",
+//		collectByCluesService.crawl(onCrawlListener, urls, CollectService.TYPE_CLUES, "文本",
 //				ajaxXpath, xpath1, xpath2);
 		// tongji crawler
 //		String xpath1 = "/html/body/div[3]/div/div[3]/div/ul/li[1]/a[1]";
@@ -368,7 +372,7 @@ public class CollectService {
 //		collectByCluesService.crawl(onCrawlListener, url, CollectService.TYPE_CLUES, "链接",
 //				ajaxXpath, xpath1, xpath2);
 
-//	}
+	}
 
 	/**
 	 * 线索 ＋ ajax翻页/点击
