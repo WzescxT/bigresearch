@@ -633,20 +633,22 @@ angular.module('MetronicApp')
         };
         var lastTag = null;
         var lastTagBorder = null;
+        var selectedTag = null;
+        var selectedTagBorder = null;
         var index = 0;
         // 选择xpath
         $scope.select_xpath = function () {
             // check if download page is exist
             if (downloadState === 0) {
                 $('#download_page_loading').modal('show');
-                $('#download_page_loading_info').val("请先下载～～")
+                $('#download_page_loading_info').text("请先在URL规则中配置，点击下一步～～")
             }
             else if (downloadState === 1) {
                 $('#download_page_loading').modal('show');
-                $('#download_page_loading_info').val("正在下载～请稍后～～")
+                $('#download_page_loading_info').text("正在下载～～请稍后～～")
             } else if (downloadState === 2) {
-                $('#download_page_loading_info').val("下载界面失败～请请重新配置～")
                 $('#download_page_loading').modal('show');
+                $('#download_page_loading_info').text("下载界面失败～请重新配置～")
             } else if (downloadState === 3){
                 $('#modal-select-xpath').modal('show');
                 index = 0;
@@ -671,13 +673,23 @@ angular.module('MetronicApp')
                             event.preventDefault();
                             if (index === 0) {
                                 select_xpath1 = $shadow.domXpath(this);
-                                console.log($shadow.domXpath(this));
+                                // console.log($shadow.domXpath(this));
                                 $('#xpath').val($shadow.domXpath(this));
+                                // update selectedTag;
+                                if (selectedTagBorder !== null) {
+                                    selectedTag.css('border', "");
+                                }
+                                selectedTag = $(this);
+                                selectedTagBorder = $(this).css('border');
                             }
                             index++;
-                        })
+                        });
                         lastTag = $(this);
                         index = 0;
+                        selectedTag.css({
+                            'border': '1.5px solid #F00',
+                            'border-radius': '5px solid'
+                        });
                     });
                 });
             }
@@ -687,15 +699,15 @@ angular.module('MetronicApp')
             // check if download page is exist
             if (downloadState === 0) {
                 $('#download_page_loading').modal('show');
-                $('#download_page_loading_info').val("请先下载～～")
+                $('#download_page_loading_info').text("请先在URL规则中配置，点击下一步～～")
             }
             else if (downloadState === 1) {
                 $('#download_page_loading').modal('show');
-                $('#download_page_loading_info').val("正在下载～请稍后～～")
+                $('#download_page_loading_info').text("正在下载～～请稍后～～")
             } else if (downloadState === 2) {
-                $('#download_page_loading_info').val("下载界面失败～请请重新配置～")
                 $('#download_page_loading').modal('show');
-            } else if (downloadState === 3){
+                $('#download_page_loading_info').text("下载界面失败～请重新配置～")
+            } else if (downloadState === 3) {
                 $('#modal-select-xpath2').modal('show');
                 // console.log("-------------------------------\n" + $type  + "-------------------------------\n");
                 $('#xpath2').val("");
@@ -723,16 +735,25 @@ angular.module('MetronicApp')
                         $(this).click(function (event) {
                             event.preventDefault();
                             if (index === 0) {
+                                // get select
                                 select_xpath2 = $shadow.domXpath(this);
-                                console.log($shadow.domXpath(this));
+                                // console.log($shadow.domXpath(this));
                                 $('#xpath2').val($shadow.domXpath(this));
+                                // update selectedTag
+                                if (selectedTagBorder !== null) {
+                                    selectedTag.css('border', "");
+                                }
+                                selectedTag = $(this);
+                                selectedTagBorder = $(this).css('border');
                             }
                             index++;
                         });
                         lastTag = $(this);
                         index = 0;
-                        // lastTag.css('border', lastTagBorder);
-                        //console.log($shadow.domXpath(this));
+                        selectedTag.css({
+                            'border': '1.5px solid #F00',
+                            'border-radius': '5px solid'
+                        });
                     });
                 });
             }
@@ -743,15 +764,15 @@ angular.module('MetronicApp')
             // check if download page is exist
             if (downloadState === 0) {
                 $('#download_page_loading').modal('show');
-                $('#download_page_loading_info').val("请先下载～～")
+                $('#download_page_loading_info').text("请先在URL规则中配置，点击下一步～～")
             }
             else if (downloadState === 1) {
                 $('#download_page_loading').modal('show');
-                $('#download_page_loading_info').val("正在下载～请稍后～～")
+                $('#download_page_loading_info').text("正在下载～～请稍后～～")
             } else if (downloadState === 2) {
-                $('#download_page_loading_info').val("下载界面失败～请请重新配置～")
                 $('#download_page_loading').modal('show');
-            } else if (downloadState === 3){
+                $('#download_page_loading_info').text("下载界面失败～请重新配置～")
+            } else if (downloadState === 3) {
                 $('#modal-select-ajax-xpath').modal('show');
                 //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
                 $('#ajax_xpath').val("");
@@ -763,16 +784,10 @@ angular.module('MetronicApp')
                     //对所有的元素添加点击事件，获取xpath
                     $("#iframe3").contents().find("*").hover(function (event) {
                         event.stopPropagation();
-                        // lastTag = $(this);
-                        // var css = div.css('border');
-                        // console.log($(this).css('border'));
                         if (lastTag !== null) {
                             lastTag.css('border', lastTagBorder);
-                            // console.log(lastTag);
-                            // console.log(lastTagBorder);
                         }
                         lastTagBorder = $(this).css('border');
-                        //console.log($(this));
                         $(this).css({
                             'border': '1.5px solid #f0f',
                             'border-radius': '5px solid'
@@ -780,19 +795,24 @@ angular.module('MetronicApp')
                         $(this).click(function (event) {
                             event.preventDefault();
                             if (index === 0) {
-                                // select_xpath1 = $shadow.domXpath(this);
-                                // console.log($shadow.domXpath(this));
-                                // $('#xpath').val($shadow.domXpath(this));
                                 select_ajax_xpath = $shadow.domXpath(this);
-                                console.log($shadow.domXpath(this));
+                                // console.log($shadow.domXpath(this));
                                 $('#ajax_xpath').val($shadow.domXpath(this));
+                                // update selectedTag
+                                if (selectedTagBorder !== null) {
+                                    selectedTag.css('border', "");
+                                }
+                                selectedTag = $(this);
+                                selectedTagBorder = $(this).css('border');
                             }
                             index++;
-                        })
-                        lastTag = $(this);
+                        });
                         index = 0;
-                        // lastTag.css('border', lastTagBorder);
-                        //console.log($shadow.domXpath(this));
+                        lastTag = $(this);
+                        selectedTag.css({
+                            'border': '1.5px solid #F00',
+                            'border-radius': '5px solid'
+                        });
                     });
                 });
             }
@@ -805,14 +825,14 @@ angular.module('MetronicApp')
             // check if download page finishing
             if (downloadState === 0) {
                 $('#download_page_loading').modal('show');
-                $('#download_page_loading_info').val("请先下载～～")
+                $('#download_page_loading_info').text("请先下载～～")
             }
             else if (downloadState === 1) {
                 $('#download_page_loading').modal('show');
-                $('#download_page_loading_info').val("正在下载～请稍后～～")
+                $('#download_page_loading_info').text("正在下载～请稍后～～")
             } else if (downloadState === 2) {
-                $('#download_page_loading_info').val("下载界面失败～请请重新配置～")
                 $('#download_page_loading').modal('show');
+                $('#download_page_loading_info').text("下载界面失败～请请重新配置～")
             }
         }
         //　保存
