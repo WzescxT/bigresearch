@@ -150,12 +150,63 @@ angular.module('MetronicApp')
 
         $scope.clearData = function () {
         };
+        
+        function clearInfo() {
+            $scope.selected_project.advanceProjectEntity.project_id = null;
+            $scope.selected_task.task_id = null;
+            $scope.task_leader = null;
+            $scope.task_description = null;
+
+            // // 辅助规则
+            $scope.open = null;
+            $scope.login_page_path = null;
+            $scope.login_username = null;
+            $scope.login_username_xpath = null;
+            $scope.login_password = null;
+            $scope.login_password_xpath = null;
+            $scope.login_verifycode = null;
+            $scope.login_verifycode_xpath = null;
+            $scope.cookie = null;
+
+            $scope.crawl_pattern = null;
+            $scope.url_path = null;
+
+            $scope.url_wildcard = null;
+            $scope.init_value = null;
+            $scope.gap = null;
+            $scope.pages_num = null;
+            // jsonData.url_pattern.list.list_url_file_path = "";
+            //
+            $scope.url_index_path = null;
+            $scope.next_page_xpath = null;
+            // jsonData.url_pattern.click.click_url_file_path = "";
+
+            $scope.import_urls = null;
+            //jsonData.url_pattern.import.file_upload_path = "";
+            //jsonData.url_pattern.import.import_url_file_path="";
+            //
+            //
+            // 持久化规则
+            $scope.store_pattern = null;
+            //
+            // 采集规则
+            $scope.creep_rule = null;
+            //
+            // 执行计划
+            $scope.proxy_ids = null;
+            $scope.start_time = null;
+            $scope.end_time = null;
+            $scope.headers = null;
+            $scope.custom_config = null;
+        }
 
         function setTaskInfo(task_id) {
             $http({
                 method: 'GET',
                 url: '/advance/task_config?task_id=' + task_id
             }).then(function successCallback(response) {
+                console.log("yes");
+                clearInfo();
                 var jsonData = response.data;
                 changeFrontData(jsonData);
             }, function errorCallback(response) {
@@ -822,6 +873,7 @@ angular.module('MetronicApp')
                         task_name: $scope.new_task_name
                     }
                 }).then(function successCallback(response) {
+
 
                     for (var i = 0; i < $scope.projects.length; i++) {
                         if ($scope.projects[i].advanceProjectEntity.project_id == response.data.project_id) {
