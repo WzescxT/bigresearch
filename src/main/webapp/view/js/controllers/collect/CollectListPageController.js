@@ -472,34 +472,33 @@ angular.module('MetronicApp')
 
             if (id !== "miningrule") {
             } else {
-                // 单页面
-                var http_url;
+
                 if ($scope.crawl_pattern === null ||
                     $scope.crawl_pattern === "单页") {
                     // same as last
-                    http_url = $scope.url_path;
-                    if (downloadPagePath === $scope.url_path && downloadState === 1) {
-                        downloadState = 1;
+                    if (downloadPagePath === $scope.url_path && downloadState === 3) {
+                        downloadState = 3;
                         return;
                     } else {
                         downloadPagePath = $scope.url_path;
-                        downloadState = 0;
+                        downloadState = 1;
                     }
                 } else if ($scope.crawl_pattern === "列表") {
-                    http_url = getPage($scope.url_wildcard, $scope.init_value);
                     if (downloadPagePath === getPage($scope.url_wildcard, $scope.init_value)
-                        && downloadState === 1) {
-                        downloadState = 1;
+                        && downloadState === 3) {
+                        downloadState = 3;
                         return;
                     } else {
                         downloadPagePath = getPage($scope.url_wildcard, $scope.init_value);
-                        downloadState = 0;
+                        downloadState = 1;
                     }
                 }
-                console.log(http_url);
+                /**
+                 * Download page
+                 */
                 $.post('/collect/download', {url_path: "http://sse.tongji.edu.cn/data/list/xwdt"}, function (result) {
                     if (result === "success") {
-                        downloadState = 1;
+                        downloadState = 3;
                     } else {
                         downloadState = 2;
                     }
@@ -564,7 +563,7 @@ angular.module('MetronicApp')
             // check if download page is exist
             var select_url_path = downloadPagePath;
 
-            var filename = "download/" + hashCode(select_url_path) + ".html";
+            var filename = hashCode(select_url_path) + ".html";
             $.post("/collect/file/exist", {filename: filename}, function (result) {
                 // exits
                 if (result) {
@@ -611,7 +610,7 @@ angular.module('MetronicApp')
         $scope.select_xpath2 = function () {
             // check if download page is exist
             var select_url_path = downloadPagePath;
-            var filename = "download/" + hashCode(select_url_path) + ".html";
+            var filename = hashCode(select_url_path) + ".html";
             $.post("/collect/file/exist", {filename: filename}, function (result) {
                 // exits
                 if (result) {
@@ -665,7 +664,7 @@ angular.module('MetronicApp')
         $scope.select_ajax_xpath = function () {
             // check if download page is exist
             var select_url_path = downloadPagePath;
-            var filename = "download/" + hashCode(select_url_path) + ".html";
+            var filename = hashCode(select_url_path) + ".html";
             $.post("/collect/file/exist", {filename: filename}, function (result) {
                 // exits
                 if (result) {

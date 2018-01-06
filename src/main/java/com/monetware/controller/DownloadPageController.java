@@ -26,8 +26,7 @@ public class DownloadPageController {
 
     private String response = "fail";
     @RequestMapping(value = "/download", method = RequestMethod.POST)
-    public String crawlByClues(@RequestBody Map<String, Object> requests) {
-        String url_path = requests.get("url_path").toString();
+    public String crawlByClues(@RequestParam("url_path") String url_path) {
         success = 0;
         DownloadPageService.OnCrawlListener onCrawlListener = new
                 DownloadPageService.OnCrawlListener() {
