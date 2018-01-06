@@ -470,7 +470,8 @@ angular.module('MetronicApp')
                 console.log("post data bad");
             });
 
-            if (id === "miningrule") {
+            if (id !== "miningrule") {
+            } else {
                 // 单页面
                 var http_url;
                 if ($scope.crawl_pattern === null ||
@@ -495,20 +496,28 @@ angular.module('MetronicApp')
                         downloadState = 0;
                     }
                 }
-                console.log(http_url)
-                const url_data = {url_path: http_url};
-                $http({
-                    method: 'POST',
-                    url: '/collect/download',
-                    data: url_data
-                }).then(function successCallback(response) {
-                    console.log("success！");
-                    downloadState = 1;
-                }, function errorCallback(response) {
-                    // 请求失败执行代码
-                    console.log("post data bad");
-                    downloadState = 2;
+                console.log(http_url);
+                $.post('/collect/download', {url_path: "http://sse.tongji.edu.cn/data/list/xwdt"}, function (result) {
+                    if (result === "success") {
+                        downloadState = 1;
+                    } else {
+                        downloadState = 2;
+                    }
+                    console.log(result);
                 });
+                // $http({
+                //     method: 'POST',
+                //     url: '/collect/download',
+                //     data: url_data
+                // }).then(function successCallback(response) {
+                //     console.log(response.toString());
+                //
+                //
+                // }, function errorCallback(response) {
+                //     // 请求失败执行代码
+                //     console.log(response);
+                //     downloadState = 2;
+                // });
             }
             $("#myTab a[href='/#" + id + "']").tab('show');
         };
