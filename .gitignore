@@ -6,3 +6,4 @@ target
 task_config*
 /META-INF
 /classes
+data/

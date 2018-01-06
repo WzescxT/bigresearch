@@ -5,6 +5,9 @@ import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
+import com.monetware.mapper.collect.SpiderTaskInfoMapper;
+import com.monetware.model.collect.SpiderTaskInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -30,6 +33,18 @@ public class CollectService {
 	 */
 	private OnCrawleLinstener onCrawleLinstener;
 
+
+	@Autowired
+	SpiderTaskInfoMapper spiderTaskInfoMapper;
+
+	/**
+	 * Get Task Info
+	 * @param taskId
+	 * @return
+	 */
+	public SpiderTaskInfo getSpiderTaskInfo(String taskId) {
+		return spiderTaskInfoMapper.findSpiderTaskInfoById(taskId);
+	}
 
 	class CollectProcessor {
 		private int collectType = -1;

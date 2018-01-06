@@ -32,8 +32,10 @@ public class CrawlPlanController {
     @RequestMapping(value="/Plan",method = RequestMethod.POST)
     @ResponseBody
     public String getProject(@RequestBody JSONObject request) {
+        final int projectId = request.getIntValue("project_id");
         final int task_id = (int) request.get("task_id");
         SpiderTaskInfo task= spiderTaskInfoMapper.findSpiderTaskInfoById(String.valueOf(task_id));
+        final String taskName = task.getTask_name();
         String path=task.getTask_config_location();
         File configjson=new File(path);
         String jsonString="";
@@ -167,11 +169,13 @@ public class CrawlPlanController {
                                         @Override
                                         public void onSuccess(List<String> result) {
                                             StringBuilder sb = new StringBuilder();
-                                            for (String s : result) {
-                                                sb.append(attributeName).append("\n");
-                                                //System.out.println(attributeName + " " + s);
+                                            String path = "data/" + projectId + "_" + taskName + "_" + attributeName + ".txt";
+                                            for (String line : result) {
+                                                if (line != null && line.length() > 0) {
+                                                    sb.append(line).append("\n");
+                                                }
                                             }
-                                            saveToFile(task_id + ".txt", sb.toString(), false);
+                                            saveToFile(path, sb.toString(), false);
                                         }
 
                                         @Override
@@ -198,11 +202,14 @@ public class CrawlPlanController {
                                         @Override
                                         public void onSuccess(List<String> result) {
                                             StringBuilder sb = new StringBuilder();
-                                            for (String s : result) {
-                                                sb.append(attributeName).append("\n");
-                                                //System.out.println(attributeName + " " + s);
+                                            for (String line : result) {
+                                                if (line != null && line.length() > 0) {
+                                                    sb.append(line).append("\n");
+                                                }
                                             }
-                                            saveToFile(task_id + ".txt", sb.toString(), false);
+                                            String path = "data/" + projectId + "_" + taskName + "_" + attributeName + ".txt";
+                                            // save to file
+                                            saveToFile(path, sb.toString(), false);
                                         }
 
                                         @Override
