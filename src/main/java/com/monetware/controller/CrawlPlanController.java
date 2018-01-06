@@ -78,6 +78,7 @@ public class CrawlPlanController {
             {
                 List<String> tmp = generateUrls(url_pattern.getJSONObject("list"));
                 urls.addAll(tmp);
+
                 //add later
             }
             else if(urltype.equals("翻页"))
@@ -86,6 +87,7 @@ public class CrawlPlanController {
             }
             else if(urltype.equals("导入"))
             {
+
                 //add later
             }
             CollectProgress.totalurls.put(task_id,urls.size());

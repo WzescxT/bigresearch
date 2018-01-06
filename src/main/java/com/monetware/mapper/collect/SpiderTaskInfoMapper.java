@@ -20,7 +20,7 @@ public interface SpiderTaskInfoMapper {
     @Update("UPDATE spider_task_info SET task_config_location = #{path} WHERE task_id = #{id}")
     void saveConfigPathById(@Param("path") String path, @Param("id") String id);
 
-    @Update("UPDATE spider_task_into SET url_location = #{path} WHERE task_id = #{id}")
+    @Update("UPDATE spider_task_info SET url_location = #{path} WHERE task_id = #{id}")
     void saveUrlFilePathById(@Param("path") String path, @Param("id") String id);
 
 }

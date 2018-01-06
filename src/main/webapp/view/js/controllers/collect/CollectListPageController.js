@@ -56,8 +56,12 @@ angular.module('MetronicApp')
             {name:"项目4",age:"任务2"},
             {name:"项目5",age:"任务1"}
         ];
-
+        var vm = $scope.vm = {};
+        vm.value = 50;
+        vm.style = 'progress-bar-info';
+        vm.showLabel = true;
         $scope.isModify = false;
+
 
         // 显示 monitor 详情
         $scope.showDetails = function($index){
@@ -236,7 +240,37 @@ angular.module('MetronicApp')
             $scope.login_verifycode_xpath = jsonData.assistant_rule.login_verifycode_xpath;
             $scope.cookie = jsonData.assistant_rule.cookie;
 
-            $scope.crawl_pattern = jsonData.url_pattern.current_selected;
+            // $scope.crawl_pattern = jsonData.url_pattern.current_selected;
+            switch (jsonData.url_pattern.current_selected) {
+                case "single": {
+                    $scope.crawl_pattern = "单页";
+
+                    break;
+                }
+
+                case "list": {
+                    $scope.crawl_pattern = "列表";
+
+                    break;
+                }
+
+                case "click": {
+                    $scope.crawl_pattern = "翻页";
+
+                    break;
+                }
+
+                case "import": {
+                    $scope.crawl_pattern = "导入";
+
+                    break;
+                }
+
+                default: {
+                    break;
+                }
+            }
+
             $scope.url_path = jsonData.url_pattern.single.url_path;
 
             $scope.url_wildcard = jsonData.url_pattern.list.url_wildcard;
@@ -286,6 +320,8 @@ angular.module('MetronicApp')
         // flag == 0 上一步
         // flag == 1 下一步
         $scope.changeTabs = function (id, flag) {
+            $("#myTab a[href='/#" + id + "']").tab('show');
+
             var jsonData = {
 
                 "basic_rule": {
@@ -402,7 +438,35 @@ angular.module('MetronicApp')
                 jsonData.assistant_rule.cookie = $scope.cookie;
 
                 // URL规则
-                jsonData.url_pattern.current_selected = $scope.crawl_pattern;
+                switch ($scope.crawl_pattern) {
+                    case "单页": {
+                        jsonData.url_pattern.current_selected = "single";
+
+                        break;
+                    }
+
+                    case "列表": {
+                        jsonData.url_pattern.current_selected = "list";
+
+                        break;
+                    }
+
+                    case "翻页": {
+                        jsonData.url_pattern.current_selected = "click";
+
+                        break;
+                    }
+
+                    case "导入": {
+                        jsonData.url_pattern.current_selected = "import";
+
+                        break;
+                    }
+
+                    default: {
+                        break;
+                    }
+                }
 
                 jsonData.url_pattern.single.url_path = $scope.url_path;
 
@@ -531,7 +595,6 @@ angular.module('MetronicApp')
                 //     downloadState = 2;
                 // });
             }
-            $("#myTab a[href='/#" + id + "']").tab('show');
         };
 
         $scope.pageTitle = "自定义采集模块";

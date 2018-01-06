@@ -5,18 +5,18 @@ import sun.security.provider.ConfigFile;
 import java.sql.Date;
 
 public class SpiderProgressInfo {
-    private int id;
-    private int task_id;
-    private int crawled_number;
+    private Long id;
+    private Integer task_id;
+    private Integer crawled_number;
     private Date time;
 
-    public SpiderProgressInfo(int task_id,int crawled_number,Date time)
+    public SpiderProgressInfo(Integer task_id,Integer crawled_number,Date time)
     {
         this.task_id=task_id;
         this.crawled_number=crawled_number;
         this.time=time;
     }
-    public SpiderProgressInfo(Integer id,Integer task_id,Integer crawled_number,Date time)
+    public SpiderProgressInfo(Long id,Integer task_id,Integer crawled_number,Date time)
     {
         this.id=id;
         this.task_id=task_id;
@@ -31,7 +31,7 @@ public class SpiderProgressInfo {
         return crawled_number;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -44,7 +44,7 @@ public class SpiderProgressInfo {
         this.crawled_number = crawled_number;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
