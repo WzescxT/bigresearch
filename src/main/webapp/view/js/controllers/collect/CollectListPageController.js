@@ -687,7 +687,7 @@ angular.module('MetronicApp')
                         lastTag = $(this);
                         index = 0;
                         selectedTag.css({
-                            'border': '1.5px solid #F00',
+                            'border': '1.5px solid #8B0000',
                             'border-radius': '5px solid'
                         });
                     });
@@ -751,7 +751,7 @@ angular.module('MetronicApp')
                         lastTag = $(this);
                         index = 0;
                         selectedTag.css({
-                            'border': '1.5px solid #F00',
+                            'border': '1.5px solid #8B0000',
                             'border-radius': '5px solid'
                         });
                     });
@@ -810,7 +810,7 @@ angular.module('MetronicApp')
                         index = 0;
                         lastTag = $(this);
                         selectedTag.css({
-                            'border': '1.5px solid #F00',
+                            'border': '1.5px solid #8B0000',
                             'border-radius': '5px solid'
                         });
                     });
