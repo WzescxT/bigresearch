@@ -150,6 +150,7 @@ angular.module('MetronicApp')
 
         $scope.clearData = function () {
         };
+
         function setTaskInfo(task_id) {
             $http({
                 method: 'GET',
