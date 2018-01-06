@@ -56,6 +56,13 @@ angular.module('MetronicApp')
             {name:"项目4",age:"任务2"},
             {name:"项目5",age:"任务1"}
         ];
+
+        var vm = $scope.vm = {};
+        vm.value = 50;
+        vm.style = 'progress-bar-info';
+        vm.showLabel = true;
+
+
         // 显示 monitor 详情
         $scope.showDetails = function($index){
             $('#monitor_detail').modal('show');
