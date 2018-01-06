@@ -10,6 +10,6 @@ import org.springframework.stereotype.Component;
 public interface SpiderProjectInfoMapper {
 
     @Select("SELECT project_name WHERE project_id = #{project_id};")
-    String getProjectNameById(@Param("project_id") Integer projectId);
+    String getProjectNameById(@Param("project_id") Long projectId);
 
 }

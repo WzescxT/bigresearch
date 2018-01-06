@@ -56,6 +56,9 @@ angular.module('MetronicApp')
             {name:"项目4",age:"任务2"},
             {name:"项目5",age:"任务1"}
         ];
+
+        $scope.isModify = false;
+
         // 显示 monitor 详情
         $scope.showDetails = function($index){
             $('#monitor_detail').modal('show');
@@ -736,17 +739,26 @@ angular.module('MetronicApp')
             }
         }
         //　保存
-        $scope.select_commit = function () {
-            // console.log("-------------------------------\n" + select_xpath1 + "\n" +
-            //     select_xpath2 + "-------------------------------\n" +
-            //     select_ajax_xpath + "-------------------------------\n");
-            $scope.attribute_xpath = select_xpath1;
-            $scope.attribute_xpath2 = select_xpath2;
+        $scope.select_commit1 = function () {
             $scope.button_xpath = select_ajax_xpath;
         };
+        $scope.select_commit2 = function () {
 
-        $scope.save = function () {
+            $scope.attribute_xpath = select_xpath1;
+        };
+        $scope.select_commit3 = function () {
+            $scope.attribute_xpath2 = select_xpath2;
+        };
 
+
+        $scope.save = function ($index) {
+
+            if($scope.isModify)
+            {
+                $scope.isModify = false;
+                $scope.modify($index);
+                return;
+            }
             var newEle = {
                 "creep_name": $scope.creep_name,
                 "creep_pattern": $scope.creep_pattern,
@@ -766,6 +778,7 @@ angular.module('MetronicApp')
         };
 
         $scope.update = function ($index) {
+            $scope.isModify = true;
             $scope.t_index = $index;
             $scope.creep_name = $scope.creep_rule[$index].creep_name;
             $scope.creep_pattern = $scope.creep_rule[$index].creep_pattern;
@@ -776,7 +789,7 @@ angular.module('MetronicApp')
             $scope.attribute_xpath2 = $scope.creep_rule[$index].attribute_xpath2;
             $scope.attribute_name = $scope.creep_rule[$index].attribute_name;
             $scope.extract_way = $scope.creep_rule[$index].extract_way;
-            $('#modal-update').modal('show');
+            $('#modal-add').modal('show');
         };
 
         $scope.modify = function ($index) {
@@ -785,7 +798,7 @@ angular.module('MetronicApp')
 
             var ajaxTypes = ["点击", "翻页", "滚动"];
             $scope.creep_rule[$index].ajax.open = $scope.x;
-            $scope.creep_rule[$index].ajax.ajax_pattern = types[$scope.y];
+            $scope.creep_rule[$index].ajax.ajax_pattern = ajaxTypes[$scope.y];
             $scope.creep_rule[$index].ajax.button_xpath = $scope.button_xpath;
             $scope.creep_rule[$index].attribute_xpath = $scope.attribute_xpath;
             $scope.creep_rule[$index].attribute_xpath2 = $scope.attribute_xpath2;
@@ -810,7 +823,7 @@ angular.module('MetronicApp')
             if ($scope.creep_rule[$index].creep_pattern === "线索") {
                 $.post("/collect/crawler", {data: req}, function (result) {
                     console.log(result.toString());
-                    //var arr = result.toString().replace(",", "\n");
+                    alert(result);
                     $('#testarea').val(result);
                     $('#loading').modal('hide');
                 });
@@ -823,12 +836,10 @@ angular.module('MetronicApp')
                 }
                 values['currenturl'] = url_path;
                 var idata = JSON.stringify(values);
-                // alert(idata);
+                alert(idata);
                 console.log(idata.toString());
-                CollectCusTempService.crawltest(idata, function (data) {
-                    $('#testarea').val(data);
-                    $('#loading').modal('hide');
-                });
+                CollectCusTempService.crawltest(idata);
+
             }
         };
 
