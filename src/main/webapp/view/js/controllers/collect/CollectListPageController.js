@@ -473,9 +473,10 @@ angular.module('MetronicApp')
                 console.log("post data bad");
             });
 
-            if (id !== "miningrule") {
-            } else {
-
+            console.log(id);
+            // next step
+            if (id === "miningrule") {
+                //
                 if ($scope.crawl_pattern === null ||
                     $scope.crawl_pattern === "单页") {
                     // same as last
@@ -496,10 +497,19 @@ angular.module('MetronicApp')
                         downloadState = 1;
                     }
                 }
+                // check file
+                $.post("/collect/file/exist", {filename: hashCode(downloadPagePath) + ".html"},
+                    function (result) {
+                    // exits
+                    if (result) {
+                        downloadState = 3;
+                    }
+                });
+                console.log(downloadPagePath);
                 /**
                  * Download page
                  */
-                $.post('/collect/download', {url_path: "http://sse.tongji.edu.cn/data/list/xwdt"}, function (result) {
+                $.post('/collect/download', {url_path: downloadPagePath}, function (result) {
                     if (result === "success") {
                         downloadState = 3;
                     } else {
@@ -528,7 +538,7 @@ angular.module('MetronicApp')
 
         $scope.creep_rule = [];
 
-        var downloadState;
+        var downloadState = 0;
         var downloadPagePath;
 
         $scope.pageTitle = "自定义采集模块";
@@ -564,161 +574,165 @@ angular.module('MetronicApp')
         // 选择xpath
         $scope.select_xpath = function () {
             // check if download page is exist
-            var select_url_path = downloadPagePath;
-
-            var filename = hashCode(select_url_path) + ".html";
-            $.post("/collect/file/exist", {filename: filename}, function (result) {
-                // exits
-                if (result) {
-                    $('#modal-select-xpath').modal('show');
-
-                    index = 0;
-                    $('#xpath').val("");
-                    $("#iframe").attr("src", "download/" + hashCode(select_url_path) + ".html");
-                    $('#modal-select-xpath').on('shown.bs.modal', function (e) {
+            if (downloadState === 0) {
+                $('#download_page_loading').modal('show');
+                $('#download_page_loading_info').val("请先下载～～")
+            }
+            else if (downloadState === 1) {
+                $('#download_page_loading').modal('show');
+                $('#download_page_loading_info').val("正在下载～请稍后～～")
+            } else if (downloadState === 2) {
+                $('#download_page_loading_info').val("下载界面失败～请请重新配置～")
+                $('#download_page_loading').modal('show');
+            } else if (downloadState === 3){
+                $('#modal-select-xpath').modal('show');
+                index = 0;
+                $('#xpath').val("");
+                $("#iframe").attr("src", "download/" + hashCode(downloadPagePath) + ".html");
+                $('#modal-select-xpath').on('shown.bs.modal', function (e) {
+                    $(this).click(function (event) {
+                        event.preventDefault();
+                    });
+                    //对所有的元素添加点击事件，获取xpath
+                    $("#iframe").contents().find("*").hover(function (event) {
+                        event.stopPropagation();
+                        if (lastTag !== null) {
+                            lastTag.css('border', lastTagBorder);
+                        }
+                        lastTagBorder = $(this).css('border');
+                        $(this).css({
+                            'border': '1.5px solid #f0f',
+                            'border-radius': '5px solid'
+                        });
                         $(this).click(function (event) {
                             event.preventDefault();
-                        });
-                        //对所有的元素添加点击事件，获取xpath
-                        $("#iframe").contents().find("*").hover(function (event) {
-                            event.stopPropagation();
-                            if (lastTag !== null) {
-                                lastTag.css('border', lastTagBorder);
+                            if (index === 0) {
+                                select_xpath1 = $shadow.domXpath(this);
+                                console.log($shadow.domXpath(this));
+                                $('#xpath').val($shadow.domXpath(this));
                             }
-                            lastTagBorder = $(this).css('border');
-                            $(this).css({
-                                'border': '1.5px solid #f0f',
-                                'border-radius': '5px solid'
-                            });
-                            $(this).click(function (event) {
-                                event.preventDefault();
-                                if (index === 0) {
-                                    select_xpath1 = $shadow.domXpath(this);
-                                    console.log($shadow.domXpath(this));
-                                    $('#xpath').val($shadow.domXpath(this));
-                                }
-                                index++;
-                            })
-                            lastTag = $(this);
-                            index = 0;
-                        });
+                            index++;
+                        })
+                        lastTag = $(this);
+                        index = 0;
                     });
-                } else {
-                    // check if download page finishing
-                    checkDownloadState();
-                }
-            });
+                });
+            }
         };
         // xpath2
         $scope.select_xpath2 = function () {
             // check if download page is exist
-            var select_url_path = downloadPagePath;
-            var filename = hashCode(select_url_path) + ".html";
-            $.post("/collect/file/exist", {filename: filename}, function (result) {
-                // exits
-                if (result) {
-                    $('#modal-select-xpath2').modal('show');
-                    // console.log("-------------------------------\n" + $type  + "-------------------------------\n");
-                    $('#xpath2').val("");
-                    $("#iframe2").attr("src", "download/" + hashCode(select_url_path) + ".html");
-                    index = 0;
-                    $('#modal-select-xpath2').on('shown.bs.modal', function (e) {
+            if (downloadState === 0) {
+                $('#download_page_loading').modal('show');
+                $('#download_page_loading_info').val("请先下载～～")
+            }
+            else if (downloadState === 1) {
+                $('#download_page_loading').modal('show');
+                $('#download_page_loading_info').val("正在下载～请稍后～～")
+            } else if (downloadState === 2) {
+                $('#download_page_loading_info').val("下载界面失败～请请重新配置～")
+                $('#download_page_loading').modal('show');
+            } else if (downloadState === 3){
+                $('#modal-select-xpath2').modal('show');
+                // console.log("-------------------------------\n" + $type  + "-------------------------------\n");
+                $('#xpath2').val("");
+                $("#iframe2").attr("src", "download/" + hashCode(downloadPagePath) + ".html");
+                index = 0;
+                $('#modal-select-xpath2').on('shown.bs.modal', function (e) {
+                    $(this).click(function (event) {
+                        event.preventDefault();
+                    });
+                    //对所有的元素添加点击事件，获取xpath
+                    $("#iframe2").contents().find("*").hover(function (event) {
+                        event.stopPropagation();
+                        // lastTag = $(this);
+                        // var css = div.css('border');
+                        // console.log($(this).css('border'));
+                        if (lastTag !== null) {
+                            lastTag.css('border', lastTagBorder);
+                        }
+                        lastTagBorder = $(this).css('border');
+                        //console.log($(this));
+                        $(this).css({
+                            'border': '1.5px solid #f0f',
+                            'border-radius': '5px solid'
+                        });
                         $(this).click(function (event) {
                             event.preventDefault();
-                        });
-                        //对所有的元素添加点击事件，获取xpath
-                        $("#iframe2").contents().find("*").hover(function (event) {
-                            event.stopPropagation();
-                            // lastTag = $(this);
-                            // var css = div.css('border');
-                            // console.log($(this).css('border'));
-                            if (lastTag !== null) {
-                                lastTag.css('border', lastTagBorder);
+                            if (index === 0) {
+                                select_xpath2 = $shadow.domXpath(this);
+                                console.log($shadow.domXpath(this));
+                                $('#xpath2').val($shadow.domXpath(this));
                             }
-                            lastTagBorder = $(this).css('border');
-                            //console.log($(this));
-                            $(this).css({
-                                'border': '1.5px solid #f0f',
-                                'border-radius': '5px solid'
-                            });
-                            $(this).click(function (event) {
-                                event.preventDefault();
-                                if (index === 0) {
-                                    select_xpath2 = $shadow.domXpath(this);
-                                    console.log($shadow.domXpath(this));
-                                    $('#xpath2').val($shadow.domXpath(this));
-                                }
-                                index++;
-                            });
-                            lastTag = $(this);
-                            index = 0;
-                            // lastTag.css('border', lastTagBorder);
-                            //console.log($shadow.domXpath(this));
+                            index++;
                         });
+                        lastTag = $(this);
+                        index = 0;
+                        // lastTag.css('border', lastTagBorder);
+                        //console.log($shadow.domXpath(this));
                     });
-                } else {
-                    // check if download page finishing
-                    checkDownloadState();
-                }
-            });
+                });
+            }
         };
 
         // 选择ajax_xpath
         $scope.select_ajax_xpath = function () {
             // check if download page is exist
-            var select_url_path = downloadPagePath;
-            var filename = hashCode(select_url_path) + ".html";
-            $.post("/collect/file/exist", {filename: filename}, function (result) {
-                // exits
-                if (result) {
-                    $('#modal-select-ajax-xpath').modal('show');
-                    //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
-                    $('#ajax_xpath').val("");
-                    $("#iframe3").attr("src", "download/" + hashCode(select_url_path) + ".html");
-                    $('#modal-select-ajax-xpath').on('shown.bs.modal', function (e) {
+            if (downloadState === 0) {
+                $('#download_page_loading').modal('show');
+                $('#download_page_loading_info').val("请先下载～～")
+            }
+            else if (downloadState === 1) {
+                $('#download_page_loading').modal('show');
+                $('#download_page_loading_info').val("正在下载～请稍后～～")
+            } else if (downloadState === 2) {
+                $('#download_page_loading_info').val("下载界面失败～请请重新配置～")
+                $('#download_page_loading').modal('show');
+            } else if (downloadState === 3){
+                $('#modal-select-ajax-xpath').modal('show');
+                //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
+                $('#ajax_xpath').val("");
+                $("#iframe3").attr("src", "download/" + hashCode(downloadPagePath) + ".html");
+                $('#modal-select-ajax-xpath').on('shown.bs.modal', function (e) {
+                    $(this).click(function (event) {
+                        event.preventDefault();
+                    });
+                    //对所有的元素添加点击事件，获取xpath
+                    $("#iframe3").contents().find("*").hover(function (event) {
+                        event.stopPropagation();
+                        // lastTag = $(this);
+                        // var css = div.css('border');
+                        // console.log($(this).css('border'));
+                        if (lastTag !== null) {
+                            lastTag.css('border', lastTagBorder);
+                            // console.log(lastTag);
+                            // console.log(lastTagBorder);
+                        }
+                        lastTagBorder = $(this).css('border');
+                        //console.log($(this));
+                        $(this).css({
+                            'border': '1.5px solid #f0f',
+                            'border-radius': '5px solid'
+                        });
                         $(this).click(function (event) {
                             event.preventDefault();
-                        });
-                        //对所有的元素添加点击事件，获取xpath
-                        $("#iframe3").contents().find("*").hover(function (event) {
-                            event.stopPropagation();
-                            // lastTag = $(this);
-                            // var css = div.css('border');
-                            // console.log($(this).css('border'));
-                            if (lastTag !== null) {
-                                lastTag.css('border', lastTagBorder);
-                                // console.log(lastTag);
-                                // console.log(lastTagBorder);
+                            if (index === 0) {
+                                // select_xpath1 = $shadow.domXpath(this);
+                                // console.log($shadow.domXpath(this));
+                                // $('#xpath').val($shadow.domXpath(this));
+                                select_ajax_xpath = $shadow.domXpath(this);
+                                console.log($shadow.domXpath(this));
+                                $('#ajax_xpath').val($shadow.domXpath(this));
                             }
-                            lastTagBorder = $(this).css('border');
-                            //console.log($(this));
-                            $(this).css({
-                                'border': '1.5px solid #f0f',
-                                'border-radius': '5px solid'
-                            });
-                            $(this).click(function (event) {
-                                event.preventDefault();
-                                if (index === 0) {
-                                    // select_xpath1 = $shadow.domXpath(this);
-                                    // console.log($shadow.domXpath(this));
-                                    // $('#xpath').val($shadow.domXpath(this));
-                                    select_ajax_xpath = $shadow.domXpath(this);
-                                    console.log($shadow.domXpath(this));
-                                    $('#ajax_xpath').val($shadow.domXpath(this));
-                                }
-                                index++;
-                            })
-                            lastTag = $(this);
-                            index = 0;
-                            // lastTag.css('border', lastTagBorder);
-                            //console.log($shadow.domXpath(this));
-                        });
+                            index++;
+                        })
+                        lastTag = $(this);
+                        index = 0;
+                        // lastTag.css('border', lastTagBorder);
+                        //console.log($shadow.domXpath(this));
                     });
-                } else {
-                    // check if download page finishing
-                    checkDownloadState();
-                }
-            });
+                });
+            }
         };
 
         /**
