@@ -324,7 +324,7 @@ public class CollectService {
 	 * 测试　只需要两个xpath和一个url
 	 * @param args
 	 */
-	public static void main(String[] args) {
+//	public static void main(String[] args) {
 		// share crawler
 //		String xpath1 = "/html/body/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/a[1]/span[1]";
 //		String xpath2 = "/html/body/div[3]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/a[1]/span[1]";
@@ -372,7 +372,7 @@ public class CollectService {
 //		collectByCluesService.crawl(onCrawlListener, url, CollectService.TYPE_CLUES, "链接",
 //				ajaxXpath, xpath1, xpath2);
 
-	}
+//	}
 
 	/**
 	 * 线索 ＋ ajax翻页/点击
