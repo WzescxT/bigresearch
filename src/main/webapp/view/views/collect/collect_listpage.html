@@ -146,37 +146,37 @@
         <ul id="myTab" class="nav nav-tabs">
 
             <li class="active">
-                <a href="/#basic" data-toggle="tab">
+                <a href="/" data-toggle="tab">
                     基本信息
                 </a>
             </li>
 
             <li>
-                <a href="/#assist" data-toggle="tab">
+                <a href="/" data-toggle="tab">
                     辅助规则
                 </a>
             </li>
 
             <li>
-                <a href="/#urlrule" data-toggle="tab">
+                <a href="/" data-toggle="tab">
                     URL规则
                 </a>
             </li>
 
             <li>
-                <a href="/#miningrule" data-toggle="tab">
+                <a href="/" data-toggle="tab">
                     采集规则
                 </a>
             </li>
 
             <li>
-                <a href="/#storerule" data-toggle="tab">
+                <a href="/" data-toggle="tab">
                     持久化规则
                 </a>
             </li>
 
             <li>
-                <a href="/#planrule" data-toggle="tab">
+                <a href="/" data-toggle="tab">
                     执行计划
                 </a>
             </li>
@@ -267,7 +267,7 @@
                         <div class="form-group">
                             <label for="signurl" class="col-sm-2 control-label">登录页路径</label>
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" id="signurl"
+                                <input type="text" class="form-control" id="signurl" placeholder="功能暂未开通"
                                        ng-model="login_page_path" ng-init="login_page_path=''">
                             </div>
                         </div>
@@ -363,7 +363,7 @@
                             <select class="form-control" id="pattern" ng-model="crawl_pattern" ng-init="crawl_pattern='单页'" >
                                 <option value="单页" ng-selected="true">单页</option>
                                 <option value="列表">列表</option>
-                                <option value="翻页">翻页</option>
+                                <!--<option value="翻页">翻页</option>-->
                                 <option value="导入">导入</option>
                             </select>
                         </div>
@@ -546,7 +546,7 @@
                     <div class="form-group">
                         <label for="proxy" class="col-sm-2 control-label">代理ip</label>
                         <div class="col-xs-4">
-                            <textarea class="form-control" rows="3" id="proxy"
+                            <textarea class="form-control" rows="3" id="proxy" placeholder="可不填"
                                       ng-model="proxy_ids" ng-list="&#10;" ng-trim="false" ng-init="proxy_ids=[]"></textarea>
                             <input type="file"
                                    onchange="angular.element(this).scope().setIPs(this)">
