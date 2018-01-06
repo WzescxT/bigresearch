@@ -44,6 +44,7 @@ public class CollectController {
            }
          */
         success = 0;
+        res=new StringBuilder();
         JSONObject jsonObject = JSON.parseObject(data);
 
         // System.out.println(jsonObject.toJSONString());

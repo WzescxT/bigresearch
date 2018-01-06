@@ -24,9 +24,9 @@ public class DownloadPageController {
     private String result;
     private int success = 0;
 
+    private String response = "fail";
     @RequestMapping(value = "/download", method = RequestMethod.POST)
-    public String crawlByClues(@RequestBody Map<String,Object> requests) {
-        String url_path = requests.get("url_path").toString();
+    public String crawlByClues(@RequestParam("url_path") String url_path) {
         success = 0;
         DownloadPageService.OnCrawlListener onCrawlListener = new
                 DownloadPageService.OnCrawlListener() {
@@ -45,28 +45,36 @@ public class DownloadPageController {
         while (success == 0) {
 
         }
-        // download page to local
-        String host = null;
-        String filename;
-        host = hashCode(url_path);
-        // save to file path
-        filename = "src/main/webapp/view/" + host + ".html";
-        File file = new File(filename);
-        if(!file.exists()) {
+        if (success == 1) {
+            // download page to local
+            String host = null;
+            String filename;
+            host = hashCode(url_path);
+            // save to file path
+            filename = "src/main/webapp/view/download/" + host + ".html";
+            File file = new File(filename);
+            if(!file.exists()) {
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             try {
-                file.createNewFile();
+                FileWriter fileWriter = new FileWriter(file);
+                fileWriter.write(result);
+                fileWriter.close();
+                response =  "success";
             } catch (IOException e) {
                 e.printStackTrace();
+                response = "fail";
             }
+        } else if (success == 2) {
+            response =  "fail";
+        } else {
+            response =  "fail";
         }
-        try {
-            FileWriter fileWriter = new FileWriter(file);
-            fileWriter.write(result);
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "success";
+        return response;
     }
 
     /**
@@ -76,7 +84,7 @@ public class DownloadPageController {
      */
     @RequestMapping(value = "/file/exist", method = RequestMethod.POST)
     public boolean checkFileExist(@RequestParam("filename") String filename) {
-        File file = new File("src/main/webapp/view/" + filename);
+        File file = new File("src/main/webapp/view/download/" + filename);
         if (file.exists()) {
             return true;
         }
