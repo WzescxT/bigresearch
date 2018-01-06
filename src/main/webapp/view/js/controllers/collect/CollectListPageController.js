@@ -677,9 +677,9 @@ angular.module('MetronicApp')
         }
         //　保存
         $scope.select_commit = function () {
-            console.log("-------------------------------\n" + select_xpath1 + "\n" +
-                select_xpath2 + "-------------------------------\n" +
-                select_ajax_xpath + "-------------------------------\n");
+            // console.log("-------------------------------\n" + select_xpath1 + "\n" +
+            //     select_xpath2 + "-------------------------------\n" +
+            //     select_ajax_xpath + "-------------------------------\n");
             $scope.attribute_xpath = select_xpath1;
             $scope.attribute_xpath2 = select_xpath2;
             $scope.button_xpath = select_ajax_xpath;

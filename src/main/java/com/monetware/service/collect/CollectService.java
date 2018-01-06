@@ -329,7 +329,7 @@ public class CollectService {
 //		String url = "http://www.sse.com.cn/assortment/stock/list/share/";
 //		CollectService collectByCluesService = new CollectService();
 //
-//		OnCrawleLinstener onCrawleLinstener = new OnCrawleLinstener() {
+//		OnCrawlListener onCrawlListener = new OnCrawlListener() {
 //			@Override
 //			public void onSuccess(List<String> result) {
 //				for (String string : result) {
@@ -344,7 +344,7 @@ public class CollectService {
 //			}
 //		};
 //		String ajaxXpath = "//*[@id=\"idStr\"]";
-//		collectByCluesService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES_AJAX_FLIP, "文本",
+//		collectByCluesService.crawl(onCrawlListener, url, CollectService.TYPE_CLUES_AJAX_FLIP, "文本",
 //				ajaxXpath, xpath1, xpath2);
 		// tongji crawler
 //		String xpath1 = "/html/body/div[3]/div/div[3]/div/ul/li[1]/a[1]";
@@ -352,7 +352,7 @@ public class CollectService {
 //		String url = "http://sse.tongji.edu.cn/data/list/xwdt";
 //		CollectService collectByCluesService = new CollectService();
 //
-//		OnCrawleLinstener onCrawleLinstener = new OnCrawleLinstener() {
+//		OnCrawlListener onCrawlListener = new OnCrawlListener() {
 //			@Override
 //			public void onSuccess(List<String> result) {
 //				for (String str : result) {
@@ -365,7 +365,7 @@ public class CollectService {
 //			}
 //		};
 //		String ajaxXpath = "";
-//		collectByCluesService.crawl(onCrawleLinstener, url, CollectService.TYPE_CLUES, "链接",
+//		collectByCluesService.crawl(onCrawlListener, url, CollectService.TYPE_CLUES, "链接",
 //				ajaxXpath, xpath1, xpath2);
 
 //	}

@@ -152,7 +152,7 @@ public class CollectByCluesService {
 //		String url = "http://sse.tongji.edu.cn/data/list/xyxw";
 //		CollectByCluesService collectByCluesService = new CollectByCluesService();
 //
-//		OnCrawleLinstener onCrawleLinstener = new OnCrawleLinstener() {
+//		OnCrawlListener onCrawlListener = new OnCrawlListener() {
 //			@Override
 //			public void onSuccess(List<String> result) {
 //				System.out.println(result.size());
@@ -163,7 +163,7 @@ public class CollectByCluesService {
 //
 //			}
 //		};
-//		collectByCluesService.crawl(onCrawleLinstener, url, xpath1, xpath2);
+//		collectByCluesService.crawl(onCrawlListener, url, xpath1, xpath2);
 //
 //	}
 

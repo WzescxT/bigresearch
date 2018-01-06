@@ -4,10 +4,11 @@ import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 import java.io.IOException;
@@ -26,10 +27,10 @@ public class DownloadPageService {
 
     class DownloadProcessor implements PageProcessor {
 
-        OnCrawleLinstener onCrawleLinstener;
+        OnCrawlListener onCrawlListener;
 
-        DownloadProcessor(OnCrawleLinstener onCrawleLinstener) {
-            this.onCrawleLinstener = onCrawleLinstener;
+        DownloadProcessor(OnCrawlListener onCrawlListener) {
+            this.onCrawlListener = onCrawlListener;
         }
 
         private Site site = Site.me()
@@ -41,7 +42,7 @@ public class DownloadPageService {
 
         @Override
         public void process(Page page) {
-            onCrawleLinstener.onSuccess(page.getHtml().toString());
+            onCrawlListener.onSuccess(page.getHtml().toString());
         }
 
         @Override
@@ -50,31 +51,32 @@ public class DownloadPageService {
         }
     }
 
-
-    public void crawl(OnCrawleLinstener onCrawleLinstener, String url) {
-
-        WebClient webClient = new WebClient(BrowserVersion.CHROME);
-        webClient.getOptions().setJavaScriptEnabled(true);
-        webClient.getOptions().setCssEnabled(false);
-        webClient.getOptions().setTimeout(35000);
-        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
-        webClient.addRequestHeader("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3192.0 Safari/537.36");
+    /**
+     * Download page
+     * @param onCrawlListener
+     * @param url
+     */
+    public void crawl(OnCrawlListener onCrawlListener, String url) {
         try {
-            HtmlPage page = webClient.getPage(url);
-            webClient.waitForBackgroundJavaScript(10000);
-            String xml = page.asXml();
-            onCrawleLinstener.onSuccess(replaceAll(url, xml));
-        } catch (IOException e) {
-            WebClient webClientT = new WebClient(BrowserVersion.FIREFOX_52);
-            webClientT.getOptions().setJavaScriptEnabled(true);
-            webClientT.getOptions().setTimeout(35000);
-            webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+            Document doc = Jsoup.connect(url).get();
+            System.out.println(doc.outerHtml());
+            String xml = doc.outerHtml();
+            onCrawlListener.onSuccess(replaceAll(url, xml));
+        } catch (Exception e) {
             try {
+                WebClient webClient = new WebClient(BrowserVersion.CHROME);
+                webClient.getOptions().setJavaScriptEnabled(true);
+                webClient.getOptions().setCssEnabled(false);
+                webClient.getOptions().setTimeout(35000);
+                webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+                webClient.addRequestHeader("User-Agent",
+                        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3192.0 Safari/537.36");
                 HtmlPage page = webClient.getPage(url);
                 webClient.waitForBackgroundJavaScript(10000);
                 String xml = page.asXml();
-                onCrawleLinstener.onSuccess(replaceAll(url, xml));
+                onCrawlListener.onSuccess(replaceAll(url, xml));
             } catch (IOException e1) {
+                onCrawlListener.onFail("DownloadFail");
                 e1.printStackTrace();
             }
         }
@@ -82,13 +84,13 @@ public class DownloadPageService {
     /**
      * 使用回调获取结果
      */
-    public interface OnCrawleLinstener {
+    public interface OnCrawlListener {
         void onSuccess(String result);
         void onFail(String error);
     }
 
     /**
-     *
+     * Replace src and script
      * @param urlPath
      * @param xml
      * @return
@@ -100,7 +102,6 @@ public class DownloadPageService {
         try {
             URL url = new URL(url_path);
             root_path = url.getProtocol() + "://" + url.getHost();
-            // System.out.println(root_path);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

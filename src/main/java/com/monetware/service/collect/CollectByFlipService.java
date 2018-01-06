@@ -226,7 +226,7 @@ public class CollectByFlipService {
 //		String url = "http://www.sse.com.cn/assortment/stock/list/share/";
 //		CollectByFlipService collectByCluesService = new CollectByFlipService();
 //
-//		OnCrawleLinstener onCrawleLinstener = new OnCrawleLinstener() {
+//		OnCrawlListener onCrawlListener = new OnCrawlListener() {
 //			@Override
 //			public void onSuccess(List<String> result) {
 //				System.out.println(result.size());
@@ -238,7 +238,7 @@ public class CollectByFlipService {
 //			}
 //		};
 //		String ajaxXpath = "//*[@id=\"idStr\"]";
-//		collectByCluesService.crawl(onCrawleLinstener, url, ajaxXpath, xpath1, xpath2);
+//		collectByCluesService.crawl(onCrawlListener, url, ajaxXpath, xpath1, xpath2);
 //
 //	}
 
