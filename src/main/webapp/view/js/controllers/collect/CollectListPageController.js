@@ -426,21 +426,22 @@ angular.module('MetronicApp')
                     $scope.crawl_pattern === "单页") {
                     // same as last
                     http_url = $scope.url_path;
-                    if (downloadPageLink === $scope.url_path && isFinishDownloadPage === true) {
-                        isFinishDownloadPage = true;
+                    if (downloadPagePath === $scope.url_path && downloadState === 1) {
+                        downloadState = 1;
                         return;
                     } else {
-                        downloadPageLink = $scope.url_path;
-                        isFinishDownloadPage = false;
+                        downloadPagePath = $scope.url_path;
+                        downloadState = 0;
                     }
                 } else if ($scope.crawl_pattern === "列表") {
                     http_url = getPage($scope.url_wildcard, $scope.init_value);
-                    if (downloadPageLink === getPage($scope.url_wildcard, $scope.init_value) && isFinishDownloadPage === true) {
-                        isFinishDownloadPage = true;
+                    if (downloadPagePath === getPage($scope.url_wildcard, $scope.init_value)
+                        && downloadState === 1) {
+                        downloadState = 1;
                         return;
                     } else {
-                        downloadPageLink = getPage($scope.url_wildcard, $scope.init_value);
-                        isFinishDownloadPage = false;
+                        downloadPagePath = getPage($scope.url_wildcard, $scope.init_value);
+                        downloadState = 0;
                     }
                 }
                 console.log(http_url)
@@ -451,11 +452,11 @@ angular.module('MetronicApp')
                     data: url_data
                 }).then(function successCallback(response) {
                     console.log("success！");
-                    isFinishDownloadPage = true;
+                    downloadState = 1;
                 }, function errorCallback(response) {
                     // 请求失败执行代码
                     console.log("post data bad");
-                    isFinishDownloadPage = true;
+                    downloadState = 2;
                 });
             }
             $("#myTab a[href='/#" + id + "']").tab('show');
@@ -465,8 +466,8 @@ angular.module('MetronicApp')
 
         $scope.creep_rule = [];
 
-        var isFinishDownloadPage;
-        var downloadPageLink;
+        var downloadState;
+        var downloadPagePath;
 
         $scope.pageTitle = "自定义采集模块";
 
@@ -501,7 +502,7 @@ angular.module('MetronicApp')
         // 选择xpath
         $scope.select_xpath = function () {
             // check if download page is exist
-            var select_url_path = downloadPageLink;
+            var select_url_path = downloadPagePath;
 
             var filename = hashCode(select_url_path) + ".html";
             $.post("/collect/file/exist", {filename: filename}, function (result) {
@@ -542,16 +543,14 @@ angular.module('MetronicApp')
                     });
                 } else {
                     // check if download page finishing
-                    if (!isFinishDownloadPage) {
-                        $('#download_page_loading').modal('show');
-                    }
+                    checkDownloadState();
                 }
             });
         };
         // xpath2
         $scope.select_xpath2 = function () {
             // check if download page is exist
-            var select_url_path = downloadPageLink;
+            var select_url_path = downloadPagePath;
             var filename = hashCode(select_url_path) + ".html";
             $.post("/collect/file/exist", {filename: filename}, function (result) {
                 // exits
@@ -597,9 +596,7 @@ angular.module('MetronicApp')
                     });
                 } else {
                     // check if download page finishing
-                    if (!isFinishDownloadPage) {
-                        $('#download_page_loading').modal('show');
-                    }
+                    checkDownloadState();
                 }
             });
         };
@@ -607,7 +604,7 @@ angular.module('MetronicApp')
         // 选择ajax_xpath
         $scope.select_ajax_xpath = function () {
             // check if download page is exist
-            var select_url_path = downloadPageLink;
+            var select_url_path = downloadPagePath;
             var filename = hashCode(select_url_path) + ".html";
             $.post("/collect/file/exist", {filename: filename}, function (result) {
                 // exits
@@ -657,13 +654,28 @@ angular.module('MetronicApp')
                     });
                 } else {
                     // check if download page finishing
-                    if (!isFinishDownloadPage) {
-                        $('#download_page_loading').modal('show');
-                    }
+                    checkDownloadState();
                 }
             });
         };
 
+        /**
+         * Check Download State
+         */
+        function checkDownloadState() {
+            // check if download page finishing
+            if (downloadState === 0) {
+                $('#download_page_loading').modal('show');
+                $('#download_page_loading_info').val("请先下载～～")
+            }
+            else if (downloadState === 1) {
+                $('#download_page_loading').modal('show');
+                $('#download_page_loading_info').val("正在下载～请稍后～～")
+            } else if (downloadState === 2) {
+                $('#download_page_loading_info').val("下载界面失败～请请重新配置～")
+                $('#download_page_loading').modal('show');
+            }
+        }
         //　保存
         $scope.select_commit = function () {
             console.log("-------------------------------\n" + select_xpath1 + "\n" +
@@ -732,7 +744,7 @@ angular.module('MetronicApp')
 
             var url_path = $scope.url_path;
             var data = $scope.creep_rule[$index];
-            data['url_path'] = downloadPageLink;
+            data['url_path'] = downloadPagePath;
             var req = JSON.stringify(data);
             //alert(req.toString());
             // cun
