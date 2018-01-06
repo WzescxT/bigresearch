@@ -56,8 +56,12 @@ angular.module('MetronicApp')
             {name:"项目4",age:"任务2"},
             {name:"项目5",age:"任务1"}
         ];
-
+        var vm = $scope.vm = {};
+        vm.value = 50;
+        vm.style = 'progress-bar-info';
+        vm.showLabel = true;
         $scope.isModify = false;
+
 
         // 显示 monitor 详情
         $scope.showDetails = function($index){
@@ -503,45 +507,53 @@ angular.module('MetronicApp')
                 console.log("post data bad");
             });
 
-            if (id === "miningrule") {
-                // 单页面
-                var http_url;
+            if (id !== "miningrule") {
+            } else {
+
                 if ($scope.crawl_pattern === null ||
                     $scope.crawl_pattern === "单页") {
                     // same as last
-                    http_url = $scope.url_path;
-                    if (downloadPagePath === $scope.url_path && downloadState === 1) {
-                        downloadState = 1;
+                    if (downloadPagePath === $scope.url_path && downloadState === 3) {
+                        downloadState = 3;
                         return;
                     } else {
                         downloadPagePath = $scope.url_path;
-                        downloadState = 0;
+                        downloadState = 1;
                     }
                 } else if ($scope.crawl_pattern === "列表") {
-                    http_url = getPage($scope.url_wildcard, $scope.init_value);
                     if (downloadPagePath === getPage($scope.url_wildcard, $scope.init_value)
-                        && downloadState === 1) {
-                        downloadState = 1;
+                        && downloadState === 3) {
+                        downloadState = 3;
                         return;
                     } else {
                         downloadPagePath = getPage($scope.url_wildcard, $scope.init_value);
-                        downloadState = 0;
+                        downloadState = 1;
                     }
                 }
-                console.log(http_url)
-                const url_data = {url_path: http_url};
-                $http({
-                    method: 'POST',
-                    url: '/collect/download',
-                    data: url_data
-                }).then(function successCallback(response) {
-                    console.log("success！");
-                    downloadState = 1;
-                }, function errorCallback(response) {
-                    // 请求失败执行代码
-                    console.log("post data bad");
-                    downloadState = 2;
+                /**
+                 * Download page
+                 */
+                $.post('/collect/download', {url_path: "http://sse.tongji.edu.cn/data/list/xwdt"}, function (result) {
+                    if (result === "success") {
+                        downloadState = 3;
+                    } else {
+                        downloadState = 2;
+                    }
+                    console.log(result);
                 });
+                // $http({
+                //     method: 'POST',
+                //     url: '/collect/download',
+                //     data: url_data
+                // }).then(function successCallback(response) {
+                //     console.log(response.toString());
+                //
+                //
+                // }, function errorCallback(response) {
+                //     // 请求失败执行代码
+                //     console.log(response);
+                //     downloadState = 2;
+                // });
             }
         };
 
@@ -587,7 +599,7 @@ angular.module('MetronicApp')
             // check if download page is exist
             var select_url_path = downloadPagePath;
 
-            var filename = "download/" + hashCode(select_url_path) + ".html";
+            var filename = hashCode(select_url_path) + ".html";
             $.post("/collect/file/exist", {filename: filename}, function (result) {
                 // exits
                 if (result) {
@@ -634,7 +646,7 @@ angular.module('MetronicApp')
         $scope.select_xpath2 = function () {
             // check if download page is exist
             var select_url_path = downloadPagePath;
-            var filename = "download/" + hashCode(select_url_path) + ".html";
+            var filename = hashCode(select_url_path) + ".html";
             $.post("/collect/file/exist", {filename: filename}, function (result) {
                 // exits
                 if (result) {
@@ -688,7 +700,7 @@ angular.module('MetronicApp')
         $scope.select_ajax_xpath = function () {
             // check if download page is exist
             var select_url_path = downloadPagePath;
-            var filename = "download/" + hashCode(select_url_path) + ".html";
+            var filename = hashCode(select_url_path) + ".html";
             $.post("/collect/file/exist", {filename: filename}, function (result) {
                 // exits
                 if (result) {
