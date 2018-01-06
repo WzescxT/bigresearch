@@ -240,7 +240,37 @@ angular.module('MetronicApp')
             $scope.login_verifycode_xpath = jsonData.assistant_rule.login_verifycode_xpath;
             $scope.cookie = jsonData.assistant_rule.cookie;
 
-            $scope.crawl_pattern = jsonData.url_pattern.current_selected;
+            // $scope.crawl_pattern = jsonData.url_pattern.current_selected;
+            switch (jsonData.url_pattern.current_selected) {
+                case "single": {
+                    $scope.crawl_pattern = "单页";
+
+                    break;
+                }
+
+                case "list": {
+                    $scope.crawl_pattern = "列表";
+
+                    break;
+                }
+
+                case "click": {
+                    $scope.crawl_pattern = "翻页";
+
+                    break;
+                }
+
+                case "import": {
+                    $scope.crawl_pattern = "导入";
+
+                    break;
+                }
+
+                default: {
+                    break;
+                }
+            }
+
             $scope.url_path = jsonData.url_pattern.single.url_path;
 
             $scope.url_wildcard = jsonData.url_pattern.list.url_wildcard;
