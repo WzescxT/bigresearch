@@ -920,11 +920,6 @@ angular.module('MetronicApp')
             if ($scope.creep_rule[$index].creep_pattern === "线索") {
                 $.post("/collect/crawler", {data: req}, function (result) {
                     console.log(result.toString());
-<<<<<<< HEAD
-                    // alert(result);
-=======
-                    //alert(result);
->>>>>>> c0f69c07fa3b400251a674806746427b23ae9e3b
                     $('#testarea').val(result);
                     $('#loading').modal('hide');
                 });
@@ -937,11 +932,6 @@ angular.module('MetronicApp')
                 }
                 values['currenturl'] = url_path;
                 var idata = JSON.stringify(values);
-<<<<<<< HEAD
-                // alert(idata);
-=======
-                //alert(idata);
->>>>>>> c0f69c07fa3b400251a674806746427b23ae9e3b
                 console.log(idata.toString());
                 CollectCusTempService.crawltest(idata);
 
@@ -1286,11 +1276,6 @@ angular.module('MetronicApp')
                 values[params[x].name] = params[x].value;
             }
             var idata = JSON.stringify(values)
-<<<<<<< HEAD
-            // alert(idata.toString());
-=======
-            //alert(idata.toString());
->>>>>>> c0f69c07fa3b400251a674806746427b23ae9e3b
             console.log(idata.toString());
             CollectCusTempService.crawltest(idata);
         };
