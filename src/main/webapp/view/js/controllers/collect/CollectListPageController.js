@@ -70,12 +70,12 @@ angular.module('MetronicApp')
         // 暂停
         $scope.isSuspend = function($index){
             if(confirm('确定暂停吗？')){
-                alert('已暂停')
+                //alert('已暂停')
             }
         };
         $scope.isStop = function($index){
             if(confirm('确定结束吗？')){
-                alert('已结束')
+                //alert('已结束')
             }
         };
 
@@ -920,7 +920,11 @@ angular.module('MetronicApp')
             if ($scope.creep_rule[$index].creep_pattern === "线索") {
                 $.post("/collect/crawler", {data: req}, function (result) {
                     console.log(result.toString());
+<<<<<<< HEAD
                     // alert(result);
+=======
+                    //alert(result);
+>>>>>>> c0f69c07fa3b400251a674806746427b23ae9e3b
                     $('#testarea').val(result);
                     $('#loading').modal('hide');
                 });
@@ -933,7 +937,11 @@ angular.module('MetronicApp')
                 }
                 values['currenturl'] = url_path;
                 var idata = JSON.stringify(values);
+<<<<<<< HEAD
                 // alert(idata);
+=======
+                //alert(idata);
+>>>>>>> c0f69c07fa3b400251a674806746427b23ae9e3b
                 console.log(idata.toString());
                 CollectCusTempService.crawltest(idata);
 
@@ -947,7 +955,7 @@ angular.module('MetronicApp')
 
                 for (var i = 0; i < $scope.projects.length; i++) {
                     if ($scope.projects[i].advanceProjectEntity.project_name == $scope.new_project_name) {
-                        alert("项目已经存在");
+                        //alert("项目已经存在");
                         return;
                     }
                 }
@@ -977,7 +985,7 @@ angular.module('MetronicApp')
             if ($scope.new_task_name != "") {
                 for (var i = 0; i < $scope.selected_project.advanceTaskEntities.length; i++) {
                     if ($scope.selected_project.advanceTaskEntities[i].task_name == $scope.new_task_name) {
-                        alert("任务已经存在");
+                        //alert("任务已经存在");
                         return;
                     }
                 }
@@ -1278,7 +1286,11 @@ angular.module('MetronicApp')
                 values[params[x].name] = params[x].value;
             }
             var idata = JSON.stringify(values)
+<<<<<<< HEAD
             // alert(idata.toString());
+=======
+            //alert(idata.toString());
+>>>>>>> c0f69c07fa3b400251a674806746427b23ae9e3b
             console.log(idata.toString());
             CollectCusTempService.crawltest(idata);
         };
@@ -1575,7 +1587,7 @@ $shadow.xpathDom = function(xpath) {
     xpath = xpath.replace(/\@/g, "");
     // 去掉第一个 >
     xpath = xpath.substr(1);
-    alert(xpath);
+    //alert(xpath);
     // 返回jQuery元素
     return $(xpath);
 };
