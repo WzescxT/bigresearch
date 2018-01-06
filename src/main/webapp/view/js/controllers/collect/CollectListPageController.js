@@ -555,7 +555,7 @@ angular.module('MetronicApp')
             // check if download page is exist
             var select_url_path = downloadPagePath;
 
-            var filename = hashCode(select_url_path) + ".html";
+            var filename = "download/" + hashCode(select_url_path) + ".html";
             $.post("/collect/file/exist", {filename: filename}, function (result) {
                 // exits
                 if (result) {
@@ -563,7 +563,7 @@ angular.module('MetronicApp')
 
                     index = 0;
                     $('#xpath').val("");
-                    $("#iframe").attr("src", hashCode(select_url_path) + ".html");
+                    $("#iframe").attr("src", "download/" + hashCode(select_url_path) + ".html");
                     $('#modal-select-xpath').on('shown.bs.modal', function (e) {
                         $(this).click(function (event) {
                             event.preventDefault();
@@ -602,14 +602,14 @@ angular.module('MetronicApp')
         $scope.select_xpath2 = function () {
             // check if download page is exist
             var select_url_path = downloadPagePath;
-            var filename = hashCode(select_url_path) + ".html";
+            var filename = "download/" + hashCode(select_url_path) + ".html";
             $.post("/collect/file/exist", {filename: filename}, function (result) {
                 // exits
                 if (result) {
                     $('#modal-select-xpath2').modal('show');
                     // console.log("-------------------------------\n" + $type  + "-------------------------------\n");
                     $('#xpath2').val("");
-                    $("#iframe2").attr("src", hashCode(select_url_path) + ".html");
+                    $("#iframe2").attr("src", "download/" + hashCode(select_url_path) + ".html");
                     index = 0;
                     $('#modal-select-xpath2').on('shown.bs.modal', function (e) {
                         $(this).click(function (event) {
@@ -656,14 +656,14 @@ angular.module('MetronicApp')
         $scope.select_ajax_xpath = function () {
             // check if download page is exist
             var select_url_path = downloadPagePath;
-            var filename = hashCode(select_url_path) + ".html";
+            var filename = "download/" + hashCode(select_url_path) + ".html";
             $.post("/collect/file/exist", {filename: filename}, function (result) {
                 // exits
                 if (result) {
                     $('#modal-select-ajax-xpath').modal('show');
                     //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
                     $('#ajax_xpath').val("");
-                    $("#iframe3").attr("src", hashCode(select_url_path) + ".html");
+                    $("#iframe3").attr("src", "download/" + hashCode(select_url_path) + ".html");
                     $('#modal-select-ajax-xpath').on('shown.bs.modal', function (e) {
                         $(this).click(function (event) {
                             event.preventDefault();
