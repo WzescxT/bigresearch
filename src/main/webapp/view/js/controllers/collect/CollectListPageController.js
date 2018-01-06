@@ -197,7 +197,7 @@ angular.module('MetronicApp')
             $scope.store_pattern = null;
             //
             // 采集规则
-            $scope.creep_rule = null;
+            $scope.creep_rule = [];
             //
             // 执行计划
             $scope.proxy_ids = null;
@@ -900,7 +900,7 @@ angular.module('MetronicApp')
             if ($scope.creep_rule[$index].creep_pattern === "线索") {
                 $.post("/collect/crawler", {data: req}, function (result) {
                     console.log(result.toString());
-                    alert(result);
+                    // alert(result);
                     $('#testarea').val(result);
                     $('#loading').modal('hide');
                 });
@@ -913,7 +913,7 @@ angular.module('MetronicApp')
                 }
                 values['currenturl'] = url_path;
                 var idata = JSON.stringify(values);
-                alert(idata);
+                // alert(idata);
                 console.log(idata.toString());
                 CollectCusTempService.crawltest(idata);
 
@@ -1258,7 +1258,7 @@ angular.module('MetronicApp')
                 values[params[x].name] = params[x].value;
             }
             var idata = JSON.stringify(values)
-            alert(idata.toString());
+            // alert(idata.toString());
             console.log(idata.toString());
             CollectCusTempService.crawltest(idata);
         };
