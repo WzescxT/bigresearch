@@ -8,3 +8,6 @@ task_config*
 /classes
 data/
 src/main/webapp/view/download/
+
+# For *.dat files to store the urls
+*.dat

@@ -17,6 +17,7 @@ import java.io.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/advance")
@@ -154,6 +155,9 @@ public class AdvanceCollectController {
     @PostMapping(value = "task_config", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Object saveTaskConfig(@RequestBody Map<String, Object> requests) {
+        String jsonStr = new Gson().toJson(requests);
+        System.out.println("jsonStr = \"" + jsonStr + "\".");
+
         // Extract project_id and task_id
         String project_id = "";
         String task_id = "";
@@ -217,7 +221,7 @@ public class AdvanceCollectController {
 
                      case "import": {
                          Map<String, Object> m = (Map<String, Object>) map.get("import");
-                         String[] importUrls = (String[]) m.get("import_urls");
+                         List<String> importUrls = (List<String>) m.get("import_urls");
 
                          // Generate the urls
                          StringBuilder stringBuilder = new StringBuilder();
@@ -228,6 +232,7 @@ public class AdvanceCollectController {
                          // Store the urls in the file
                          File file = new File(generateTaskUrlFilePath(project_id, task_id,
                                  "import"));
+                         System.out.println("saveStringToFile(\"" + file.getAbsolutePath() + "\") called.");
                          FileUtils.saveStringToFile(stringBuilder.toString(), file);
 
                          // Save the path of the url file into the json data
