@@ -31,7 +31,7 @@ public class CollectService {
 	/**
 	 *
 	 */
-	private OnCrawleLinstener onCrawleLinstener;
+	private OnCrawlListener onCrawlListener;
 
 
 	@Autowired
@@ -48,7 +48,7 @@ public class CollectService {
 
 	class CollectProcessor {
 		private int collectType = -1;
-		private OnCrawleLinstener onCrawleLinstener;
+		private OnCrawlListener onCrawlListener;
 		private String ajaxXpath;
 		private List<String> xpaths;
 		private List<String> urls;
@@ -70,12 +70,12 @@ public class CollectService {
 		public void setAjaxXpath(String ajaxXpath) {
 			this.ajaxXpath = ajaxXpath;
 		}
-		public OnCrawleLinstener getOnCrawleLinstener() {
-			return onCrawleLinstener;
+		public OnCrawlListener getOnCrawlListener() {
+			return onCrawlListener;
 		}
 
-		public void setOnCrawleLinstener(OnCrawleLinstener onCrawleLinstener) {
-			this.onCrawleLinstener = onCrawleLinstener;
+		public void setOnCrawlListener(OnCrawlListener onCrawlListener) {
+			this.onCrawlListener = onCrawlListener;
 		}
 
 		CollectProcessor(List<String> urls, int collectType, String extract_way) {
@@ -142,10 +142,10 @@ public class CollectService {
 						// Crawler is over
 						if(isEnd){
 							if(results.size() == 0) {
-								onCrawleLinstener.onFail("results is null");
+								onCrawlListener.onFail("results is null");
 								return;
 							}
-							onCrawleLinstener.onSuccess(results);
+							onCrawlListener.onSuccess(results);
 							break;
 						}else{
 							isEnd = true;
@@ -174,7 +174,7 @@ public class CollectService {
 							e.printStackTrace();
 						}
 					}
-					onCrawleLinstener.onSuccess(results);
+					onCrawlListener.onSuccess(results);
 				}
 				else if(collectType == CollectService.TYPE_CLUES_AJAX_CLICK) {
 					List<String> results = new ArrayList<>();
@@ -197,11 +197,11 @@ public class CollectService {
 						}
 						// Crawler is over
 						if(results.size() == 0) {
-							onCrawleLinstener.onFail("results is null");
+							onCrawlListener.onFail("results is null");
 							return;
 						}
 					}
-					onCrawleLinstener.onSuccess(results);
+					onCrawlListener.onSuccess(results);
 				}
 			}catch (IOException e) {
 				System.out.println(e.getMessage());
@@ -372,50 +372,50 @@ public class CollectService {
 
 	/**
 	 * 线索 ＋ ajax翻页/点击
-	 * @param onCrawleLinstener
+	 * @param onCrawlListener
 	 * @param url
 	 * @param ajaxXpath
 	 * @param xpath1
 	 * @param xpath2
 	 */
-	public void crawl(OnCrawleLinstener onCrawleLinstener, List<String> urls, int type, String extract_way, String ajaxXpath, String xpath1, String xpath2) {
-		this.onCrawleLinstener = onCrawleLinstener;
+	public void crawl(OnCrawlListener onCrawlListener, List<String> urls, int type, String extract_way, String ajaxXpath, String xpath1, String xpath2) {
+		this.onCrawlListener = onCrawlListener;
 		List<String> clues = new ArrayList<>();
 		clues.add(xpath1);
 		clues.add(xpath2);
 		CollectProcessor clueProcessor = new CollectProcessor(urls, type, extract_way);
 		clueProcessor.setXpaths(clues);
 		clueProcessor.setAjaxXpath(ajaxXpath);
-		clueProcessor.setOnCrawleLinstener(this.onCrawleLinstener);
+		clueProcessor.setOnCrawlListener(this.onCrawlListener);
 		clueProcessor.start();
 	}
 
 	/**
 	 *
-	 * @param onCrawleLinstener
+	 * @param onCrawlListener
 	 * @param url
 	 * @param type
 	 * @param extract_way
 	 * @param ajaxXpath
 	 * @param xpath
 	 */
-	public void crawl(OnCrawleLinstener onCrawleLinstener, List<String> urls, int type, String extract_way, String ajaxXpath, String xpath) {
-		this.onCrawleLinstener = onCrawleLinstener;
+	public void crawl(OnCrawlListener onCrawlListener, List<String> urls, int type, String extract_way, String ajaxXpath, String xpath) {
+		this.onCrawlListener = onCrawlListener;
 		List<String> clues = new ArrayList<>();
 		clues.add(xpath);
 		CollectProcessor clueProcessor = new CollectProcessor(urls, type, extract_way);
 		clueProcessor.setXpaths(clues);
 		clueProcessor.setAjaxXpath(ajaxXpath);
-		clueProcessor.setOnCrawleLinstener(this.onCrawleLinstener);
+		clueProcessor.setOnCrawlListener(this.onCrawlListener);
 		clueProcessor.start();
 	}
 
-	public OnCrawleLinstener getOnCrawleLinstener() {
-		return onCrawleLinstener;
+	public OnCrawlListener getOnCrawlListener() {
+		return onCrawlListener;
 	}
 
-	public void setOnCrawleLinstener(OnCrawleLinstener onCrawleLinstener) {
-		this.onCrawleLinstener = onCrawleLinstener;
+	public void setOnCrawlListener(OnCrawlListener onCrawlListener) {
+		this.onCrawlListener = onCrawlListener;
 	}
 
 	public boolean isAjaxHtml(HtmlPage page, String xpath) {
@@ -428,7 +428,7 @@ public class CollectService {
 	/**
 	 * 使用回调获取结果
 	 */
-	public interface OnCrawleLinstener {
+	public interface OnCrawlListener {
 		void onSuccess(List<String> result);
 		void onFail(String error);
 	}

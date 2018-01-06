@@ -34,7 +34,7 @@ public class CrawlPlanController {
     public String getProject(@RequestBody JSONObject request) {
         final int projectId = request.getIntValue("project_id");
         final int task_id = (int) request.get("task_id");
-        SpiderTaskInfo task= spiderTaskInfoMapper.findSpiderTaskInfoById(String.valueOf(task_id));
+        SpiderTaskInfo task = spiderTaskInfoMapper.findSpiderTaskInfoById(String.valueOf(task_id));
         final String taskName = task.getTask_name();
         String path=task.getTask_config_location();
         File configjson=new File(path);
@@ -42,51 +42,42 @@ public class CrawlPlanController {
         JSONObject configdata=null;
         try {
             Scanner scanner=new Scanner(new FileInputStream(configjson));
-            while(scanner.hasNext())
-            {
+            while(scanner.hasNext()) {
                 jsonString+=scanner.next();
-
             }
             configdata=JSONObject.parseObject(jsonString);
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         //System.out.println(configdata.toString());
-        JSONObject assistant_rule=configdata.getJSONObject("assistant_rule");
-        JSONObject url_pattern=configdata.getJSONObject("url_pattern");
-        JSONObject store_rule=configdata.getJSONObject("store_rule");
-        JSONArray creep_rule=configdata.getJSONArray("creep_rule");
-        JSONObject run_rule=configdata.getJSONObject("run_rule");
-
-        if(assistant_rule.getBoolean("open"))
-        {
+        JSONObject assistant_rule = configdata.getJSONObject("assistant_rule");
+        JSONObject url_pattern = configdata.getJSONObject("url_pattern");
+        JSONObject store_rule = configdata.getJSONObject("store_rule");
+        JSONArray creep_rule = configdata.getJSONArray("creep_rule");
+        JSONObject run_rule = configdata.getJSONObject("run_rule");
+        if (assistant_rule.getBoolean("open")) {
             //登录
-        }
-        else
-        {
+        } else {
             //不配置登录
             String urltype=url_pattern.getString("current_selected");
+            System.out.println(urltype);
             List<String> urls=new ArrayList<>();
             String url;
-            if(urltype.equals("单页"))
-            {
-                url=url_pattern.getJSONObject("single").getString("url_path");
+            if(urltype.equals("single")) {
+                url = url_pattern.getJSONObject("single").getString("url_path");
                 urls.add(url);
             }
-            else if(urltype.equals("列表"))
-            {
+            else if(urltype.equals("list")) {
                 List<String> tmp = generateUrls(url_pattern.getJSONObject("list"));
                 urls.addAll(tmp);
 
+                for (String ur : urls) {
+                    System.out.println(ur);
+                }
+
                 //add later
             }
-            else if(urltype.equals("翻页"))
-            {
-                //add later
-            }
-            else if(urltype.equals("导入"))
-            {
+            else if(urltype.equals("import")) {
 
                 //add later
             }
@@ -106,14 +97,11 @@ public class CrawlPlanController {
                     String creep_pattern=eachtaskJSON.getString("creep_pattern");
                     // extract_way
                     String extract_way = eachtaskJSON.getString("extract_way");
-                    if(creep_pattern.equals("单体"))
-                    {
+                    if(creep_pattern.equals("单体")) {
                         JSONObject ajax=eachtaskJSON.getJSONObject("ajax");
-                        if(ajax.getBoolean("open"))
-                        {
+                        if(ajax.getBoolean("open")) {
                             String ajax_pattern=ajax.getString("ajax_pattern");
-                            if(ajax_pattern.equals("点击"))
-                            {
+                            if(ajax_pattern.equals("点击")) {
                                 String button_xpath=ajax.getString("button_xpath");
                                 String xpath1=((JSONObject) eachtask).getString("attribute_xpath");
                                 if(extract_way.equals("链接"))
@@ -126,12 +114,10 @@ public class CrawlPlanController {
 
 
                             }
-                            else if(ajax_pattern.equals("翻页"))
-                            {
+                            else if(ajax_pattern.equals("翻页")) {
                                 String button_xpath=ajax.getString("button_xpath");
                                 String xpath1=((JSONObject) eachtask).getString("attribute_xpath");
-                                if(extract_way.equals("链接"))
-                                {
+                                if(extract_way.equals("链接")) {
                                     System.out.println("lianjie here");
                                     xpath1=xpath1+"/@href";
                                 }
@@ -141,13 +127,10 @@ public class CrawlPlanController {
 
                             }
 
-                        }
-                        else
-                        {
+                        } else {
 
                             String xpath1=((JSONObject) eachtask).getString("attribute_xpath");
-                            if(extract_way.equals("链接"))
-                            {
+                            if (extract_way.equals("链接")) {
                                 System.out.println("lianjie here");
                                 xpath1=xpath1+"/@href";
                             }
@@ -155,8 +138,7 @@ public class CrawlPlanController {
                             service.crawlSingleData(task_id,false,urls,xpath1,attribute_name,ajax.getBoolean("open").toString(),null,null,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
                         }
                     }
-                    else if(creep_pattern.equals("线索"))
-                    {
+                    else if(creep_pattern.equals("线索")) {
                         // xuantang here
                         JSONObject ajax=eachtaskJSON.getJSONObject("ajax");
                         // ajax
@@ -166,8 +148,8 @@ public class CrawlPlanController {
                             String xpath1 = ((JSONObject) eachtask).getString("attribute_xpath");
                             String xpath2 = ((JSONObject) eachtask).getString("attribute_xpath2");
                             final String attributeName = eachtaskJSON.getString("attribute_name");
-                            CollectService.OnCrawleLinstener onCrawleLinstener = new
-                                    CollectService.OnCrawleLinstener() {
+                            CollectService.OnCrawlListener onCrawlListener = new
+                                    CollectService.OnCrawlListener() {
                                         @Override
                                         public void onSuccess(List<String> result) {
                                             StringBuilder sb = new StringBuilder();
@@ -186,10 +168,10 @@ public class CrawlPlanController {
                                         }
                                     };
                             if(ajaxPattern.equals("点击")) {
-                                collectService.crawl(onCrawleLinstener, urls, CollectService.TYPE_CLUES_AJAX_CLICK,
+                                collectService.crawl(onCrawlListener, urls, CollectService.TYPE_CLUES_AJAX_CLICK,
                                         extract_way, ajaxXpath, xpath1, xpath2);
                             } else if(ajaxPattern.equals("翻页")) {
-                                collectService.crawl(onCrawleLinstener, urls, CollectService.TYPE_CLUES_AJAX_FLIP,
+                                collectService.crawl(onCrawlListener, urls, CollectService.TYPE_CLUES_AJAX_FLIP,
                                         extract_way, ajaxXpath, xpath1, xpath2);
                             }
                         }
@@ -199,8 +181,8 @@ public class CrawlPlanController {
                             String xpath2 = ((JSONObject) eachtask).getString("attribute_xpath2");
                             final String attributeName = eachtaskJSON.getString("attribute_name");
                             // out
-                            CollectService.OnCrawleLinstener onCrawleLinstener = new
-                                    CollectService.OnCrawleLinstener() {
+                            CollectService.OnCrawlListener onCrawlListener = new
+                                    CollectService.OnCrawlListener() {
                                         @Override
                                         public void onSuccess(List<String> result) {
                                             StringBuilder sb = new StringBuilder();
@@ -219,7 +201,7 @@ public class CrawlPlanController {
                                             System.out.println(error);
                                         }
                                     };
-                            collectService.crawl(onCrawleLinstener, urls, CollectService.TYPE_CLUES, extract_way, "", xpath1, xpath2);
+                            collectService.crawl(onCrawlListener, urls, CollectService.TYPE_CLUES, extract_way, "", xpath1, xpath2);
                         }
                     }
             }
@@ -263,7 +245,5 @@ public class CrawlPlanController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }

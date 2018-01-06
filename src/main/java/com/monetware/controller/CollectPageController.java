@@ -1,10 +1,6 @@
 package com.monetware.controller;
 
-import com.monetware.model.collect.CollectProject;
-import com.monetware.model.collect.CollectTemplate;
 import com.monetware.model.collect.FilePipline;
-import com.monetware.model.collect.MysqlPipline;
-import com.monetware.model.common.RtInfo;
 import com.monetware.service.collect.CollectService;
 import com.monetware.service.collect.XpathCollectorService;
 import net.minidev.json.JSONObject;
@@ -13,14 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
-
-import javax.servlet.http.HttpServletRequest;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequestMapping("/collect")
 @Controller
@@ -87,8 +77,8 @@ public class CollectPageController {
                 String ajaxPattern = ajaxtype;
                 String ajaxXpath = ajaxxpath;
                 final String attributeName = nameindb;
-                CollectService.OnCrawleLinstener onCrawleLinstener = new
-                        CollectService.OnCrawleLinstener() {
+                CollectService.OnCrawlListener onCrawlListener = new
+                        CollectService.OnCrawlListener() {
                             @Override
                             public void onSuccess(List<String> result) {
                                 for (String s : result) {
@@ -105,12 +95,12 @@ public class CollectPageController {
                 if(ajaxPattern.equals("点击")) {
                     List<String> mUrls = new ArrayList<>();
                     urls.add(url);
-                    collectService.crawl(onCrawleLinstener, mUrls, CollectService.TYPE_CLUES_AJAX_CLICK,
+                    collectService.crawl(onCrawlListener, mUrls, CollectService.TYPE_CLUES_AJAX_CLICK,
                             extract_way, ajaxXpath, xpath, xpath2);
                 } else if(ajaxPattern.equals("翻页")) {
                     List<String> mUrls = new ArrayList<>();
                     urls.add(url);
-                    collectService.crawl(onCrawleLinstener, mUrls, CollectService.TYPE_CLUES_AJAX_FLIP,
+                    collectService.crawl(onCrawlListener, mUrls, CollectService.TYPE_CLUES_AJAX_FLIP,
                             extract_way, ajaxXpath, xpath, xpath2);
                 }
             }
@@ -118,8 +108,8 @@ public class CollectPageController {
             else {
                 final String attributeName = nameindb;
                 // out
-                CollectService.OnCrawleLinstener onCrawleLinstener = new
-                        CollectService.OnCrawleLinstener() {
+                CollectService.OnCrawlListener onCrawlListener = new
+                        CollectService.OnCrawlListener() {
                             @Override
                             public void onSuccess(List<String> result) {
                                 for (String s : result) {
@@ -136,7 +126,7 @@ public class CollectPageController {
                         };
                 List<String> mUrls = new ArrayList<>();
                 urls.add(url);
-                collectService.crawl(onCrawleLinstener, mUrls, CollectService.TYPE_CLUES, extract_way, "", xpath, xpath2);
+                collectService.crawl(onCrawlListener, mUrls, CollectService.TYPE_CLUES, extract_way, "", xpath, xpath2);
             }
             while (success == 0) {
 

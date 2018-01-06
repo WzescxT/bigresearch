@@ -7,7 +7,6 @@ import com.monetware.service.collect.CollectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,8 +61,8 @@ public class CollectController {
         String button_xpath = ajax.getString("button_xpath");
 
         System.out.println(jsonObject.toJSONString());
-        CollectService.OnCrawleLinstener onCrawleLinstener = new
-                CollectService.OnCrawleLinstener() {
+        CollectService.OnCrawlListener onCrawlListener = new
+                CollectService.OnCrawlListener() {
                     @Override
                     public void onSuccess(List<String> result) {
                         for (String str : result) {
@@ -92,7 +91,7 @@ public class CollectController {
         // start crawler
         List<String> urls = new ArrayList<>();
         urls.add(url_path);
-        collectService.crawl(onCrawleLinstener, urls, collectType, extract_way, button_xpath, xpath1, xpath2);
+        collectService.crawl(onCrawlListener, urls, collectType, extract_way, button_xpath, xpath1, xpath2);
         // start crawler
 
         while (success == 0) {
