@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Component;
 
 @Mapper
-//@Component(value = "userMapper")
+@Component
 public interface SpiderTaskInfoMapper {
 
     @Select("SELECT * FROM spider_task_info WHERE task_name = #{name}")

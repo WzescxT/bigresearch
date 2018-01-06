@@ -284,6 +284,13 @@ public class AdvanceCollectController {
 
         // Read the content of the configuration file
         File file = new File(path);
+
+        // If the file does not exist
+        if (!file.exists()) {
+            System.out.println("Config json file \"" + file.getAbsolutePath() + "\" not found!");
+            return null;
+        }
+
         FileInputStream fileInputStream = null;
         StringBuilder stringBuilder = new StringBuilder();
         try {
