@@ -2,11 +2,13 @@ package com.monetware.controller;
 
 import com.monetware.service.collect.DownloadPageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 
 /**
@@ -18,11 +20,15 @@ import java.util.Map;
 @RestController
 public class DownloadPageController {
 
+    @Value("${download.html.path}")
+    String download_html_path;
+
     @Autowired
     DownloadPageService downloadPageService;
 
     private String result;
     private int success = 0;
+
 
     private String response = "fail";
     @RequestMapping(value = "/download", method = RequestMethod.POST)
@@ -51,7 +57,7 @@ public class DownloadPageController {
             String filename;
             host = hashCode(url_path);
             // save to file path
-            filename = "src/main/webapp/view/download/" + host + ".html";
+            filename = download_html_path + host + ".html";
             File file = new File(filename);
             if(!file.exists()) {
                 try {
@@ -84,7 +90,7 @@ public class DownloadPageController {
      */
     @RequestMapping(value = "/file/exist", method = RequestMethod.POST)
     public boolean checkFileExist(@RequestParam("filename") String filename) {
-        File file = new File("src/main/webapp/view/download/" + filename);
+        File file = new File(download_html_path + filename);
         if (file.exists()) {
             return true;
         }
