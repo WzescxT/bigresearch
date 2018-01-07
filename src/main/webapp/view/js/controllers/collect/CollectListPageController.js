@@ -653,7 +653,7 @@ angular.module('MetronicApp')
                 $('#modal-select-xpath').modal('show');
                 index = 0;
                 $('#xpath').val("");
-                $("#iframe").attr("src", "download/" + hashCode(downloadPagePath) + ".html");
+                $("#iframe").attr("src", "http://localhost:8888/" + hashCode(downloadPagePath) + ".html");
                 $('#modal-select-xpath').on('shown.bs.modal', function (e) {
                     $(this).click(function (event) {
                         event.preventDefault();
@@ -711,7 +711,7 @@ angular.module('MetronicApp')
                 $('#modal-select-xpath2').modal('show');
                 // console.log("-------------------------------\n" + $type  + "-------------------------------\n");
                 $('#xpath2').val("");
-                $("#iframe2").attr("src", "download/" + hashCode(downloadPagePath) + ".html");
+                $("#iframe2").attr("src", "http://localhost:8888/" + hashCode(downloadPagePath) + ".html");
                 index = 0;
                 $('#modal-select-xpath2').on('shown.bs.modal', function (e) {
                     $(this).click(function (event) {
@@ -776,7 +776,7 @@ angular.module('MetronicApp')
                 $('#modal-select-ajax-xpath').modal('show');
                 //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
                 $('#ajax_xpath').val("");
-                $("#iframe3").attr("src", "download/" + hashCode(downloadPagePath) + ".html");
+                $("#iframe3").attr("src", "http://localhost:8888/" + hashCode(downloadPagePath) + ".html");
                 $('#modal-select-ajax-xpath').on('shown.bs.modal', function (e) {
                     $(this).click(function (event) {
                         event.preventDefault();
