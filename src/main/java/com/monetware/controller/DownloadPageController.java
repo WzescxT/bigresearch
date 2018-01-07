@@ -21,7 +21,7 @@ import java.util.Map;
 public class DownloadPageController {
 
     @Value("${download.html.path}")
-    String download_html_path;
+    private String download_html_path;
 
     @Autowired
     DownloadPageService downloadPageService;

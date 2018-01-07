@@ -8,6 +8,7 @@ import com.monetware.model.collect.SpiderTaskInfo;
 import com.monetware.service.collect.CollectService;
 import com.monetware.service.collect.XpathCollectorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,10 @@ import java.util.Scanner;
 @RequestMapping("/CrawlPlan")
 @Controller
 public class CrawlPlanController {
+
+    @Value("${generate.spider.result}")
+    private String generate_spider_result;
+
     @Autowired
     SpiderTaskInfoMapper spiderTaskInfoMapper;
     @Autowired
@@ -153,7 +158,7 @@ public class CrawlPlanController {
                                         @Override
                                         public void onSuccess(List<String> result) {
                                             StringBuilder sb = new StringBuilder();
-                                            String path = "data/" + projectId + "_" + taskName + "_" + attributeName + ".txt";
+                                            String path = generate_spider_result + projectId + "_" + taskName + "_" + attributeName + ".txt";
                                             for (String line : result) {
                                                 if (line != null && line.length() > 0) {
                                                     sb.append(line).append("\n");
@@ -191,7 +196,7 @@ public class CrawlPlanController {
                                                     sb.append(line).append("\n");
                                                 }
                                             }
-                                            String path = "data/" + projectId + "_" + taskName + "_" + attributeName + ".txt";
+                                            String path = generate_spider_result + projectId + "_" + taskName + "_" + attributeName + ".txt";
                                             // save to file
                                             saveToFile(path, sb.toString(), false);
                                         }
