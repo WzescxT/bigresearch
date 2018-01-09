@@ -157,7 +157,7 @@ angular.module('MetronicApp')
 
         $scope.clearData = function () {
         };
-        
+
         function clearInfo() {
             $scope.selected_project.advanceProjectEntity.project_id = null;
             $scope.selected_task.task_id = null;
@@ -564,11 +564,11 @@ angular.module('MetronicApp')
                 // check file
                 $.post("/collect/file/exist", {filename: hashCode(downloadPagePath) + ".html"},
                     function (result) {
-                    // exits
-                    if (result) {
-                        downloadState = 3;
-                    }
-                });
+                        // exits
+                        if (result) {
+                            downloadState = 3;
+                        }
+                    });
                 console.log(downloadPagePath);
                 /**
                  * Download page
@@ -653,7 +653,7 @@ angular.module('MetronicApp')
                 $('#modal-select-xpath').modal('show');
                 index = 0;
                 $('#xpath').val("");
-                $("#iframe").attr("src", "http://101.132.180.240:8888/" + hashCode(downloadPagePath) + ".html");
+                $("#iframe").attr("src", "http://localhost:8888/" + hashCode(downloadPagePath) + ".html");
                 $('#modal-select-xpath').on('shown.bs.modal', function (e) {
                     $(this).click(function (event) {
                         event.preventDefault();
@@ -711,7 +711,7 @@ angular.module('MetronicApp')
                 $('#modal-select-xpath2').modal('show');
                 // console.log("-------------------------------\n" + $type  + "-------------------------------\n");
                 $('#xpath2').val("");
-                $("#iframe2").attr("src", "http://101.132.180.240:8888/" + hashCode(downloadPagePath) + ".html");
+                $("#iframe2").attr("src", "http://localhost:8888/" + hashCode(downloadPagePath) + ".html");
                 index = 0;
                 $('#modal-select-xpath2').on('shown.bs.modal', function (e) {
                     $(this).click(function (event) {
@@ -776,7 +776,7 @@ angular.module('MetronicApp')
                 $('#modal-select-ajax-xpath').modal('show');
                 //console.log("-------------------------------\n" + $type  + "-------------------------------\n");
                 $('#ajax_xpath').val("");
-                $("#iframe3").attr("src", "http://101.132.180.240:8888/" + hashCode(downloadPagePath) + ".html");
+                $("#iframe3").attr("src", "http://localhost:8888/" + hashCode(downloadPagePath) + ".html");
                 $('#modal-select-ajax-xpath').on('shown.bs.modal', function (e) {
                     $(this).click(function (event) {
                         event.preventDefault();
@@ -1264,9 +1264,9 @@ angular.module('MetronicApp')
             /* var x = $('#crawlrule').serializeArray();
              var m = [], idata;
              $.each(x, function(i, field){
-                 // 由于会出现"双引号字符会导致接下来的数据打包失败，故此对元素内容进行encodeURI编码
-                 // 后台PHP采用urldecode()函数还原数据
-                 m.push('"' + field.name + '":"' + field.value) + '"';
+             // 由于会出现"双引号字符会导致接下来的数据打包失败，故此对元素内容进行encodeURI编码
+             // 后台PHP采用urldecode()函数还原数据
+             m.push('"' + field.name + '":"' + field.value) + '"';
              });
              idata ='{' +  m.join(',') + '}';
              idata = eval('(' +idata+ ')');*/
