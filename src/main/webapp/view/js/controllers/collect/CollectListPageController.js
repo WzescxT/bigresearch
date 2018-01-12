@@ -302,9 +302,11 @@ angular.module('MetronicApp')
             $scope.custom_config = jsonData.run_rule.custom_config;
         }
         // 执行计划
-        $scope.excuteTask = function () {
-            var jsonData = {"task_id": ""};
+        $scope.executeTask = function () {
+            var jsonData = {"task_id": "", "project_id": ""};
+            jsonData.project_id = $scope.selected_project.advanceProjectEntity.project_id;
             jsonData.task_id = $scope.selected_task.task_id;
+            console.log($scope.selected_project.advanceProjectEntity.project_id);
             $http({
                 method: 'POST',
                 url: '/CrawlPlan/Plan',

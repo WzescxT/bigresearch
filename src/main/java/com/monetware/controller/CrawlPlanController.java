@@ -2,6 +2,7 @@ package com.monetware.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.monetware.mapper.collect.SpiderProjectInfoMapper;
 import com.monetware.mapper.collect.SpiderTaskInfoMapper;
 import com.monetware.model.collect.CollectProgress;
 import com.monetware.model.collect.SpiderTaskInfo;
@@ -31,6 +32,8 @@ public class CrawlPlanController {
     @Autowired
     SpiderTaskInfoMapper spiderTaskInfoMapper;
     @Autowired
+    SpiderProjectInfoMapper spiderProjectInfoMapper;
+    @Autowired
     CollectService collectService;
 
     private XpathCollectorService service = new XpathCollectorService();
@@ -38,6 +41,7 @@ public class CrawlPlanController {
     @ResponseBody
     public String getProject(@RequestBody JSONObject request) {
         final int projectId = request.getIntValue("project_id");
+        final String projectName = spiderProjectInfoMapper.getProjectNameById((long) projectId);
         final int task_id = (int) request.get("task_id");
         SpiderTaskInfo task = spiderTaskInfoMapper.findSpiderTaskInfoById(String.valueOf(task_id));
         final String taskName = task.getTask_name();
@@ -54,7 +58,6 @@ public class CrawlPlanController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //System.out.println(configdata.toString());
         JSONObject assistant_rule = configdata.getJSONObject("assistant_rule");
         JSONObject url_pattern = configdata.getJSONObject("url_pattern");
         JSONObject store_rule = configdata.getJSONObject("store_rule");
@@ -65,7 +68,6 @@ public class CrawlPlanController {
         } else {
             //不配置登录
             String urltype=url_pattern.getString("current_selected");
-            System.out.println(urltype);
             List<String> urls=new ArrayList<>();
             String url;
             if(urltype.equals("single")) {
@@ -158,7 +160,7 @@ public class CrawlPlanController {
                                         @Override
                                         public void onSuccess(List<String> result) {
                                             StringBuilder sb = new StringBuilder();
-                                            String path = generate_spider_result + projectId + "_" + taskName + "_" + attributeName + ".txt";
+                                            String path = generate_spider_result + projectName + "_" + taskName + "_" + attributeName + ".txt";
                                             for (String line : result) {
                                                 if (line != null && line.length() > 0) {
                                                     sb.append(line).append("\n");
@@ -196,7 +198,7 @@ public class CrawlPlanController {
                                                     sb.append(line).append("\n");
                                                 }
                                             }
-                                            String path = generate_spider_result + projectId + "_" + taskName + "_" + attributeName + ".txt";
+                                            String path = generate_spider_result + projectName + "_" + taskName + "_" + attributeName + ".txt";
                                             // save to file
                                             saveToFile(path, sb.toString(), false);
                                         }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public interface SpiderProjectInfoMapper {
 
-    @Select("SELECT project_name WHERE project_id = #{project_id};")
+    @Select("SELECT project_name FROM spider_project_info WHERE project_id = #{project_id};")
     String getProjectNameById(@Param("project_id") Long projectId);
 
 }
