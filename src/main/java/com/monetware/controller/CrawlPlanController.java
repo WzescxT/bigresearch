@@ -37,9 +37,10 @@ public class CrawlPlanController {
     CollectService collectService;
 
     private XpathCollectorService service = new XpathCollectorService();
+
     @RequestMapping(value="/Plan",method = RequestMethod.POST)
     @ResponseBody
-    public String getProject(@RequestBody JSONObject request) {
+    public String crawl(@RequestBody JSONObject request) {
         final int projectId = request.getIntValue("project_id");
         final String projectName = spiderProjectInfoMapper.getProjectNameById((long) projectId);
         final int task_id = (int) request.get("task_id");
@@ -75,7 +76,7 @@ public class CrawlPlanController {
                 urls.add(url);
             }
             else if(urltype.equals("list")) {
-                List<String> tmp = generateUrls(url_pattern.getJSONObject("list"));
+                List<String> tmp = collectService.generateUrls(url_pattern.getJSONObject("list"));
                 urls.addAll(tmp);
 
                 for (String ur : urls) {
@@ -166,7 +167,7 @@ public class CrawlPlanController {
                                                     sb.append(line).append("\n");
                                                 }
                                             }
-                                            saveToFile(path, sb.toString(), false);
+                                            collectService.saveToFile(path, sb.toString(), false);
                                         }
 
                                         @Override
@@ -200,7 +201,7 @@ public class CrawlPlanController {
                                             }
                                             String path = generate_spider_result + projectName + "_" + taskName + "_" + attributeName + ".txt";
                                             // save to file
-                                            saveToFile(path, sb.toString(), false);
+                                            collectService.saveToFile(path, sb.toString(), false);
                                         }
 
                                         @Override
@@ -214,43 +215,5 @@ public class CrawlPlanController {
             }
         }
         return "";
-    }
-
-    /**
-     * Generate Urls
-     * @param jsonObject
-     * @return
-     */
-
-    private List<String> generateUrls(JSONObject jsonObject) {
-        String template = jsonObject.get("url_wildcard").toString();
-        int start = Integer.valueOf(jsonObject.get("init_value").toString());
-        int interval = Integer.valueOf(jsonObject.get("gap").toString());
-        int num = Integer.valueOf(jsonObject.get("pages_num").toString());
-
-        List<String> urls = new ArrayList<>();
-        // Generate the urls
-        for (int i = 0; i < num; i++) {
-            urls.add(template.replaceAll("\\{[^}]*\\}",
-                    String.valueOf(start + i * interval)));
-        }
-        return urls;
-    }
-
-    /**
-     *
-     * @param filename
-     * @param content
-     * @param append
-     */
-    private void saveToFile(String filename, String content, boolean append) {
-        try {
-            BufferedWriter bufferedWriter = new BufferedWriter(
-                    new FileWriter(filename, append));
-            bufferedWriter.write(content + "\n");
-            bufferedWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

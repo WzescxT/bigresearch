@@ -25,32 +25,6 @@ import java.util.regex.Pattern;
 @Component
 public class DownloadPageService {
 
-    class DownloadProcessor implements PageProcessor {
-
-        OnCrawlListener onCrawlListener;
-
-        DownloadProcessor(OnCrawlListener onCrawlListener) {
-            this.onCrawlListener = onCrawlListener;
-        }
-
-        private Site site = Site.me()
-                .setTimeOut(500000000)
-                .setRetryTimes(50)
-                .setCycleRetryTimes(10)
-                .setSleepTime(1000)
-                .setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3192.0 Safari/537.36");
-
-        @Override
-        public void process(Page page) {
-            onCrawlListener.onSuccess(page.getHtml().toString());
-        }
-
-        @Override
-        public Site getSite() {
-            return site;
-        }
-    }
-
     /**
      * Download page
      * @param onCrawlListener
@@ -93,7 +67,7 @@ public class DownloadPageService {
      * Replace src and script
      * @param urlPath
      * @param xml
-     * @return
+     * @return the string of xml data
      */
     public static String replaceAll(String urlPath, String xml) {
 

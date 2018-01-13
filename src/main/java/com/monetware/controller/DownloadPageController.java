@@ -32,7 +32,7 @@ public class DownloadPageController {
 
     private String response = "fail";
     @RequestMapping(value = "/download", method = RequestMethod.POST)
-    public String crawlByClues(@RequestParam("url_path") String url_path) {
+    public String crawl(@RequestParam("url_path") String url_path) {
         success = 0;
         DownloadPageService.OnCrawlListener onCrawlListener = new
                 DownloadPageService.OnCrawlListener() {
@@ -85,8 +85,8 @@ public class DownloadPageController {
 
     /**
      * Check file exist
-     * @param filename
-     * @return
+     * @param filename the filename
+     * @return the result of file existing
      */
     @RequestMapping(value = "/file/exist", method = RequestMethod.POST)
     public boolean checkFileExist(@RequestParam("filename") String filename) {
@@ -97,6 +97,11 @@ public class DownloadPageController {
         return false;
     }
 
+    /**
+     * Get string of hashcode
+     * @param str
+     * @return the hashcode of string
+     */
     private String hashCode(String str) {
         return String.valueOf(str.hashCode());
     }

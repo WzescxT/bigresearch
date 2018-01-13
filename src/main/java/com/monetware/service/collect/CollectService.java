@@ -1,6 +1,7 @@
 package com.monetware.service.collect;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -9,6 +10,9 @@ import com.monetware.mapper.collect.SpiderTaskInfoMapper;
 import com.monetware.model.collect.SpiderTaskInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,19 +37,6 @@ public class CollectService {
 	 */
 	private OnCrawlListener onCrawlListener;
 
-
-	@Autowired
-	SpiderTaskInfoMapper spiderTaskInfoMapper;
-
-	/**
-	 * Get Task Info
-	 * @param taskId
-	 * @return
-	 */
-	public SpiderTaskInfo getSpiderTaskInfo(String taskId) {
-		return spiderTaskInfoMapper.findSpiderTaskInfoById(taskId);
-	}
-
 	class CollectProcessor {
 		private int collectType = -1;
 		private OnCrawlListener onCrawlListener;
@@ -54,17 +45,8 @@ public class CollectService {
 		private List<String> urls;
 		private String extract_way;
 
-
-		public List<String> getXpaths() {
-			return xpaths;
-		}
-
 		public void setXpaths(List<String> xpaths) {
 			this.xpaths = xpaths;
-		}
-
-		public String getAjaxXpath() {
-			return ajaxXpath;
 		}
 
 		public void setAjaxXpath(String ajaxXpath) {
@@ -284,7 +266,7 @@ public class CollectService {
 		}
 		/**
 		 * get the root tag according to xpaths
-		 * @param xpaths
+		 * @param xpaths the extracted path
 		 * @return the tag
 		 */
 		String getXpathListTag(List<String> xpaths) {
@@ -302,82 +284,81 @@ public class CollectService {
 				return null;
 			}
 		}
-	}
 
-	/**
-	 *
-	 * @param absolutePath
-	 * @param relativePath
-	 * @return
-	 */
-	public static String getAbsUrl(String absolutePath, String relativePath){
-		try {
-			URL absoluteUrl = new URL(absolutePath);
-			URL parseUrl = new URL(absoluteUrl ,relativePath );
-			return parseUrl.toString();
-		}
-		catch (MalformedURLException e) {
-			return "";
-		}
-	}
-	/**
-	 * 测试　只需要两个xpath和一个url
-	 * @param args
-	 */
-//	public static void main(String[] args) {
-		// share crawler
-//		String xpath1 = "/html/body/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/a[1]/span[1]";
-//		String xpath2 = "/html/body/div[3]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/a[1]/span[1]";
-//		String url = "http://daily.zhihu.com/";
-//		CollectService collectByCluesService = new CollectService();
-//
-//		OnCrawlListener onCrawlListener = new OnCrawlListener() {
-//			@Override
-//			public void onSuccess(List<String> result) {
-//				for (String string : result) {
-//					System.out.println(string);
-//				}
-// 				System.out.println(result.size());
-//			}
-//
-//			@Override
-//			public void onFail(String error) {
-//
-//			}
-//		};
-//		List<String> urls = new ArrayList<>();
-//		urls.add(url);
-//		String ajaxXpath = "//*[@id=\"idStr\"]";
-//		collectByCluesService.crawl(onCrawlListener, urls, CollectService.TYPE_CLUES, "文本",
-//				ajaxXpath, xpath1, xpath2);
-		// tongji crawler
-//		String xpath1 = "/html/body/div[3]/div/div[3]/div/ul/li[1]/a[1]";
-//		String xpath2 = "/html/body/div[3]/div/div[3]/div/ul/li[2]/a[1]";
-//		String url = "http://sse.tongji.edu.cn/data/list/xwdt";
-//		CollectService collectByCluesService = new CollectService();
-//
-//		OnCrawlListener onCrawlListener = new OnCrawlListener() {
-//			@Override
-//			public void onSuccess(List<String> result) {
-//				for (String str : result) {
-//					System.out.println(str);
-//				}
-//			}
-//			@Override
-//			public void onFail(String error) {
-//				System.out.println(error);
-//			}
-//		};
-//		String ajaxXpath = "";
-//		collectByCluesService.crawl(onCrawlListener, url, CollectService.TYPE_CLUES, "链接",
-//				ajaxXpath, xpath1, xpath2);
+        /**
+         * Check if the page is using ajax
+         * @param page the page of html
+         * @param xpath the xpath of page
+         * @return
+         */
+        boolean isAjaxHtml(HtmlPage page, String xpath) {
+            if (page.getByXPath(xpath).size() < 1) {
+                return true;
+            }
+            return false;
+        }
+        /**
+         *
+         * @param basePath the base url
+         * @param relativePath the relative url
+         * @return the absolute url
+         */
+        String getAbsUrl(String basePath, String relativePath){
+            try {
+                URL baseUrl = new URL(basePath);
+                URL parseUrl = new URL(baseUrl ,relativePath);
+                return parseUrl.toString();
+            }
+            catch (MalformedURLException e) {
+                return "";
+            }
+        }
 
-//	}
+    }
+
+
+    /**
+     * Generate Urls
+     * @param jsonObject the json data
+     * @return
+     */
+
+    public List<String> generateUrls(JSONObject jsonObject) {
+        String template = jsonObject.get("url_wildcard").toString();
+        int start = Integer.valueOf(jsonObject.get("init_value").toString());
+        int interval = Integer.valueOf(jsonObject.get("gap").toString());
+        int num = Integer.valueOf(jsonObject.get("pages_num").toString());
+
+        List<String> urls = new ArrayList<>();
+        // Generate the urls
+        for (int i = 0; i < num; i++) {
+            urls.add(template.replaceAll("\\{[^}]*\\}",
+                    String.valueOf(start + i * interval)));
+        }
+        return urls;
+    }
+
+    /**
+     *
+     * @param filename
+     * @param content
+     * @param append
+     */
+    public void saveToFile(String filename, String content, boolean append) {
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(
+                    new FileWriter(filename, append));
+            bufferedWriter.write(content + "\n");
+            bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 	/**
 	 * 线索 ＋ ajax翻页/点击
 	 * @param onCrawlListener
-	 * @param url
+	 * @param urls
 	 * @param ajaxXpath
 	 * @param xpath1
 	 * @param xpath2
@@ -397,7 +378,7 @@ public class CollectService {
 	/**
 	 *
 	 * @param onCrawlListener
-	 * @param url
+	 * @param urls
 	 * @param type
 	 * @param extract_way
 	 * @param ajaxXpath
@@ -414,19 +395,12 @@ public class CollectService {
 		clueProcessor.start();
 	}
 
-	public OnCrawlListener getOnCrawlListener() {
-		return onCrawlListener;
-	}
-
+    /**
+     *
+     * @param onCrawlListener
+     */
 	public void setOnCrawlListener(OnCrawlListener onCrawlListener) {
 		this.onCrawlListener = onCrawlListener;
-	}
-
-	public boolean isAjaxHtml(HtmlPage page, String xpath) {
-		if (page.getByXPath(xpath).size() < 1) {
-			return true;
-		}
-		return false;
 	}
 
 	/**

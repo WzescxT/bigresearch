@@ -1517,35 +1517,35 @@ var $shadow = new Object();
  特性：
  - 转换xpath为csspath进行jQuery元素获取
  - 仅生成自然表述路径（不支持非、或）
- @param dom {String/Dom} 目标元素
+ @param dom {jQuery} 目标元素
  @returns {String} dom的xpath路径
  */
 $shadow.domXpath = function(dom) {
     dom = $(dom).get(0);
     var path = "";
-    var xname = "";
-    var isID = false;
+    var currentTagName = "";
+    var isExistId = false;
     for (; dom && dom.nodeType == 1; dom = dom.parentNode) {
         var index = 1;
         for (var sib = dom.previousSibling; sib; sib = sib.previousSibling) {
-            if (sib.nodeType == 1 && sib.tagName == dom.tagName)
+            if (sib.nodeType == 1 && sib.tagName == dom.tagName) {
                 index++;
+            }
         }
-        xname =  dom.tagName.toLowerCase();
-        // if (index > 0)
-        //     xname += "[" + index + "]";
+        currentTagName = dom.tagName.toLowerCase();
+        // check whether id is exist
         if (dom.id) {
-            xname = "//*[@id=\"" + dom.id + "\"]";
-            isID = true;
+            currentTagName = "//*[@id=\"" + dom.id + "\"]";
+            isExistId = true;
             break;
         } else {
             if (index > 0)
-                xname += "[" + index + "]";
+                currentTagName += "[" + index + "]";
         }
-        path = "/" + xname + path;
+        path = "/" + currentTagName + path;
     }
-    if (isID) {
-        path = xname + path;
+    if (isExistId) {
+        path = currentTagName + path;
     }
     path = path.replace("html[1]/body[1]/","html/body/");
     return path;
@@ -1554,7 +1554,7 @@ $shadow.domXpath = function(dom) {
 /**
  根据xpath获取元素
  特性：
- - 转换xpath为csspath进行jQuery元素获取
+ - 转换xpath为css path进行jQuery元素获取
  - 仅支持自然表述（不支持非、或元素选取）
  @param xpath {String} 目标元素xpath
  @returns {jQuery Object} 元素/元素集合
