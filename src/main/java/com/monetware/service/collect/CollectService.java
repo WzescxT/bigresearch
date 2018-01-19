@@ -85,7 +85,7 @@ public class CollectService {
 					webClient.setAjaxController(new NicelyResynchronizingAjaxController());
 					webClient.getOptions().setJavaScriptEnabled(true);
 					HtmlPage page = webClient.getPage(urls.get(0));
-					webClient.waitForBackgroundJavaScript(10000);
+					webClient.waitForBackgroundJavaScript(15000);
 
 					// note the page for share page
 					List<Integer> pages = new ArrayList<>();

@@ -284,6 +284,7 @@ public class AdvanceCollectController {
     @ResponseBody
     public String getTaskConfig(@RequestParam("task_id") String taskId) {
         // Get the path of the configuration file of the task
+        System.out.println(taskId);
         String path = spiderTaskInfoMapper.findSpiderTaskInfoById(taskId)
                 .getTask_config_location();
 
