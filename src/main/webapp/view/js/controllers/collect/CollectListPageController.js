@@ -562,6 +562,15 @@ angular.module('MetronicApp')
                         downloadPagePath = getPage($scope.url_wildcard, $scope.init_value);
                         downloadState = 1;
                     }
+                } else if ($scope.crawl_pattern === "导入") {
+                    if (downloadPagePath === jsonData.url_pattern.import.import_urls[0]
+                        && downloadState === 3) {
+                        downloadState = 3;
+                        return;
+                    } else {
+                        downloadPagePath = jsonData.url_pattern.import.import_urls[0];
+                        downloadState = 1;
+                    }
                 }
                 // check file
                 $.post("/collect/file/exist", {filename: hashCode(downloadPagePath) + ".html"},
