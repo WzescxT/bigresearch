@@ -1,4 +1,4 @@
-# Bigresearch
+# Big Research
 
 ## Introduction
 
