@@ -12,7 +12,8 @@ import java.util.Map;
 public class FilePipline implements us.codecraft.webmagic.pipeline.Pipeline {
     public static String tempResult="";
 
-    private String generate_spider_result="C:\\MyFiles\\实验室\\result";
+    @Value("${generate.spider.result}")
+    private String generate_spider_result;
 
     @Override
     public void process(ResultItems resultItems, Task task) {

@@ -73,6 +73,10 @@ public class XpathCollectorService {
         {
             this.xpath=xpath+"/@href";
         }
+        else
+        {
+            this.xpath=xpath+"/text()";
+        }
         if(this.header==null||this.header.equals(""))
         {
 
