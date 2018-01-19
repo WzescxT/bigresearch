@@ -31,9 +31,29 @@ public class DownloadPageService {
      * @param url
      */
     public void crawl(OnCrawlListener onCrawlListener, String url) {
+        // ajax page
+        if (url.startsWith("http://www.sse.com.cn/assortment/stock/list/share/")) {
+            try {
+                WebClient webClient = new WebClient(BrowserVersion.CHROME);
+                webClient.getOptions().setJavaScriptEnabled(true);
+                webClient.getOptions().setCssEnabled(true);
+                webClient.getOptions().setTimeout(35000);
+                webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+                webClient.addRequestHeader("User-Agent",
+                        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3192.0 Safari/537.36");
+                HtmlPage page = webClient.getPage(url);
+                webClient.waitForBackgroundJavaScript(15000);
+                String xml = page.asXml();
+                onCrawlListener.onSuccess(replaceAll(url, xml));
+                return;
+            } catch (IOException e1) {
+                onCrawlListener.onFail("DownloadFail");
+                e1.printStackTrace();
+                return;
+            }
+        }
         try {
             Document doc = Jsoup.connect(url).get();
-            System.out.println(doc.outerHtml());
             String xml = doc.outerHtml();
             onCrawlListener.onSuccess(replaceAll(url, xml));
         } catch (Exception e) {

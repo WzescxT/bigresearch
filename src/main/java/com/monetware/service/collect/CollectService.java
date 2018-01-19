@@ -108,7 +108,7 @@ public class CollectService {
 						}
 						// > 1
 						else {
-							for(HtmlAnchor htmlAnchor: htmlListItems){
+							for(HtmlAnchor htmlAnchor : htmlListItems){
 								String number = htmlAnchor.asText();
 								if(isNumeric(number)){
 									Integer pageNumber = Integer.valueOf(number);
@@ -116,6 +116,7 @@ public class CollectService {
 										isEnd = false;
 										pages.add(pageNumber);
 										currentPage = pageNumber;
+										htmlAnchor.click();
 										break;
 									}
 								}

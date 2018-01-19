@@ -36,7 +36,7 @@ public class FilePipline implements us.codecraft.webmagic.pipeline.Pipeline {
             if (direc.isDirectory()) {
                 File[] files = direc.listFiles();
                 if (files.length == 0) {
-                    File file = new File(generate_spider_result + "1.txt");
+                    File file = new File(generate_spider_result + "\\1.txt");
                     file.createNewFile();
                     FileWriter writer=new FileWriter(file,true);
                     writer.write(result);

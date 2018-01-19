@@ -89,7 +89,8 @@ public class CrawlPlanController {
                 JSONArray importurls = url_pattern.getJSONObject("import").getJSONArray("import_urls");
                 for(int i=0;i<importurls.size();i++)
                 {
-                    urls.add((String)importurls.get(i));
+                    System.out.println("sdfsdfdf"+(String)importurls.get(i));
+                    urls.add((String)(((String) importurls.get(i))).trim());
                 }
             }
             CollectProgress.totalurls.put(task_id,urls.size());
@@ -154,7 +155,7 @@ public class CrawlPlanController {
                         JSONObject ajax=eachtaskJSON.getJSONObject("ajax");
                         // ajax
                         if(ajax.getBoolean("open")) {
-                            String ajaxPattern = ajax.getString("ajaxPattern");
+                            String ajaxPattern = ajax.getString("ajax_pattern");
                             String ajaxXpath = ajax.getString("button_xpath");
                             String xpath1 = ((JSONObject) eachtask).getString("attribute_xpath");
                             String xpath2 = ((JSONObject) eachtask).getString("attribute_xpath2");
