@@ -1,7 +1,5 @@
 # Detailed Design (详细设计规约)
 
-
-
 ## Process Flow Design
 
 ![process](images/detailed_design/class_design_process.png)

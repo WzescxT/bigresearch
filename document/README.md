@@ -1,8 +1,21 @@
 # Big Research
 
-## w - Introduction
+## Introduction
 
-> 
+- **Background**
+  With the rapid development of the Internet, the amount of information and related service has been increasing considerably. It is becoming more and more important to figure out an efficient method of extracting the target information precisely among the overwhelming amount of resources on the World-Wide Web. The requirement for web crawling is so common that even some people with little programming knowledge are looking for a way to extract data from websites.
+
+- **Purpose of this Project**
+
+  The purpose of this project is to implement a scraping tool that allows users to easily extract data from the websites visually with no coding required.
+
+- **Target Users**
+
+  The users with little knowledge of developing web crawlers who want to scrape some information from websites efficiently and conviently.
+
+- **Boundary of this Project**
+
+  This project can help to crawl information from websites, but it cannot help to process of the data crawled afterwards. The project aims to simplify the process of scraping data from websites, instead of the analysis on the data, such as emotion analysis of an article or data mining among the large amount of data scraped.
 
 ## How to Build
 
@@ -56,9 +69,55 @@ We develop this project in IntelliJ IDEA, so we strongly suggest that you import
 
   ![run](./images/readme/run.png)
 
-## w - How to Use
+## How to Use
 
-> 
+- 创建项目
+
+  ![创建项目](./images/readme/创建项目.png)
+
+- 创建任务
+
+  ![创建任务](./images/readme/创建任务.png)
+
+- 配置基本信息
+
+  ![配置基本信息](./images/readme/配置基本信息.png)
+
+- 配置辅助规则
+
+  ![配置辅助规则](./images/readme/配置辅助规则.png)
+
+- 配置URL规则
+
+  ![配置URL规则](./images/readme/配置URL规则.png)
+
+- 单页
+
+  ![单页](./images/readme/单页.png)
+
+  ![单页输入](./images/readme/单页输入.png)
+
+  ![列表](./images/readme/列表.png)
+
+  ![导入](./images/readme/导入.png)
+
+- 配置采集规则
+
+  ![添加模式](./images/readme/添加模式.png)
+
+  ![输入项目](./images/readme/输入项目.png)
+
+  ![选取xpath](./images/readme/选取xpath.png)
+
+  ![模式添加成功](./images/readme/模式添加成功.png)
+
+- 配置持久化规则
+
+  ![配置持久化规则](./images/readme/配置持久化规则.png)
+
+- 配置执行计划
+
+  ![配置执行计划](./images/readme/配置执行计划.png)
 
 ## Code Structure
 
