@@ -12,8 +12,7 @@ import java.util.Map;
 public class FilePipline implements us.codecraft.webmagic.pipeline.Pipeline {
     public static String tempResult="";
 
-    @Value("${generate.spider.result}")
-    private String generate_spider_result;
+    private String generate_spider_result="C:\\MyFiles\\实验室\\result";
 
     @Override
     public void process(ResultItems resultItems, Task task) {
@@ -36,7 +35,7 @@ public class FilePipline implements us.codecraft.webmagic.pipeline.Pipeline {
             if (direc.isDirectory()) {
                 File[] files = direc.listFiles();
                 if (files.length == 0) {
-                    File file = new File(generate_spider_result + "1.txt");
+                    File file = new File(generate_spider_result + "\\1.txt");
                     file.createNewFile();
                     FileWriter writer=new FileWriter(file,true);
                     writer.write(result);
