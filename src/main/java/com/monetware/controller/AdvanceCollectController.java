@@ -8,11 +8,15 @@ import com.monetware.model.collect.AdvanceProjectModel;
 import com.monetware.model.collect.AdvanceTaskEntity;
 import com.monetware.util.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -284,7 +288,6 @@ public class AdvanceCollectController {
     @ResponseBody
     public String getTaskConfig(@RequestParam("task_id") String taskId) {
         // Get the path of the configuration file of the task
-        System.out.println(taskId);
         String path = spiderTaskInfoMapper.findSpiderTaskInfoById(taskId)
                 .getTask_config_location();
 
@@ -317,6 +320,72 @@ public class AdvanceCollectController {
         }
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * Returns a JSON configuration file of the task specified by the {@code taskId}.
+     * @param taskId The id of the task.
+     * @param httpServletResponse The response of the HttpServlet.
+     */
+    @GetMapping(value = "file/task_config", produces = "application/force-download")
+    public void downloadConfigJsonFile(@RequestParam("task_id") String taskId,
+                                                        HttpServletResponse httpServletResponse) {
+        // Get the path of the configuration file of the task
+        String path = spiderTaskInfoMapper.findSpiderTaskInfoById(taskId)
+                .getTask_config_location();
+
+        // Read the content of the configuration file
+        File file = new File(path);
+
+        // If the file does not exist
+        if (!file.exists()) {
+            System.out.println("Config json file \"" + file.getAbsolutePath() + "\" not found!");
+            try {
+                httpServletResponse.getOutputStream().print("");
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+
+        FileInputStream fileInputStream = null;
+        final StringBuilder stringBuilder = new StringBuilder();
+        try {
+            fileInputStream = new FileInputStream(file);
+            byte[] buffer = new byte[1024];
+            int length = -1;
+            while ((length = fileInputStream.read(buffer)) != -1) {
+                stringBuilder.append(new String(buffer, 0, length));
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            try {
+                fileInputStream.close();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+
+        String fileName = "task_config_" + taskId + ".json";
+        httpServletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + "\"");
+
+        try {
+            ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
+            servletOutputStream.print(stringBuilder.toString());
+            servletOutputStream.flush();
+            servletOutputStream.close();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
+//        return new StreamingResponseBody() {
+//
+//            @Override
+//            public void writeTo(OutputStream outputStream) throws IOException {
+//                outputStream.write(stringBuilder.toString().getBytes());
+//            }
+//
+//        };
     }
 
     /**

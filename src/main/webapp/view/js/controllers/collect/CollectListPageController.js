@@ -1182,27 +1182,32 @@ angular.module('MetronicApp')
          * Exports the configuration json file to the local
          */
         $scope.exportConfigJson_advancedTemplate = function () {
-            var id = $scope.selected_task.task_id;
+            var id = $scope.selected_task_exporting;
+            console.log(id);
 
-            $http({
-                url: '/advance/task_config?task_id=' + id,
-                method: "GET"
-            }).success(function (data, status, headers, config) {
-                console.log("get task config json success...");
+            window.open("/advance/file/task_config?task_id=" + id.toString(), "_blank");
 
-                var blob = new Blob([angular.toJson(data)], {type: "text/plain"});
-                var objectUrl = URL.createObjectURL(blob);
-                var a = document.createElement('a');
-                document.body.appendChild(a);
-                a.setAttribute('style', 'display:none');
-                a.setAttribute('href', objectUrl);
-                var filename = "config.json";
-                a.setAttribute('download', filename);
-                a.click();
-                URL.revokeObjectURL(objectUrl);
-            }).error(function (data, status, headers, config) {
-                console.log("get task config json error..." + status);
-            });
+            // $http({
+            //     url: '/advance/task_config?task_id=' + id,
+            //     method: "GET"
+            // }).success(function (data, status, headers, config) {
+            //     console.log("get task config json success...");
+            //
+            //     var blob = new Blob([angular.toJson(data)], {type: "text/plain"});
+            //     var objectUrl = (window.URL || window.webkitURL).createObjectURL(blob);
+            //     var a = document.createElement('a');
+            //     document.body.appendChild(a);
+            //     a.setAttribute('style', 'display:none');
+            //     a.setAttribute('href', objectUrl);
+            //     var filename = "config_" + id.toString() + ".json";
+            //     a.setAttribute('download', filename);
+            //     console.log(a);
+            //     a.click();
+            //     document.body.removeChild(a);
+            //     URL.revokeObjectURL(objectUrl);
+            // }).error(function (data, status, headers, config) {
+            //     console.log("get task config json error..." + status);
+            // });
         };
 
         // For importing file from the local machine
