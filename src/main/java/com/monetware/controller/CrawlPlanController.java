@@ -86,8 +86,11 @@ public class CrawlPlanController {
                 //add later
             }
             else if(urltype.equals("import")) {
-
-                //add later
+                JSONArray importurls = url_pattern.getJSONObject("import").getJSONArray("import_urls");
+                for(int i=0;i<importurls.size();i++)
+                {
+                    urls.add((String)importurls.get(i));
+                }
             }
             CollectProgress.totalurls.put(task_id,urls.size());
             CollectProgress.crawledurls.put(task_id,0);
