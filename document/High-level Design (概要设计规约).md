@@ -90,7 +90,7 @@ According to the Entity-Realtion Design, the detailed database design for entiti
 
 ## Interface Specifications （接口规约）
 
-The specifications of interfaces used in interactions among subsystems, here gives a RESTful example in the style of [Swagger](https://swagger.io/):
+The specifications of interfaces used in interactions among subsystems:
 
 ---
 ### *advance/getProjectsBasicInfo*   
@@ -603,7 +603,7 @@ collect/download
 ```
 ---
 ---
-### *collect//file/exist*   
+### *collect/file/exist*   
 
 #### Description (接口描述)
 
@@ -634,7 +634,7 @@ Get exist message of given file name
 #### Request Sample (示例请求)
 
 ```
-collect//file/exist
+collect/file/exist
 ```
 
 #### Response Sample (示例结果)
