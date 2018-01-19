@@ -154,7 +154,7 @@ public class CrawlPlanController {
                         JSONObject ajax=eachtaskJSON.getJSONObject("ajax");
                         // ajax
                         if(ajax.getBoolean("open")) {
-                            String ajaxPattern = ajax.getString("ajaxPattern");
+                            String ajaxPattern = ajax.getString("ajax_pattern");
                             String ajaxXpath = ajax.getString("button_xpath");
                             String xpath1 = ((JSONObject) eachtask).getString("attribute_xpath");
                             String xpath2 = ((JSONObject) eachtask).getString("attribute_xpath2");
