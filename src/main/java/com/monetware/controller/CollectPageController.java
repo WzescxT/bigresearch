@@ -45,9 +45,10 @@ public class CollectPageController {
         String ajaxtype = (String) request.get("ajaxtype");
         String ajaxxpath = (String) request.get("ajaxxpath");
         String extract_way = (String) request.get("extract_way");
-        String project_id = (String) request.get("project_id");
-        String task_id = (String) request.get("task_id");
-        final String projectName = spiderProjectInfoMapper.getProjectNameById( Long.parseLong(project_id));
+        Integer project_id = request.getInteger("project_id");
+        Integer task_id = request.getInteger("task_id");
+        System.out.println(request.toJSONString());
+        final String projectName = spiderProjectInfoMapper.getProjectNameById(Long.parseLong(String.valueOf(project_id)));
         SpiderTaskInfo task = spiderTaskInfoMapper.findSpiderTaskInfoById(String.valueOf(task_id));
         final String taskName = task.getTask_name();
         String path=task.getTask_config_location();
