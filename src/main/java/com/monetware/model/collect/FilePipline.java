@@ -29,7 +29,7 @@ public class FilePipline implements us.codecraft.webmagic.pipeline.Pipeline {
             }
 
         }
-        tempResult=result;
+        tempResult += result;
         try {
             File direc = new File("data/single");
             if (direc.isDirectory()) {

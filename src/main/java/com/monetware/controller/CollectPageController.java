@@ -84,7 +84,17 @@ public class CollectPageController {
 
             //add later
         }
-
+        else if(urltype.equals("import")) {
+            JSONArray importurls = url_pattern.getJSONObject("import").getJSONArray("import_urls");
+            for(int i=0;i<importurls.size();i++)
+            {
+                System.out.println("sdfsdfdf"+(String)importurls.get(i));
+                urls.add((String)(((String) importurls.get(i))).trim());
+                if (i > 10) {
+                    break;
+                }
+            }
+        }
         if (crawltype.equals("单体")) {
             if(extract_way.equals("链接")) {
                 xpath=xpath+"/@href";
