@@ -3,6 +3,7 @@
 ## Introduction
 
 - **Background**
+
   With the rapid development of the Internet, the amount of information and related service has been increasing considerably. It is becoming more and more important to figure out an efficient method of extracting the target information precisely among the overwhelming amount of resources on the World-Wide Web. The requirement for web crawling is so common that even some people with little programming knowledge are looking for a way to extract data from websites.
 
 - **Purpose of this Project**
@@ -11,7 +12,7 @@
 
 - **Target Users**
 
-  The users with little knowledge of developing web crawlers who want to scrape some information from websites efficiently and conviently.
+  The users with little knowledge of developing web crawlers who want to scrape some information from websites efficiently and conveniently.
 
 - **Boundary of this Project**
 
@@ -26,32 +27,31 @@
 
 ### Notable Technologies
 
-- Backend: Java 8 with Sprint Boot
-- Frontend: Angular.js + Bootstrap
+- Back End: Java 8 with Sprint Boot
+- Front End: AngularJS + BootStrap
 - Database: MySQL
-- ORM: Mybatis
+- ORM: MyBatis
 - Security: Spring Security
 - Restful API
 
 ### Get the Project
 
-- Use the `git` command
+- Using the command line interface of Git
 
   ```
   git clone https://github.com/XLab-Tongji/bigresearch.git
   ```
 
-- Use Sourcetree `https://www.sourcetreeapp.com`or other tools
+- Use a GUI client for Git ([SourceTree](https://www.sourcetreeapp.com/) for example)
 
   ![sourcetree](./images/readme/sourcetree.png)
 
-  ​
 
-- Just download from `https://github.com/XLab-Tongji/bigresearch/tree/spider-dev`
+- Just download it from [GitHub Repository](https://github.com/XLab-Tongji/bigresearch/tree/spider-dev)
 
-### Import the Project to IDE
+### Import the Project into your IDE
 
-We develop this project in IntelliJ IDEA, so we strongly suggest that you import this project using  IntelliJ IDEA. Of course, you can also  use other IDE. 
+As this project was developed using IntelliJ IDEA, so we strongly recommend you to import this project using IntelliJ IDEA. Of course, you can also use other IDE.
 
 - Open the IntelliJ IDEA and click `import project`
 
