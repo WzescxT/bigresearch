@@ -20,13 +20,12 @@ public class FilePipline implements us.codecraft.webmagic.pipeline.Pipeline {
 
         Map<String,Object> infos=resultItems.getAll();
         String result="";
-        if(infos==null||infos.size()==0)
-        {
+        if(infos==null||infos.size()==0) {
             result="nothing to show";
         }
         else {
             for (Map.Entry<String, Object> info : infos.entrySet()) {
-                result += info.getKey() + ":" + info.getValue()==null?"no data crawled":info.getValue();
+                result += info.getKey() + ":" + info.getValue() == null ? "no data crawled\n" : info.getValue()+"\n";
             }
 
         }
@@ -37,7 +36,7 @@ public class FilePipline implements us.codecraft.webmagic.pipeline.Pipeline {
                 File[] files = direc.listFiles();
                 if (files.length == 0) {
                     File file = new File("data/single/1.txt");
-                    System.out.println(file.getAbsolutePath());
+                    // System.out.println(file.getAbsolutePath());
                     file.createNewFile();
                     FileWriter writer=new FileWriter(file,true);
                     writer.write(result);
