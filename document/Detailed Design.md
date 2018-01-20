@@ -8,25 +8,25 @@
 
 ### Get the XPath of the element
 
-- background
+- Background
 
-  XPath stands for XML Path Language. It uses a non-XML syntax to provide a flexible way of addressing (pointing to) different parts of an [XML](https://developer.mozilla.org/en-US/docs/XML) document. When crawling a web page, the element is located mainly through XPath and the content of the element is extracted. According to the existing web page, by clicking on the element on the web page to get the XPath of the element, you can crawl the content of the web page through the XPath.The algorithm traverses document through the elements' parentNode and previousSibling until it finds the elements that have ID and splits into a complete XPath
+  XPath stands for XML Path Language. It uses a non-XML syntax to provide a flexible way of addressing (pointing to) different parts of an [XML](https://developer.mozilla.org/en-US/docs/XML) document. When crawling a web page, the element is located mainly through XPath and the content of the element is extracted. According to the existing web page, by clicking on the element on the web page to get the XPath of the element, you can crawl the content of the web page through the XPath.The algorithm traverses document through the elements' parentNode and previousSibling until it finds the elements that have ID and splits into a complete XPath.
 
-- algorithm framework (flowchart of pseudo code)
+- Algorithm framework (flowchart of pseudo code)
 
   ![Get XPath Algorithm](images/detailed_design/flow_chart_xpath.png)
 
-- dataset
+- Data set
 
   Input document's element
 
-- key steps
+- Key steps
 
   - Traverses document through the elements' parentNode and previousSibling until it finds the elements that have ID, otherwise, *html/body* can be used as a root tag. Finale them become into a complete XPath
 
-- code
+- Code
 
-  ```
+  ```java
   $shadow.domXpath = function(dom) {
       dom = $(dom).get(0);
       var path = "";
@@ -154,7 +154,7 @@ The Download Page Service instance in the system.
 
 *public void crawl(OnCrawlListener onCrawlListener, String url)*
 
-Download page.
+Downloads page.
 
 **returns**
 
@@ -169,11 +169,11 @@ void
 
 *public static String replaceAll(String urlPath, String xml)*
 
-Replace src and script tag content.
+Replaces src and script tag content.
 
 **returns**
 
-the string of xml data
+The string of xml data
 
 **parameters**
 
@@ -185,7 +185,7 @@ the string of xml data
 
 *com.monetware.service.collect*
 
-the interface of  downloading listener
+The interface of downloading listener
 
 #### Methods
 
@@ -209,7 +209,7 @@ String *error* : the information of download error
 
 *com.monetware.service.collect*
 
-the collect instance of system
+The collect instance of system
 
 #### Fields
 | Modifier and Type       | Field           | Description                |
@@ -225,7 +225,7 @@ the collect instance of system
 
 > CollectProcessor(List<String> urls, int collectType, String extract_way)
 
-Create a spider processor
+Creates a spider processor
 
 **parameters**
 
@@ -239,7 +239,7 @@ Create a spider processor
 
 *public void start()*
 
-Process the page, extract urls to fetch, extract the data and store
+Processes the page, extract urls to fetch, extract the data and store
 
 **returns**
 
@@ -249,7 +249,7 @@ void
 
 *List<String> getContent(HtmlPage page, List<String> xpaths, String extract_way)*
 
-Get content from htmlPage use xpath
+Gets content from htmlPage use xpath
 
 **parameters**
 
@@ -265,7 +265,7 @@ the result content
 
 *int getNumber(HtmlPage page, List<String> xpaths)*
 
-Get number of content from one htmlpage
+Gets number of content from one htmlpage
 
 **parameters**
 
@@ -274,13 +274,13 @@ Get number of content from one htmlpage
 
 **returns**
 
-the number of page
+The number of page
 
 > getXpathListTag
 
 *String getXpathListTag(List<String> xpaths)*
 
-Get the root tag according to xpaths
+Gets the root tag according to xpaths
 
 **parameters**
 
@@ -288,13 +288,13 @@ Get the root tag according to xpaths
 
 **returns**
 
-the xpath of root tag 
+The xpath of the root tag 
 
 > getAbsUrl
 
 *public static String getAbsUrl(String absolutePath, String relativePath)*
 
-Get the absolute url
+Gets the absolute url
 
 **parameters**
 
@@ -303,13 +303,13 @@ Get the absolute url
 
 **returns**
 
-the absolute url
+The absolute url
 
 > isAjaxHtml
 
 *public boolean isAjaxHtml(HtmlPage page, String xpath)*
 
-Check if the page is using ajax
+Checks whether the page is using Ajax
 
 **parameters**
 
@@ -326,7 +326,7 @@ the boolean value if using ajax
 
 public class **CollectService**
 
-The Collect Service instance in the system.
+The ```CollectService``` instance in the system.
 
 #### Fields
 
@@ -381,7 +381,7 @@ void
 
 *public void saveToFile(String filename, String content, boolean append)*
 
-Save content to file
+Saves the content to file
 
 **parameters**
 
@@ -397,7 +397,7 @@ void
 
 *public List<String> generateUrls(JSONObject jsonObject)*
 
-Generate urls according to url list
+Generates urls according to url list
 
 **parameters**
 
@@ -405,7 +405,7 @@ Generate urls according to url list
 
 **returns**
 
-the list of url
+The list of all the urls
 
 ### FilePipline
 
@@ -413,7 +413,7 @@ com.monetware.model.collect
 
 *public class FilePipline implements us.codecraft.webmagic.pipeline.Pipeline*
 
-the pipeline of saving result in the system
+The pipeline of saving result in the system
 
 | Modifier and Type    | Field                  | Description               |
 | -------------------- | ---------------------- | ------------------------- |
@@ -426,7 +426,7 @@ the pipeline of saving result in the system
 
 *public void process(ResultItems resultItems, Task task)*
 
-Save result to file
+Saves the result to local file
 
 **parameters**
 
@@ -463,7 +463,7 @@ The crawl controller instance in the system.
 
 *public void crawl(@RequestBody JSONObject request)*
 
-Start crawling and save results to local file
+Starts crawling and saves results to local file
 
 **parameters**
 
@@ -496,7 +496,7 @@ The download page controller instance in the system.
 
 *public void crawl(@RequestParam("url_path") String url_path)*
 
-Start download web page and save to local
+Starts downloading the web page and save to local disk
 
 **parameters**
 
@@ -504,13 +504,13 @@ Start download web page and save to local
 
 **returns**
 
-the content of html
+The content of html
 
 > checkFileExist
 
 *public boolean checkFileExist(@RequestParam("filename") String filename)*
 
-Check whether the file exists according to the file name
+Checks whether the file exists according to the file name
 
 **parameters**
 
@@ -518,13 +518,13 @@ Check whether the file exists according to the file name
 
 **returns**
 
-the result of file existing
+The result of file existing
 
 > hashCode
 
 *private String hashCode(String str)*
 
-Get the string-hashcode of the string
+Gets the string-hashcode of the string
 
 **parameters**
 
@@ -556,7 +556,7 @@ This class be used to crawling test
 
 *public void crawl(@RequestParam("data") String data)*
 
-Start download web page and return to front
+Starts download web page and return to front
 
 **parameters**
 
@@ -564,4 +564,4 @@ Start download web page and return to front
 
 **returns**
 
-the result of crawling
+The crawled result.

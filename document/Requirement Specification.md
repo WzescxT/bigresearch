@@ -3,11 +3,15 @@
 ## Project Introduction
 
 - **Background**
+
   With the rapid development of the Internet, the amount of information and related service has been increasing considerably. It is becoming more and more important to figure out an efficient method of extracting the target information precisely among the overwhelming amount of resources on the World-Wide Web. The requirement for web crawling is so common that even some people with little programming knowledge are looking for a way to extract data from websites.
+
+  ![Web Crawler](images/requirement_specification/spider_web_crawl_featured.jpg)
 
 - **Purpose of this Project**
 
   The purpose of this project is to implement a scraping tool that allows users to easily extract data from the websites visually with no coding required.
+  ![Portia](images/requirement_specification/portia.png)
 
 - **Target Users**
 
@@ -37,7 +41,7 @@ Login with the registered username and the password.
 
 User
 
-#### Pre-condition (Optional)
+#### Pre-condition
 
 The user has registered the username in the system.
 
@@ -46,7 +50,7 @@ The user has registered the username in the system.
 1. Enter the username.
 2. Enter the password.
 
-#### Exceptions (Optional)
+#### Exceptions
 
 If the username does not exist in the system or the password does not match the username, the login action will fail.
 
@@ -87,14 +91,15 @@ User
 - The format of the configuration file should be the same as the exported configuration file (JSON).
 
 #### Process Flow
-
 Linear process flow:
 1. Edit the basic rules.
-2. Edit the assitant rules.
+2. Edit the assitantant rules.
 3. Edit the persistence rules.
 4. Edit the creep rules.
-5. Edit the executation rules.
+5. Edit the execution rules.
 6. Save the modifications.
+
+![flow_chart](images/requirement_specification/flow_chart.png)
 
 ### Use Case: _Import Configurations_
 
