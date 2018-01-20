@@ -27,7 +27,7 @@
 
 ### Notable Technologies
 
-- Back End: Java 8 with Sprint Boot
+- Back End: Java 8 with Spring Boot
 - Front End: AngularJS + BootStrap
 - Database: MySQL
 - ORM: MyBatis
