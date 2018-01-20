@@ -153,6 +153,7 @@ public class CrawlPlanController {
                     else if(creep_pattern.equals("线索")) {
                         // xuantang here
                         JSONObject ajax=eachtaskJSON.getJSONObject("ajax");
+                        System.out.println(ajax);
                         // ajax
                         if(ajax.getBoolean("open")) {
                             String ajaxPattern = ajax.getString("ajax_pattern");

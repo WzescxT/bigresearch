@@ -1,16 +1,23 @@
 package com.monetware.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.monetware.mapper.collect.SpiderProjectInfoMapper;
+import com.monetware.mapper.collect.SpiderTaskInfoMapper;
 import com.monetware.model.collect.FilePipline;
+import com.monetware.model.collect.SpiderTaskInfo;
 import com.monetware.service.collect.CollectService;
 import com.monetware.service.collect.XpathCollectorService;
-import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 @RequestMapping("/collect")
 @Controller
@@ -22,6 +29,10 @@ public class CollectPageController {
     private XpathCollectorService service = new XpathCollectorService();
     @Autowired
     CollectService collectService;
+    @Autowired
+    SpiderTaskInfoMapper spiderTaskInfoMapper;
+    @Autowired
+    SpiderProjectInfoMapper spiderProjectInfoMapper;
 
     @RequestMapping(value = "/CrawledData", method = RequestMethod.POST)
     @ResponseBody
@@ -33,18 +44,46 @@ public class CollectPageController {
         String ifajax = (String) request.get("ifajax");
         String ajaxtype = (String) request.get("ajaxtype");
         String ajaxxpath = (String) request.get("ajaxxpath");
-        String url = (String) request.get("currenturl");
         String extract_way = (String) request.get("extract_way");
+        String project_id = (String) request.get("project_id");
+        String task_id = (String) request.get("task_id");
+        final String projectName = spiderProjectInfoMapper.getProjectNameById( Long.parseLong(project_id));
+        SpiderTaskInfo task = spiderTaskInfoMapper.findSpiderTaskInfoById(String.valueOf(task_id));
+        final String taskName = task.getTask_name();
+        String path=task.getTask_config_location();
+        File configjson=new File(path);
+        String jsonString="";
+        JSONObject configdata=null;
+        try {
+            Scanner scanner=new Scanner(new FileInputStream(configjson));
+            while(scanner.hasNext()) {
+                jsonString+=scanner.next();
+            }
+            configdata= JSONObject.parseObject(jsonString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         ArrayList<String> urls = new ArrayList<>();
-        urls.add(url);
-        System.out.println(xpath);
-        System.out.println(xpath2);
-        System.out.println(nameindb);
-        System.out.println(crawltype);
-        System.out.println(ajaxxpath);
-        System.out.println(ifajax);
-        System.out.println(url);
-        System.out.println(extract_way);
+        JSONObject url_pattern = configdata.getJSONObject("url_pattern");
+        com.alibaba.fastjson.JSONObject run_rule = configdata.getJSONObject("run_rule");
+        String urltype=url_pattern.getString("current_selected");
+        String url="";
+        if(urltype.equals("single")) {
+            url = url_pattern.getJSONObject("single").getString("url_path");
+            urls.add(url);
+        }
+        else if(urltype.equals("list")) {
+            List<String> tmp = collectService.generateUrls(url_pattern.getJSONObject("list"));
+            urls.addAll(tmp);
+
+            for (String ur : urls) {
+                System.out.println(ur);
+            }
+
+            //add later
+        }
+
         if (crawltype.equals("单体")) {
             if(extract_way.equals("链接")) {
                 xpath=xpath+"/@href";

@@ -942,6 +942,8 @@ angular.module('MetronicApp')
                     values[params[x].name] = params[x].value;
                 }
                 values['currenturl'] = url_path;
+                values['task_id']=  $scope.selected_task.task_id;
+                values['project_id'] = $scope.selected_project.advanceProjectEntity.project_id;
                 var idata = JSON.stringify(values);
                 console.log(idata.toString());
                 CollectCusTempService.crawltest(idata);
