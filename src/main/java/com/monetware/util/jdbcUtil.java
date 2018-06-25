@@ -2,15 +2,12 @@ package com.monetware.util;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 import java.util.Properties;
 
 
-import com.mysql.jdbc.Connection;
+//import com.mysql.jdbc.Connection;
 
 /** 
  *@author  venbillyu 
@@ -34,6 +31,7 @@ public class jdbcUtil {
             url = prop.getProperty("spring.datasource.url").trim();
             username = prop.getProperty("spring.datasource.username").trim();
             password = prop.getProperty("spring.datasource.password").trim();
+			System.out.println("asd" + password);
             batchno = Integer.parseInt(prop.getProperty("spring.datasource.batchno").trim());
 
         } catch (IOException e) {   

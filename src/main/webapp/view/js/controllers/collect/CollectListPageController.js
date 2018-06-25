@@ -540,6 +540,8 @@ angular.module('MetronicApp')
             });
 
             console.log(id);
+            // clear
+            $('#testarea').val("");
             // next step
             if (id === "miningrule") {
                 //

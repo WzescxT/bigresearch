@@ -102,121 +102,119 @@ public class CrawlPlanController {
             JSONObject time=run_rule.getJSONObject("time");
             String header=run_rule.getString("headers");
             String custom_config=run_rule.getString("custom_config");
-            System.out.println();
-            for(final Object eachtask : creep_rule)
-            {
-                    JSONObject eachtaskJSON=(JSONObject)eachtask;
-                    String creep_pattern=eachtaskJSON.getString("creep_pattern");
-                    // extract_way
-                    String extract_way = eachtaskJSON.getString("extract_way");
-                    if(creep_pattern.equals("单体")) {
-                        JSONObject ajax=eachtaskJSON.getJSONObject("ajax");
-                        if(ajax.getBoolean("open")) {
-                            String ajax_pattern=ajax.getString("ajax_pattern");
-                            if(ajax_pattern.equals("点击")) {
-                                String button_xpath=ajax.getString("button_xpath");
-                                String xpath1=((JSONObject) eachtask).getString("attribute_xpath");
-                                if(extract_way.equals("链接"))
-                                {
-                                    System.out.println("lianjie here");
-                                    xpath1=xpath1+"/@href";
-                                }
-                                String attribute_name=eachtaskJSON.getString("attribute_name");
-                                service.crawlSingleData(task_id,false,urls,xpath1,attribute_name,ajax.getBoolean("open").toString(),ajax_pattern,button_xpath,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
-
-
-                            }
-                            else if(ajax_pattern.equals("翻页")) {
-                                String button_xpath=ajax.getString("button_xpath");
-                                String xpath1=((JSONObject) eachtask).getString("attribute_xpath");
-                                if(extract_way.equals("链接")) {
-                                    System.out.println("lianjie here");
-                                    xpath1=xpath1+"/@href";
-                                }
-                                String attribute_name=eachtaskJSON.getString("attribute_name");
-                                service.crawlSingleData(task_id,false,urls,xpath1,attribute_name,ajax.getBoolean("open").toString(),ajax_pattern,button_xpath,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
-
-
-                            }
-
-                        } else {
-
+            for(final Object eachtask : creep_rule) {
+                JSONObject eachtaskJSON=(JSONObject)eachtask;
+                String creep_pattern=eachtaskJSON.getString("creep_pattern");
+                // extract_way
+                String extract_way = eachtaskJSON.getString("extract_way");
+                if(creep_pattern.equals("单体")) {
+                    JSONObject ajax=eachtaskJSON.getJSONObject("ajax");
+                    if(ajax.getBoolean("open")) {
+                        String ajax_pattern=ajax.getString("ajax_pattern");
+                        if(ajax_pattern.equals("点击")) {
+                            String button_xpath=ajax.getString("button_xpath");
                             String xpath1=((JSONObject) eachtask).getString("attribute_xpath");
-                            if (extract_way.equals("链接")) {
+                            if(extract_way.equals("链接"))
+                            {
                                 System.out.println("lianjie here");
                                 xpath1=xpath1+"/@href";
                             }
                             String attribute_name=eachtaskJSON.getString("attribute_name");
-                            service.crawlSingleData(task_id,false,urls,xpath1,attribute_name,ajax.getBoolean("open").toString(),null,null,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
-                        }
-                    }
-                    else if(creep_pattern.equals("线索")) {
-                        // xuantang here
-                        JSONObject ajax=eachtaskJSON.getJSONObject("ajax");
-                        System.out.println(ajax);
-                        // ajax
-                        if(ajax.getBoolean("open")) {
-                            String ajaxPattern = ajax.getString("ajax_pattern");
-                            String ajaxXpath = ajax.getString("button_xpath");
-                            String xpath1 = ((JSONObject) eachtask).getString("attribute_xpath");
-                            String xpath2 = ((JSONObject) eachtask).getString("attribute_xpath2");
-                            final String attributeName = eachtaskJSON.getString("attribute_name");
-                            CollectService.OnCrawlListener onCrawlListener = new
-                                    CollectService.OnCrawlListener() {
-                                        @Override
-                                        public void onSuccess(List<String> result) {
-                                            StringBuilder sb = new StringBuilder();
-                                            String path = generate_spider_result + projectName + "_" + taskName + "_" + attributeName + ".txt";
-                                            for (String line : result) {
-                                                if (line != null && line.length() > 0) {
-                                                    sb.append(line).append("\n");
-                                                }
-                                            }
-                                            collectService.saveToFile(path, sb.toString(), false);
-                                        }
+                            service.crawlSingleData(task_id,false,urls,xpath1,attribute_name,ajax.getBoolean("open").toString(),ajax_pattern,button_xpath,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
 
-                                        @Override
-                                        public void onFail(String error) {
-                                            System.out.println(error);
-                                        }
-                                    };
-                            if(ajaxPattern.equals("点击")) {
-                                collectService.crawl(onCrawlListener, urls, CollectService.TYPE_CLUES_AJAX_CLICK,
-                                        extract_way, ajaxXpath, xpath1, xpath2);
-                            } else if(ajaxPattern.equals("翻页")) {
-                                collectService.crawl(onCrawlListener, urls, CollectService.TYPE_CLUES_AJAX_FLIP,
-                                        extract_way, ajaxXpath, xpath1, xpath2);
+
+                        }
+                        else if(ajax_pattern.equals("翻页")) {
+                            String button_xpath=ajax.getString("button_xpath");
+                            String xpath1=((JSONObject) eachtask).getString("attribute_xpath");
+                            if(extract_way.equals("链接")) {
+                                System.out.println("lianjie here");
+                                xpath1=xpath1+"/@href";
                             }
-                        }
-                        // no ajax
-                        else {
-                            String xpath1 = ((JSONObject) eachtask).getString("attribute_xpath");
-                            String xpath2 = ((JSONObject) eachtask).getString("attribute_xpath2");
-                            final String attributeName = eachtaskJSON.getString("attribute_name");
-                            // out
-                            CollectService.OnCrawlListener onCrawlListener = new
-                                    CollectService.OnCrawlListener() {
-                                        @Override
-                                        public void onSuccess(List<String> result) {
-                                            StringBuilder sb = new StringBuilder();
-                                            for (String line : result) {
-                                                if (line != null && line.length() > 0) {
-                                                    sb.append(line).append("\n");
-                                                }
-                                            }
-                                            String path = generate_spider_result + projectName + "_" + taskName + "_" + attributeName + ".txt";
-                                            // save to file
-                                            collectService.saveToFile(path, sb.toString(), false);
-                                        }
+                            String attribute_name=eachtaskJSON.getString("attribute_name");
+                            service.crawlSingleData(task_id,false,urls,xpath1,attribute_name,ajax.getBoolean("open").toString(),ajax_pattern,button_xpath,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
 
-                                        @Override
-                                        public void onFail(String error) {
-                                            System.out.println(error);
+
+                        }
+
+                    } else {
+
+                        String xpath1=((JSONObject) eachtask).getString("attribute_xpath");
+                        if (extract_way.equals("链接")) {
+                            System.out.println("lianjie here");
+                            xpath1=xpath1+"/@href";
+                        }
+                        String attribute_name=eachtaskJSON.getString("attribute_name");
+                        service.crawlSingleData(task_id,false,urls,xpath1,attribute_name,ajax.getBoolean("open").toString(),null,null,proxy_id,time.getString("start_time"),time.getString("end_time"),header,store_pattern,extract_way);
+                    }
+                }
+                else if(creep_pattern.equals("线索")) {
+                    // xuantang here
+                    JSONObject ajax=eachtaskJSON.getJSONObject("ajax");
+                    System.out.println(ajax);
+                    // ajax
+                    if(ajax.getBoolean("open")) {
+                        String ajaxPattern = ajax.getString("ajax_pattern");
+                        String ajaxXpath = ajax.getString("button_xpath");
+                        String xpath1 = ((JSONObject) eachtask).getString("attribute_xpath");
+                        String xpath2 = ((JSONObject) eachtask).getString("attribute_xpath2");
+                        final String attributeName = eachtaskJSON.getString("attribute_name");
+                        CollectService.OnCrawlListener onCrawlListener = new
+                                CollectService.OnCrawlListener() {
+                                    @Override
+                                    public void onSuccess(List<String> result) {
+                                        StringBuilder sb = new StringBuilder();
+                                        String path = generate_spider_result + projectName + "_" + taskName + "_" + attributeName + ".txt";
+                                        for (String line : result) {
+                                            if (line != null && line.length() > 0) {
+                                                sb.append(line).append("\n");
+                                            }
                                         }
-                                    };
-                            collectService.crawl(onCrawlListener, urls, CollectService.TYPE_CLUES, extract_way, "", xpath1, xpath2);
+                                        collectService.saveToFile(path, sb.toString(), false);
+                                    }
+
+                                    @Override
+                                    public void onFail(String error) {
+                                        System.out.println(error);
+                                    }
+                                };
+                        if(ajaxPattern.equals("点击")) {
+                            collectService.crawl(onCrawlListener, urls, CollectService.TYPE_CLUES_AJAX_CLICK,
+                                    extract_way, ajaxXpath, xpath1, xpath2);
+                        } else if(ajaxPattern.equals("翻页")) {
+                            collectService.crawl(onCrawlListener, urls, CollectService.TYPE_CLUES_AJAX_FLIP,
+                                    extract_way, ajaxXpath, xpath1, xpath2);
                         }
                     }
+                    // no ajax
+                    else {
+                        String xpath1 = ((JSONObject) eachtask).getString("attribute_xpath");
+                        String xpath2 = ((JSONObject) eachtask).getString("attribute_xpath2");
+                        final String attributeName = eachtaskJSON.getString("attribute_name");
+                        // out
+                        CollectService.OnCrawlListener onCrawlListener = new
+                                CollectService.OnCrawlListener() {
+                                    @Override
+                                    public void onSuccess(List<String> result) {
+                                        StringBuilder sb = new StringBuilder();
+                                        for (String line : result) {
+                                            if (line != null && line.length() > 0) {
+                                                sb.append(line).append("\n");
+                                            }
+                                        }
+                                        String path = generate_spider_result + projectName + "_" + taskName + "_" + attributeName + ".txt";
+                                        // save to file
+                                        collectService.saveToFile(path, sb.toString(), false);
+                                    }
+
+                                    @Override
+                                    public void onFail(String error) {
+                                        System.out.println(error);
+                                    }
+                                };
+                        collectService.crawl(onCrawlListener, urls, CollectService.TYPE_CLUES, extract_way, "", xpath1, xpath2);
+                    }
+                }
             }
         }
         return "";

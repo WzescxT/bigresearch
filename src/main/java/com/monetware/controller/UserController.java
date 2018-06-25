@@ -265,7 +265,11 @@ public class UserController {
     	String username = user.getUsername();
     	String password = user.getPassword();
         User realUser = userService.getUserByName(username);
-        if (realUser!=null) {
+//		User realUser = new User();
+//		realUser.setPassword("admin");
+//		realUser.setId(1);
+//		realUser.setRoleLevel(3);
+		if (realUser != null) {
         	if (password.equals(realUser.getPassword())) {
         		//登录时检查有效时间
         		if (realUser.getEndTime()!=null&&realUser.getEndTime().getTime()<new Date().getTime()){
